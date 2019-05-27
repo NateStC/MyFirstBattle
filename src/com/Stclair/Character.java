@@ -90,6 +90,7 @@ public class Character {
         }
     }
 
+    //this probably won't work
     public void equipWeapon(Weapon w) {
         this.attributeArray[0] += w.getStrengthBonus();
         this.attributeArray[1] += w.getDexterityBonus();

@@ -98,6 +98,7 @@ public class Character {
         this.attributeArray[3] += w.getIntelligenceBonus();
     }
 
+    //figure this one out too
     public void unequipWeapon(Weapon w) {
         this.attributeArray[0] -= w.getStrengthBonus();
         this.attributeArray[1] -= w.getDexterityBonus();

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainBorderPane" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Stclair.battlePane.battlePaneController">
+
+    <top>
+        <Label alignment="CENTER" text="My First Battle" />
+    </top>
+    <left>
+        <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="517.0" spacing="7.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <children>
+                  <GridPane hgap="10.0" style="-fx-background-color: cyan;">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="45.0" prefWidth="45.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="playerNameLabel" text="PlayerName" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="playerLvlLabel" text="Lvl" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <Label text="STR" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                        <Label text="CON" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                        <Label text="DEX" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                        <Label text="INT" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                        <Label text="WIS" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                        <Label text="CHA" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+                        <Label fx:id="strLabel" text="str" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="conLabel" text="con" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="dexLabel" text="dex" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="intLabel" text="int" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="wisLabel" text="wis" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label fx:id="chaLabel" text="cha" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label text="Mana" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+                        <Label text="EXP" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+                        <ProgressBar fx:id="expBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+                        <Label text="HEALTH" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                        <ProgressBar fx:id="playerHpBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" />
+                        <ProgressBar fx:id="manaBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+                        <Label fx:id="playerXpLabel" text="XP" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
+                           <children>
+                              <Label fx:id="playerHpLabel" text="HP" />
+                              <Label text="/" />
+                              <Label fx:id="playerMaxHpLabel" text="MAX" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8">
+                           <children>
+                              <Label fx:id="playerMpLabel" text="MP" />
+                              <Label text="/" />
+                              <Label fx:id="playerMaxMpLabel" text="MAX" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="strPlus" mnemonicParsing="false" onAction="#strPlus" prefHeight="25.0" prefWidth="25.0" text="+" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Button fx:id="dexPlus" mnemonicParsing="false" onAction="#dexPlus" prefHeight="25.0" prefWidth="25.0" text="+" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Button fx:id="conPlus" mnemonicParsing="false" onAction="#conPlus" prefHeight="25.0" prefWidth="25.0" text="+" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Button fx:id="intPlus" mnemonicParsing="false" onAction="#intPlus" prefHeight="25.0" prefWidth="25.0" text="+" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Button fx:id="wisPlus" mnemonicParsing="false" onAction="#wisPlus" text="+" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <Button fx:id="chaPlus" mnemonicParsing="false" onAction="#chaPlus" prefHeight="25.0" prefWidth="25.0" text="+" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <Label fx:id="strBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label fx:id="dexBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label fx:id="conBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Label fx:id="intBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Label fx:id="wisBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <Label fx:id="chaBonusLabel" text="(+0)" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                     </children>
+                  </GridPane>
+                  <GridPane hgap="10.0" style="-fx-background-color: orange;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="45.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="60.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label fx:id="enemyNameLabel" text="Enemy" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="enemyLvlLabel" text="Lvl" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <Label text="STR" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                        <Label text="CON" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                        <Label text="DEX" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                        <Label text="INT" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                        <Label text="WIS" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                        <Label text="CHA" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+                        <Label fx:id="enemyStrLabel" text="Strength" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="enemyConLabel" text="Constitution" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="enemyDexLabel" text="Dexterity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="enemyIntLabel" text="Intelligence" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="enemyWisLabel" text="Wisom" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label fx:id="enemyChaLabel" text="Charisma" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label text="Mana" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+                        <Label text="HEALTH" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                        <ProgressBar fx:id="enemyHpBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" />
+                        <ProgressBar fx:id="enemyManaBar" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="7">
+                           <children>
+                              <Label fx:id="enemyHpLabel" text="HP" />
+                              <Label text="/" />
+                              <Label fx:id="enemyMaxHpLabel" text="Max" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8">
+                           <children>
+                              <Label fx:id="enemyMpLabel" text="MP" />
+                              <Label text="/" />
+                              <Label fx:id="enemyMaxMpLabel" text="Max" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
+            <GridPane hgap="5.0" layoutX="26.0" layoutY="305.0" vgap="5.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="305.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="spellButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#fireBall" prefWidth="100.0" text="Fire Ball" GridPane.columnIndex="1" />
+                  <Button fx:id="stabButton" disable="true" layoutX="10.0" layoutY="13.0" minWidth="100.0" mnemonicParsing="false" onAction="#stab" prefWidth="100.0" text="Stab" textAlignment="CENTER" />
+                  <Button fx:id="healButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#healingSpell" prefWidth="100.0" text="Healing Spell" GridPane.rowIndex="1" />
+                  <Button fx:id="nextButton" disable="true" minWidth="100.0" mnemonicParsing="false" text="Next Enemy" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children></AnchorPane>
+    </left>
+   <center>
+      <AnchorPane fx:id="centerPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
+               <children>
+                    <Button onAction="#showNewPlayerDialog" text="New Game" />
+                  <Button fx:id="loadGame" mnemonicParsing="false" text="Load Game" />
+               </children>
+            </HBox>
+         </children></AnchorPane>
+   </center>
+
+</BorderPane>

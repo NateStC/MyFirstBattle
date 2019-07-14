@@ -6,7 +6,6 @@ public class Item {
 
     private String name;
     private double weight;
-    private int damgeBonus;
 
     public Item(String name, double weight) {
         this.name = name;
@@ -22,6 +21,12 @@ public class Item {
 
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public double getWeight() {
+        return weight;
+    }
 }
 

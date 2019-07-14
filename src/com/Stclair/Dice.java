@@ -6,9 +6,24 @@ import java.util.Random;
 
 public class Dice {
 
-    public static int d6(){
+    public static int d6() {
         Random rand = new Random();
         return rand.nextInt(6) + 1;
+    }
+
+    public static int d8() {
+        Random rand = new Random();
+        return rand.nextInt(8) + 1;
+    }
+
+    public static int d12(){
+        Random rand = new Random();
+        return rand.nextInt(12)+1;
+    }
+
+    public static int d20() {
+        Random rand = new Random();
+        return rand.nextInt(20) + 1;
     }
 
     public static int statRoll() {
@@ -26,10 +41,5 @@ public class Dice {
         if (stat1C <= stat1B && stat1C <= stat1A && stat1C <= stat1D) {
             return stat1B + stat1A + stat1D;
         } else return stat1A + stat1B + stat1D;
-    }
-
-    public static int d20() {
-        Random rand = new Random();
-        return rand.nextInt(20) + 1;
     }
 }

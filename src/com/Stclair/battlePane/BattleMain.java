@@ -1,5 +1,6 @@
-package com.Stclair;
+package com.Stclair.battlePane;
 
+import com.Stclair.myCharacter;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +10,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class BattleMain extends Application {
-
-    @FXML
-    private BorderPane mainBorderPane;
-
-    static Character player;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

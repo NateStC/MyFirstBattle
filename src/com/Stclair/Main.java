@@ -1,12 +1,11 @@
 package com.Stclair;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Character player;
+    public static myCharacter player;
 
     public static void main(String[] args) {
 
@@ -14,7 +13,7 @@ public class Main {
 
         System.out.println("Please enter your name.");
         String name = scanner.nextLine();
-        player = new Character(name);
+        player = new myCharacter(name);
 
         System.out.println("\nGreat!\n");
         ArrayList<Integer> arrayRolls = new ArrayList<>();
@@ -64,16 +63,17 @@ public class Main {
                 goblin.takeDamage(player.stab());
                 break;
             case 2:
-                goblin.takeDamage(player.fireball(goblin.name));
+                goblin.takeDamage(player.fireball());
                 break;
             case 3:
-                player.heal(player.healingSpell());
+                int[] heal = player.healingSpell();
+                player.heal(heal[1]);
                 break;
         }
         if (goblin.isDead()) {
             battle = false;
             System.out.println("You have slain the goblin!\n");
-            player.gainExperience(100);
+            player.gainExp(100);
         }
     }
         scanner.nextLine();

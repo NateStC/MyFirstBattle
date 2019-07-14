@@ -1,11 +1,17 @@
-package com.Stclair;
+package com.Stclair.battlePane;
 
+import com.Stclair.Item;
+import com.Stclair.Weapon;
+import com.Stclair.myCharacter;
+import com.Stclair.Dice;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class newPlayerController {
 
@@ -25,10 +31,11 @@ public class newPlayerController {
     private int wisdom;
     private int charisma;
 
-    //public ObservableList<Integer> statRolls;
-    private ObservableList<Integer> statRolls;
     @FXML
     private ListView<Integer> statRollList;
+
+    @FXML
+    private ListView<Weapon> weaponListView;
 
     @FXML
     private Label strLabel;
@@ -42,6 +49,11 @@ public class newPlayerController {
     private Label wisLabel;
     @FXML
     private Label charismaLabel;
+    @FXML
+    private Label strBonusLabel, conBonusLabel, dexBonusLabel, intBonusLabel, wisBonusLabel, chaBonusLabel;
+
+    private
+    ObservableList<Weapon> weapons;
 
     private Integer selectedRoll;
 
@@ -54,8 +66,7 @@ public class newPlayerController {
         charisma = 0;
         createPlayerButton.setDisable(true);
         rollStatsButton.setDisable(true);
-
-
+        statRollList.setDisable(true);
 
         statRollList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -66,7 +77,7 @@ public class newPlayerController {
                 if (newValue != null) {
                     selectedRoll = statRollList.getSelectionModel().getSelectedItem();
                 }
-                if (statRollList.getItems().isEmpty()){
+                if (statRollList.getItems().isEmpty()) {
                     createPlayerButton.setDisable(false);
 //                    if (!playerNameField.getText().isEmpty()){
 //                        createPlayerButton.setDisable(true);
@@ -78,7 +89,7 @@ public class newPlayerController {
         playerNameField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.trim().equals("")){
+                if (newValue.trim().equals("")) {
                     rollStatsButton.setDisable(true);
                     instructionLabel.setText("Enter your name before rolling stats");
                     createPlayerButton.setDisable(true);
@@ -92,18 +103,71 @@ public class newPlayerController {
                 }
             }
         });
+
+        weapons = FXCollections.observableArrayList();
+        weapons.addAll(Weapon.swordShort(), Weapon.longSword(), Weapon.daggers(), Weapon.staff(), Weapon.mace());
+        weaponListView.setItems(weapons);
+        weaponListView.setCellFactory(lv -> new ListCell<>(){
+            @Override
+            public void updateItem(Weapon weapon, boolean empty){
+                super.updateItem(weapon,empty);
+                if (empty){
+                    setText(null);
+                } else {
+                    setText(weapon.getName());
+                }
+            }
+        });
+        weaponListView.getSelectionModel().selectedItemProperty().addListener((weapon, oldWeapon, newWeapon) -> {
+            if (newWeapon.getStrBonus() >= 0) {
+                strBonusLabel.setText("(+" + newWeapon.getStrBonus() + ")");
+            } else {
+                strBonusLabel.setText("(" + newWeapon.getStrBonus() + ")");
+            }
+            if (newWeapon.getConBonus() >= 0) {
+                conBonusLabel.setText("(+" + newWeapon.getConBonus() + ")");
+            } else {
+                conBonusLabel.setText("(" + newWeapon.getConBonus() + ")");
+            }
+            if (newWeapon.getDexBonus() >= 0) {
+                dexBonusLabel.setText("(+" + newWeapon.getDexBonus() + ")");
+            } else {
+                dexBonusLabel.setText("(" + newWeapon.getDexBonus() + ")");
+            }
+            if (newWeapon.getIntBonus() >= 0) {
+                intBonusLabel.setText("(+" + newWeapon.getIntBonus() + ")");
+            } else {
+                intBonusLabel.setText("(" + newWeapon.getIntBonus() + ")");
+            }
+            if (newWeapon.getWisBonus() >= 0) {
+                wisBonusLabel.setText("(+" + newWeapon.getWisBonus() + ")");
+            } else {
+                wisBonusLabel.setText("(" + newWeapon.getWisBonus() + ")");
+            }
+            if (newWeapon.getCharBonus() >= 0) {
+                chaBonusLabel.setText("(+" + newWeapon.getCharBonus() + ")");
+            } else {
+                chaBonusLabel.setText("(" + newWeapon.getCharBonus() + ")");
+            }
+        });
+        weaponListView.getSelectionModel().selectFirst();
     }
 
     public void createNewPlayer() {
-        if (!playerNameField.getText().isEmpty() || strength == 0 || dexterity == 0 || constitution == 0 || intelligence == 0 || wisdom == 0 || charisma == 0) {
-            Main.player = new Character(playerNameField.getText().trim(), strength, dexterity, constitution, intelligence, wisdom, charisma, 1);
+        if (!playerNameField.getText().isEmpty() || strength == 0 || dexterity == 0 || constitution == 0 ||
+                intelligence == 0 || wisdom == 0 || charisma == 0) {
+
+            battlePaneController.player = new myCharacter(playerNameField.getText().trim(), strength, dexterity,
+                    constitution, intelligence, wisdom, charisma, weaponListView.getSelectionModel().getSelectedItem());
             System.out.println("new player created");
+
+            //todo how to pass new character to battlePaneController from create character button and not close button
         }
     }
 
     @FXML
     private void rollDice() {
-        statRolls = FXCollections.observableArrayList();
+        ObservableList<Integer> statRolls = FXCollections.observableArrayList();
         strLabel.setText(null);
         dexLabel.setText(null);
         constLabel.setText(null);
@@ -115,19 +179,20 @@ public class newPlayerController {
             statRolls.add(Dice.statRoll());
         }
         statRollList.setItems(statRolls);
+        statRollList.getSelectionModel().select(0);
+
+        statRollList.setDisable(false);
     }
 
     @FXML
     private void handleClickListRollView() {
-        Integer stat = (Integer) statRollList.getSelectionModel().getSelectedItem();
-        System.out.println(stat + " selected"); //todo temprint
-        selectedRoll = stat;
+        selectedRoll = statRollList.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     private void handleStrengthButton() {
         if (this.strength == 0 && selectedRoll != null) {
-            Integer str = (Integer) statRollList.getSelectionModel().getSelectedItem();
+            Integer str = statRollList.getSelectionModel().getSelectedItem();
             strLabel.setText(str.toString());
             this.strength = str;
             statRollList.getItems().remove(selectedRoll);
@@ -225,6 +290,10 @@ public class newPlayerController {
             selectedRoll = null;
             createPlayerButton.setDisable(true);
         }
+    }
+
+    public void processResults() {
+
     }
 }
 

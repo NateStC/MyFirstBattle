@@ -45,7 +45,7 @@ public class Spell extends Attack {
     }
 
     public static int getFireBallCost(myCharacter caster){
-        return 15 + (caster.getLevel() * 2) - (caster.getWisStat() / 3);
+        return 10 + (caster.getLevel() * 2) - (caster.getWisStat() / 3);
     }
 
     // Electrocution spell that relies more on player stats than dice
@@ -72,7 +72,7 @@ public class Spell extends Attack {
     }
 
     public static int getStaticShockCost(myCharacter caster){
-        return 20 + (caster.getLevel() * 2) - (caster.getWisStat() / 3);
+        return 12 + (caster.getLevel() * 2) - (caster.getWisStat() / 3);
     }
 
     public static Spell healingHands(myCharacter caster) {
@@ -93,7 +93,7 @@ public class Spell extends Attack {
     }
 
     public static int getHealingHandsCost(myCharacter caster){
-        return 12 + (caster.getLevel() * 3) - (caster.getWisStat() / 3);
+        return 10 + (caster.getLevel() * 2) - (caster.getWisStat() / 3);
     }
 
     //lvlReq 3?
@@ -120,7 +120,7 @@ public class Spell extends Attack {
     }
 
     public static int getDrainlifeCost(myCharacter caster){
-        return 20 + (caster.getLevel() * 3) - ((caster.getWisStat() + caster.getDexStat()) / 6);
+        return 15 + (caster.getLevel() * 3) - ((caster.getWisStat() + caster.getDexStat()) / 6);
     }
 
     public static Spell fireArrow(myCharacter caster){
@@ -144,7 +144,7 @@ public class Spell extends Attack {
     }
 
     public static int getFireArrowCost(myCharacter caster){
-        return 15 + (caster.getLevel()*2)- ((caster.getWisStat() + caster.getDexStat())/4);
+        return 12 + (caster.getLevel()*2)- ((caster.getWisStat() + caster.getDexStat())/4);
     }
 
     public int getManaCost() {

@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +20,9 @@ public class battlePaneController {
     private BorderPane mainBorderPane;
 
     @FXML
+    private GridPane actionsGrid;
+
+    @FXML
     private Label playerNameLabel, playerLvlLabel, strLabel, conLabel, dexLabel, intLabel, wisLabel, chaLabel,
             enemyNameLabel, enemyLvlLabel, enemyStrLabel, enemyConLabel, enemyDexLabel, enemyIntLabel, enemyWisLabel,
             enemyChaLabel, playerHpLabel, playerMpLabel, playerXpLabel, playerMaxHpLabel, playerMaxMpLabel,
@@ -29,8 +32,14 @@ public class battlePaneController {
     @FXML
     private ProgressBar expBar, playerHpBar, manaBar, enemyHpBar, enemyManaBar;
 
+//    @FXML
+//    private Button stabButton, healButton, spellButton;
+
     @FXML
-    private Button stabButton, healButton, spellButton, nextButton, strPlus, dexPlus, conPlus, intPlus, wisPlus, chaPlus;
+    private Button nextButton;
+
+    @FXML
+    private Button strPlus, dexPlus, conPlus, intPlus, wisPlus, chaPlus;
 
     static myCharacter player;
 
@@ -132,9 +141,9 @@ public class battlePaneController {
                 nextButton.setText("New Round");
                 nextButton.setOnAction(event -> startGame());
                 nextButton.setDisable(false);
-                spellButton.setDisable(true);
-                healButton.setDisable(true);
-                stabButton.setDisable(true);
+//                spellButton.setDisable(true);
+//                healButton.setDisable(true);
+//                stabButton.setDisable(true);
             }
         } else {
             actionList.add(enemy.getName() + " stands in your way, refusing to let you continue.");
@@ -151,11 +160,11 @@ public class battlePaneController {
         setUpEnemies();
         actionList.add("Your journey begins!");
         setEnemy(enemies.get(0));
-        spellButton.setDisable(false);
-        healButton.setDisable(false);
-        stabButton.setDisable(false);
-        stabButton.setDefaultButton(true);
-        makeNextEnemyButton();
+//        spellButton.setDisable(false);
+//        healButton.setDisable(false);
+//        stabButton.setDisable(false);
+//        stabButton.setDefaultButton(true);
+//        makeNextEnemyButton();
 
 //        try {
 //            mainBorderPane.setCenter(FXMLLoader.load(getClass().getResource("battleUI.fxml")));
@@ -163,6 +172,218 @@ public class battlePaneController {
 //            System.out.println("Unable to start game");
 //            e.printStackTrace();
 //        }
+    }
+
+    private void setActions() {
+        //get weapon attacks (wa) from equipped weapon
+        ArrayList<String> wa = player.getWeapon().getAttacks();
+
+        ArrayList<Button> attacks = new ArrayList<>();
+
+        if (wa.contains("stab")) {
+            Button stab = new Button("Stab");
+            stab.setPrefWidth(100);
+            stab.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.stab(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(stab);
+        }
+
+        if (wa.contains("bash")) {
+            Button bash = new Button("Bash");
+            bash.setPrefWidth(100);
+            bash.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.bash(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(bash);
+        }
+
+        if (wa.contains("daggerSlice")) {
+            Button dSlice = new Button("Dagger Slice");
+            dSlice.setPrefWidth(100);
+            dSlice.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.daggerSlice(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(dSlice);
+        }
+
+        if (wa.contains("swordSlice")) {
+            Button sSlice = new Button("Sword Slice");
+            sSlice.setPrefWidth(100);
+            sSlice.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.swordSlice(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(sSlice);
+        }
+
+        if (wa.contains("smash")) {
+            Button smash = new Button("Smash");
+            smash.setPrefWidth(100);
+            smash.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.smash(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(smash);
+        }
+
+        if (wa.contains("arrowStrike")) {
+            Button arrow = new Button("Arrow Strike");
+            arrow.setPrefWidth(100);
+            arrow.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.arrowStrike(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(arrow);
+        }
+
+        if (wa.contains("headShot")) {
+            Button headShot = new Button("Head Shot");
+            headShot.setPrefWidth(100);
+            headShot.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerAttack(Attack.headShot(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(headShot);
+        }
+
+        if (wa.contains("fireball")) {
+            Button fireball = new Button("Fireball");
+            fireball.setPrefWidth(100);
+            fireball.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerCast(Spell.fireball(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(fireball);
+        }
+
+        if (wa.contains("staticShock")) {
+            Button shock = new Button("Static Shock");
+            shock.setPrefWidth(100);
+            shock.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerCast(Spell.staticShock(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(shock);
+        }
+
+        if (wa.contains("healingHands")) {
+            Button heal = new Button("Healing Hands");
+            heal.setPrefWidth(100);
+            heal.setOnAction(event -> {
+                if (!player.healthIsFull()) {
+                    playerCast(Spell.healingHands(player));
+                } else {
+                    actionList.add(player.getName() + "'s health is already full");
+                }
+            });
+            attacks.add(heal);
+        }
+
+        if (wa.contains("drainLife")) {
+            Button drain = new Button("Drain Life");
+            drain.setPrefWidth(100);
+            drain.setOnAction(e -> {
+                if (enemy.getHealth() > 0) {
+                    playerCast(Spell.drainLife(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(drain);
+        }
+
+        if (wa.contains("fireArrow")) {
+            Button fire = new Button("Fire Arrow");
+            fire.setPrefWidth(100);
+            fire.setOnAction(event -> {
+                if (!enemy.isDead()) {
+                    playerCast(Spell.fireArrow(player));
+                } else {
+                    enemyDead();
+                }
+            });
+            attacks.add(fire);
+        }
+
+        nextButton = new Button("Next Enemy");
+        nextButton.setPrefWidth(100);
+        nextButton.setOnAction(e -> nextEnemy());
+        attacks.add(nextButton);
+//        actionsGrid.getChildren().add(nextButton);
+
+        int row = 0;
+        int column = 0;
+
+        //populate gridPane with buttons for attacks player is able to cast with that weapon
+        for (Button b : attacks) {
+            actionsGrid.add(b,column,row);
+            column +=1;
+            if (column >1){
+                column = 0;
+                row ++;
+            }
+        }
+
+        for (int col = 0; col < actionsGrid.getColumnCount(); col++){
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setFillWidth(true);
+        }
+
+    }
+
+
+    //fixme I want to be able to pause between messages, but it pauses displaying them but continues to generate them, and dumps them all at the same time
+//    private void actionPause(String message){
+//        actionList.add(message);
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private void actionPause(String message, int miliPause){
+//        actionList.add(message);
+//        try{
+//            Thread.sleep(miliPause);
+//        } catch (InterruptedException e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    private void enemyDead() {
+        actionList.add("Enemy " + enemy.getName() + " is already dead!");
     }
 
     private void setPlayer() {
@@ -173,6 +394,7 @@ public class battlePaneController {
 //        experience = new SimpleIntegerProperty(player.getExperience());
 
         setPlayerStats();
+        setActions();
 
         //broken listeners in an attempt to bind labels to stats
 //        experience.addListener((observable, oldValue, newValue) -> {
@@ -398,15 +620,16 @@ public class battlePaneController {
             enemySpell((Spell) attack);
             return;
         }
+        actionList.add(enemy.getName() + " uses " + attack.getName());
         if (attack.getAccuracy() == 1) {
-            actionList.add(enemy.getName() + "'s " + attack.getName() + " missed!");
+            actionList.add(enemy.getName() + " missed!");
             return;
         }
         if (attack.isCrit()) {
             actionList.add("Critical Hit!");
         }
         if (attack.getDamage() > 0) {
-            actionList.add(enemy.getName() + " uses " + attack.getName() + " to deal " + attack.getDamage() + " damage");
+            actionList.add(enemy.getName() + " deals " + attack.getDamage() + " damage" + " to " + player.getName());
             playerTakeDamage(attack.getDamage());
         }
     }
@@ -416,32 +639,33 @@ public class battlePaneController {
             enemyAttack(Attack.bash(enemy));
             return;
         }
+        actionList.add(enemy.getName() + " casts " + spell.getName());
         enemyDrainMana(spell.getManaCost());
         if (spell.getAccuracy() == 1) {
-            actionList.add(enemy.getName() + "'s " + spell.getName() + " missed!");
+            actionList.add(enemy.getName() + " missed!");
             return;
         }
         if (spell.isCrit()) {
             actionList.add("Critical hit!");
         }
         if (spell.getDamage() > 0) {
-            actionList.add(enemy.getName() + " casts " + spell.getName() + ", dealing " + spell.getDamage() + " damage to " + player.getName() + ".");
+            actionList.add(enemy.getName() + " deals " + spell.getDamage() + " damage to " + player.getName() + ".");
             playerTakeDamage(spell.getDamage());
         }
         if (spell.getHeal() > 0) {
-            actionList.add(enemy.getName() + " casts " + spell.getName() + " restoring " + spell.getHeal() + " health");
+            actionList.add(enemy.getName() + " restores " + spell.getHeal() + " health");
             enemyHeal(spell.getHeal());
         }
     }
 
     private void gameOver() {
         deaths += 1;
-        actionList.add("Oh no! You died! Game over.");
-        actionList.add("Rounds Completed: " + roundsCompleted);
-        actionList.add("Deaths: " + deaths);
-        stabButton.setDisable(true);
-        spellButton.setDisable(true);
-        healButton.setDisable(true);
+        actionList.add("Oh no! You died!\nGame over.");
+        actionList.add("Rounds Completed: " + roundsCompleted +
+                "\nDeaths: " + deaths);
+//        stabButton.setDisable(true);
+//        spellButton.setDisable(true);
+//        healButton.setDisable(true);
 
         nextButton.setText("Restart Round");
         nextButton.setOnAction(event -> restartRound());
@@ -458,13 +682,12 @@ public class battlePaneController {
         enemiesDefeated = 0;
         setEnemy(enemies.get(0));
         restorePlayer();
-        stabButton.setDisable(false);
-        spellButton.setDisable(false);
-        healButton.setDisable(false);
+//        stabButton.setDisable(false);
+//        spellButton.setDisable(false);
+//        healButton.setDisable(false);
     }
 
     private void levelUp() {
-        System.out.println("level up!");
         skillPoints += 4 + (player.getLevel() / 4);
         actionList.add("LEVEL UP! You are now level " + player.getLevel() + "\nYou have " + skillPoints + " points to spend on attributes");
         nextButton.setDisable(true);
@@ -561,36 +784,41 @@ public class battlePaneController {
     }
 
     private void playerCast(Spell spell) {
-        if (player.getMana() >= spell.getManaCost()) { //todo check why this >= check is not working sometimes
-            if (spell.getDamage()==-1){
-                actionList.add("Not enough mana to cast " + spell.getName());
-                return;
+        if (player.isDead()){
+            actionList.add(player.getName() + " is dead!");
+            return;
+        }
+        if (spell.getDamage() == -1) {
+            actionList.add("Not enough mana to cast " + spell.getName());
+            return;
+        }
+        playerDrainMana(spell.getManaCost());
+        if (spell.getAccuracy() != 1) {
+            if (spell.isCrit()) {
+                actionList.add("Critical Hit!");
             }
-            playerDrainMana(spell.getManaCost());
-            if (spell.getAccuracy() != 1) {
-                if (spell.isCrit()) {
-                    actionList.add("Critical Hit!");
-                }
-                if (spell.getHeal() > 0) {
-                    actionList.add("You heal yourself for " + spell.getHeal());
-                    playerHeal(spell.getHeal());
-                }
-                if (spell.getDamage() == 0) {
-                    enemyTurn();
-                } else {
-                    actionList.add(enemy.getName() + " takes " + spell.getDamage() + " damage from your " + spell.getName());
-                    enemyTakeDamage(spell.getDamage());
-                }
-            } else {
-                actionList.add("Your " + spell.getName() + " missed!");
+            if (spell.getHeal() > 0) {
+                actionList.add("You heal yourself for " + spell.getHeal());
+                playerHeal(spell.getHeal());
+            }
+            if (spell.getDamage() == 0 && spell.getHeal() == 0) {
+                actionList.add("Spell does no damage");
                 enemyTurn();
+            } else {
+                actionList.add(enemy.getName() + " takes " + spell.getDamage() + " damage from your " + spell.getName());
+                enemyTakeDamage(spell.getDamage());
             }
         } else {
-            actionList.add("Not enough mana to cast " + spell.getName());
+            actionList.add("Your " + spell.getName() + " missed!");
+            enemyTurn();
         }
     }
 
     private void playerAttack(Attack attack) {
+        if (player.isDead()){
+            actionList.add(player.getName() + " is dead!");
+            return;
+        }
         if (attack instanceof Spell) {
             playerCast((Spell) attack);
             return;
@@ -599,7 +827,7 @@ public class battlePaneController {
             if (attack.isCrit()) {
                 System.out.println("Critical hit!");
             }
-            actionList.add(player.getName() + "'s stab hits the enemy for " + attack.getDamage());
+            actionList.add(player.getName() + "'s " + attack.getName() + " hits the enemy for " + attack.getDamage());
             enemyTakeDamage(attack.getDamage());
         } else {
             actionList.add("Your attack missed!");

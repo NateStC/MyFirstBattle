@@ -36,7 +36,7 @@ public class Attack {
     //basic attack
     public static Attack stab(myCharacter attacker) {
         int att = Dice.d20();
-        int dmg = Dice.d6() + ((attacker.getStrStat() + attacker.getDexStat()) / 2) + attacker.getLevel();
+        int dmg = Dice.d6() + ((attacker.getStrStat() + attacker.getDexStat()) / 3) + attacker.getLevel();
         boolean crit = false;
         if (att == 1) {
             dmg = 0;
@@ -56,7 +56,7 @@ public class Attack {
     //todo test daggerSlice attack and find a better name, (maybe eviscerate?)
     public static Attack daggerSlice(myCharacter attacker) {
         int att = Dice.d20();
-        int dmg = Dice.d12() + attacker.getDexStat() + attacker.getLevel();
+        int dmg = Dice.d6() + Dice.d6() + (attacker.getDexStat()/2) + attacker.getLevel();
         boolean crit = false;
         if (att == 1) {
             dmg = 0;
@@ -74,7 +74,7 @@ public class Attack {
     //todo test swordSlice attack and come up with a much better name
     public static Attack swordSlice(myCharacter attacker){
         int att = Dice.d20();
-        int dmg = Dice.d12() + (int)(attacker.getStrStat()*1.5) + attacker.getLevel();
+        int dmg = Dice.d12() + (attacker.getStrStat()/3) + attacker.getLevel();
         boolean crit = false;
         if (att==1) {
             dmg = 0;
@@ -88,7 +88,7 @@ public class Attack {
 
     public static Attack smash(myCharacter attacker) {
         int acc = Dice.d20();
-        int dmg = Dice.d8() + (attacker.getStrStat() / 2) + attacker.getLevel();
+        int dmg = Dice.d6() + (attacker.getStrStat() / 2) + attacker.getLevel();
         boolean crit = false;
         if (acc == 1) {
             System.out.println("Smash missed!");

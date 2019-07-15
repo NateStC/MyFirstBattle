@@ -160,18 +160,6 @@ public class battlePaneController {
         setUpEnemies();
         actionList.add("Your journey begins!");
         setEnemy(enemies.get(0));
-//        spellButton.setDisable(false);
-//        healButton.setDisable(false);
-//        stabButton.setDisable(false);
-//        stabButton.setDefaultButton(true);
-//        makeNextEnemyButton();
-
-//        try {
-//            mainBorderPane.setCenter(FXMLLoader.load(getClass().getResource("battleUI.fxml")));
-//        } catch (IOException e){
-//            System.out.println("Unable to start game");
-//            e.printStackTrace();
-//        }
     }
 
     private void setActions() {

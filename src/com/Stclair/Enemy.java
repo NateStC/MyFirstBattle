@@ -62,7 +62,7 @@ public class Enemy extends myCharacter {
     }
 
     public Attack defaultAttack() {
-        // look for healing spells if health is lew enough and if enemy is smart enough
+        // look for healing spells if health is low enough and if enemy is smart enough
         ArrayList<String> attackArray = new ArrayList<>(this.getWeapon().getAttacks());
 
         for (String att : attackArray) {
@@ -86,7 +86,7 @@ public class Enemy extends myCharacter {
 
         //chooses random attack from list of attacks for weapon
         Random rand = new Random();
-        String att = attackArray.get(rand.nextInt(this.getWeapon().getAttacks().size()));
+        String att = attackArray.get(rand.nextInt(attackArray.size()));
         switch (att.toLowerCase()) {
             case "stab":
                 return Attack.stab(this);
@@ -98,9 +98,9 @@ public class Enemy extends myCharacter {
                 return Attack.swordSlice(this);
             case "smash":
                 return Attack.smash(this);
-            case "arrowStrike":
+            case "arrowstrike":
                 return Attack.arrowStrike(this);
-            case "headShot":
+            case "headshot":
                 return Attack.headShot(this);
 
 //          if there isn't enough mana for spells, it rerolls with

@@ -429,7 +429,7 @@ public class myCharacter {
     }
 
     public int getNextLvlExp() {
-        System.out.println("Next lvl is level " + this.getLevel()+1);
+        System.out.println("Next lvl is level " + (this.getLevel()+1));
         return (getExpForLvl(this.getLevel() + 1));
     }
 

@@ -14,7 +14,7 @@ public class Weapon extends Item {
     private int wisBonus;
     private int charBonus;
     private ArrayList<String> attacks = new ArrayList<>();
-//    private ArrayList<Attack> attacks = new ArrayList<>();
+//    private ArrayList<Attack> attackList = new ArrayList<>();
 
     //todo find if there's a better arrayList than type string for listing attacks
     public Weapon(String name, double weight, int accuracy, int speed, int physDmg, int spellDmg, int strBonus, int dexBonus,
@@ -46,7 +46,6 @@ public class Weapon extends Item {
         ArrayList<String> attacks = new ArrayList<>();
         attacks.add("stab");
         attacks.add("bash");
-        attacks.add("staticShock");
 
         return new Weapon("Dagger", 1.5, 5, 6, 2, 0,
                 0, 0, 0, 0, 0, 0, attacks);

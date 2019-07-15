@@ -1,39 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/Stclair/Attack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Stclair/Enemies.java" afterDir="false" />
+    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="Got a system working for creating buttons for attacks that each weapon has">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyFirstBattle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MyFirstBattle.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/BattleMain.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Character.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Dice.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Dice.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Enemy.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Enemy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Item.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Weapon.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Weapon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/battlePane.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/battlePaneController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/newPlayerController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/newPlayerController$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/newPlayerController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/newPlayerDialog.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/module-info.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/BattleMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/BattleMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/myCharacter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Dice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Dice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Ranged.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Ranged.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Spell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Weapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Weapon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/battlePane.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/battlePaneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/newPlayerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/newPlayerDialog.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerDialog.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/module-info.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,27 +26,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="561" column="4" selection-start-line="561" selection-start-column="4" selection-end-line="561" selection-end-column="4" />
+            <state relative-caret-position="14976">
+              <caret line="832" column="48" selection-start-line="832" selection-start-column="48" selection-end-line="832" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerDialog.fxml">
+        <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml">
           <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
           <provider editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="34" column="296" selection-start-line="34" selection-start-column="296" selection-end-line="34" selection-end-column="296" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/Stclair/Weapon.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
+            <state relative-caret-position="3150">
+              <caret line="175" column="23" selection-start-line="175" selection-start-column="23" selection-end-line="175" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -84,8 +45,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/Stclair/Enemy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2646">
-              <caret line="147" column="95" selection-start-line="147" selection-start-column="95" selection-end-line="147" selection-end-column="95" />
+            <state relative-caret-position="1458">
+              <caret line="81" column="26" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/Stclair/Weapon.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="846">
+              <caret line="47" column="28" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -93,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/Stclair/Spell.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="718">
-              <caret line="54" column="18" lean-forward="true" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
+            <state relative-caret-position="1710">
+              <caret line="95" column="5" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -102,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/Stclair/Attack.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="52" column="68" selection-start-line="52" selection-start-column="68" selection-end-line="52" selection-end-column="68" />
+            <state relative-caret-position="2016">
+              <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -111,8 +81,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/Stclair/myCharacter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+            <state relative-caret-position="7704">
+              <caret line="428" column="5" selection-start-line="428" selection-start-column="5" selection-end-line="428" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -138,11 +108,19 @@
       <find>random</find>
       <find>nextbutton</find>
       <find>levelup</find>
+      <find>next level</find>
+      <find>next lvl</find>
+      <find>Next lvl</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -169,26 +147,26 @@
         <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/lvlUpDialog.fxml" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Main.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Dice.java" />
-        <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Ranged.java" />
         <option value="$PROJECT_DIR$/src/module-info.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Item.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerDialog.fxml" />
-        <option value="$PROJECT_DIR$/src/com/Stclair/myCharacter.java" />
-        <option value="$PROJECT_DIR$/src/com/Stclair/Spell.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/Enemies.java" />
-        <option value="$PROJECT_DIR$/src/com/Stclair/Weapon.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Enemies.java" />
+        <option value="$PROJECT_DIR$/src/com/Stclair/Weapon.java" />
+        <option value="$PROJECT_DIR$/src/com/Stclair/myCharacter.java" />
+        <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Enemy.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/Attack.java" />
+        <option value="$PROJECT_DIR$/src/com/Stclair/Spell.java" />
         <option value="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="width" value="1191" />
+    <option name="width" value="1350" />
     <option name="height" value="1403" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -197,6 +175,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -235,7 +214,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -300,6 +278,8 @@
       <list>
         <item itemvalue="Application.BattleMain" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.BattleMain" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -314,6 +294,14 @@
       <option name="presentableId" value="Default" />
       <updated>1547250881597</updated>
     </task>
+    <task id="LOCAL-00001" summary="Got a system working for creating buttons for attacks that each weapon has">
+      <created>1563138230601</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1563138230601</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView">
@@ -326,19 +314,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1377" height="1403" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="0" width="1350" height="1403" extended-state="0" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Favorites" order="4" sideWeight="0.5014837" side_tool="true" weight="0.3006483" />
-      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49851632" weight="0.15261959" />
+      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49851632" visible="true" weight="0.12635659" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" order="0" weight="0.32967034" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="0" sideWeight="0.4995579" visible="true" weight="0.32913387" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.27795276" />
-      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" weight="0.3291634" />
+      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.5004421" side_tool="true" weight="0.32913387" />
       <window_info anchor="bottom" id="Messages" order="3" weight="0.32755905" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.32834646" />
@@ -387,10 +374,52 @@
       <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.3298969" />
     </layout-to-restore>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="Got a system working for creating buttons for attacks that each weapon has" />
+    <option name="LAST_COMMIT_MESSAGE" value="Got a system working for creating buttons for attacks that each weapon has" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MyFirstBattle$BattleMain.ic" NAME="BattleMain Coverage Results" MODIFIED="1562457724438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
@@ -445,13 +474,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="63" column="35" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -536,13 +558,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/BattleMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="33" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/lang/Object.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
@@ -550,21 +565,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/lvlUpDialog.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/LvlUpController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/lvlUpDialog.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/LvlUpController.java" />
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/Ranged.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -586,32 +588,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="83" column="67" selection-start-line="83" selection-start-column="67" selection-end-line="83" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="767">
-          <caret line="107" column="107" selection-start-line="107" selection-start-column="107" selection-end-line="107" selection-end-column="107" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/Enemies.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/Enemy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2646">
-          <caret line="147" column="95" selection-start-line="147" selection-start-column="95" selection-end-line="147" selection-end-column="95" />
         </state>
       </provider>
     </entry>
@@ -625,43 +605,103 @@
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerDialog.fxml">
       <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
       <provider editor-type-id="text-editor">
-        <state relative-caret-position="540">
+        <state relative-caret-position="612">
           <caret line="34" column="296" selection-start-line="34" selection-start-column="296" selection-end-line="34" selection-end-column="296" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/myCharacter.java">
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/BattleMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+        <state relative-caret-position="270">
+          <caret line="15" column="33" selection-start-line="15" selection-start-column="33" selection-end-line="15" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-97">
+          <caret line="107" column="107" selection-start-line="107" selection-start-column="107" selection-end-line="107" selection-end-column="107" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/lib/javafx-sdk-11.0.2/lib/src.zip!/javafx.graphics/javafx/scene/layout/GridPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="971" column="16" selection-start-line="971" selection-start-column="16" selection-end-line="971" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/lib/javafx-sdk-11.0.2/lib/src.zip!/javafx.graphics/javafx/scene/layout/ColumnConstraints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="304" column="26" selection-start-line="304" selection-start-column="26" selection-end-line="304" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/lib/javafx-sdk-11.0.2/lib/src.zip!/javafx.controls/javafx/scene/control/Button.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-50">
+          <caret line="94" column="11" selection-start-line="94" selection-start-column="11" selection-end-line="94" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="3150">
+          <caret line="175" column="23" selection-start-line="175" selection-start-column="23" selection-end-line="175" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/Enemy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1458">
+          <caret line="81" column="26" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/Weapon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/Stclair/Attack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="52" column="68" selection-start-line="52" selection-start-column="68" selection-end-line="52" selection-end-column="68" />
+        <state relative-caret-position="846">
+          <caret line="47" column="28" selection-start-line="47" selection-start-column="28" selection-end-line="47" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/Spell.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="718">
-          <caret line="54" column="18" lean-forward="true" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="18" />
+        <state relative-caret-position="1710">
+          <caret line="95" column="5" selection-start-line="95" selection-start-column="5" selection-end-line="95" selection-end-column="5" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/Attack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2016">
+          <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/Stclair/myCharacter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7704">
+          <caret line="428" column="5" selection-start-line="428" selection-start-column="5" selection-end-line="428" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="7" selection-start-column="7" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MyFirstBattle.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="561" column="4" selection-start-line="561" selection-start-column="4" selection-end-line="561" selection-end-column="4" />
+        <state relative-caret-position="14976">
+          <caret line="832" column="48" selection-start-line="832" selection-start-column="48" selection-end-line="832" selection-end-column="48" />
         </state>
       </provider>
     </entry>

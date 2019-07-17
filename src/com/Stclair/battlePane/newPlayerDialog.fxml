@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Stclair.battlePane.newPlayerController">
-    <headerText>
-        Create your character
-    </headerText>
-    <content>
-        <GridPane alignment="CENTER" hgap="10" vgap="10">
+<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Stclair.battlePane.newPlayerController">
+        <GridPane alignment="CENTER" hgap="5.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" vgap="10" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="5.0">
             <TextField fx:id="playerNameField" promptText="Enter player name" GridPane.columnSpan="2" GridPane.rowIndex="0" />
             <Button fx:id="rollStatsButton" onAction="#rollDice" text="Roll Stats" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <ListView fx:id="statRollList" onMouseClicked="#handleClickListRollView" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.rowSpan="6" />
-            <Button onAction="#handleStrengthButton" prefWidth="81.0" text="Strength" GridPane.RowIndex="2" GridPane.columnIndex="1" />
-            <Label fx:id="strLabel" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Button onAction="#handleConstitutionButton" text="Constitution" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <Label fx:id="constLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Button maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleDexButton" prefWidth="81.0" text="Dexterity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         <Label fx:id="dexLabel" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Button maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleIntelligenceButton" prefWidth="81.0" text="Intelligence" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Button onAction="#handleWisdomButton" prefWidth="81.0" text="Wisdom" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Button onAction="#handleCharismaButton" prefWidth="81.0" text="Charisma" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-         <Label fx:id="intelLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-         <Label fx:id="wisLabel" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-         <Label fx:id="charismaLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Button onAction="#handleStrengthButton" prefWidth="81.0" text="Strength" GridPane.RowIndex="2" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Button onAction="#handleConstitutionButton" text="Constitution" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <Button maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleDexButton" prefWidth="81.0" text="Dexterity" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <Button maxWidth="-Infinity" minWidth="-Infinity" onAction="#handleIntelligenceButton" prefWidth="81.0" text="Intelligence" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Button onAction="#handleWisdomButton" prefWidth="81.0" text="Wisdom" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+            <Button onAction="#handleCharismaButton" prefWidth="81.0" text="Charisma" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+            <Label fx:id="newStrLabel" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         <Label fx:id="newConLabel" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+         <Label fx:id="newDexLabel" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+         <Label fx:id="newIntelLabel" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+         <Label fx:id="newWisLabel" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+         <Label fx:id="newCharismaLabel" GridPane.columnIndex="2" GridPane.rowIndex="7" />
          <Button fx:id="createPlayerButton" mnemonicParsing="false" onAction="#createNewPlayer" text="Create Player" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
          <Label fx:id="instructionLabel" text="Click to button to add selected roll to that stat" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-         <ListView fx:id="weaponListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="235.0" prefWidth="135.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.rowSpan="2147483647" />
-         <Label text="Choose your weapon:" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-         <Label fx:id="strBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-         <Label fx:id="conBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-         <Label fx:id="dexBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-         <Label fx:id="intBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-         <Label fx:id="wisBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-         <Label fx:id="chaBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+         <ListView fx:id="weaponListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="135.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="2147483647" />
+         <Label fx:id="newStrBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+         <Label fx:id="newConBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+         <Label fx:id="newDexBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+         <Label fx:id="newIntBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+         <Label fx:id="newWisBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+         <Label fx:id="newChaBonusLabel" text="(+0)" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+      <VBox prefHeight="55.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+         <children>
+               <Label text="Choose your weapon:" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" text="(Affects which attacks and spells you will have)" textAlignment="CENTER" wrapText="true" />
+         </children>
+      </VBox>
          <columnConstraints>
-            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="73.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="66.0" />
             <ColumnConstraints fillWidth="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="90.0" />
-            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
-            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="45.0" />
-            <ColumnConstraints />
+         <ColumnConstraints maxWidth="-Infinity" minWidth="10.0" prefWidth="35.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="30.0" />
+            <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="135.0" />
             <ColumnConstraints />
          </columnConstraints>
          <rowConstraints>
@@ -57,9 +64,6 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
          </rowConstraints>
         </GridPane>
-    </content>
-
-</DialogPane>
+</AnchorPane>

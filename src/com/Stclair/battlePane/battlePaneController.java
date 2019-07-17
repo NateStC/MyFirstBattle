@@ -2,12 +2,17 @@ package com.Stclair.battlePane;
 
 import com.Stclair.*;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,8 +86,30 @@ public class battlePaneController {
         });
     }
 
+
+//    @FXML
+//    private void startNewGame() {
+//        FXMLLoader Loader = new FXMLLoader();
+//        try {
+//            Loader.setLocation(FXMLLoader.load(getClass().getResource("newPlayerDialog.fxml")));
+//        } catch (IOException e){
+//            System.out.println("Could not set the loader");
+//            e.printStackTrace();
+//        }
+//        Parent p = Loader.getRoot();
+//        mainBorderPane.setCenter(p);
+
+//        try {
+//            mainBorderPane.setCenter(FXMLLoader.load(getClass().getResource("newPlayerDialog.fxml")));
+//        } catch (IOException e) {
+//            System.out.println("Unable to load roof dialog");
+//            e.printStackTrace();
+//        }
+//    }
+
+//     dialog popup window to create new player
     @FXML
-    private void showNewPlayerDialog() {
+    private void startNewGame() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -139,7 +166,7 @@ public class battlePaneController {
                 actionList.add("You have defeated all of the enemies!");
                 roundsCompleted += 1;
                 nextButton.setText("New Round");
-                nextButton.setOnAction(event -> startGame());
+                nextButton.setOnAction(event -> newRound());
                 nextButton.setDisable(false);
 //                spellButton.setDisable(true);
 //                healButton.setDisable(true);
@@ -150,15 +177,20 @@ public class battlePaneController {
         }
     }
 
-    private void startGame() {
+    public void startGame() {
         enemiesDefeated = 0;
-        player.fullHealth();
-        player.fullMana();
-        setHpBar();
-        setManaBar();
+        restorePlayer();
         showActionList();
         setUpEnemies();
         actionList.add("Your journey begins!");
+        setEnemy(enemies.get(0));
+    }
+
+    public void newRound(){
+        enemiesDefeated = 0;
+        restorePlayer();
+        setUpEnemies();
+        makeNextEnemyButton();
         setEnemy(enemies.get(0));
     }
 
@@ -771,6 +803,7 @@ public class battlePaneController {
         setHpBar();
     }
 
+    //fixme figure out why actions aren't being added to actionListView when casting spells
     private void playerCast(Spell spell) {
         if (player.isDead()){
             actionList.add(player.getName() + " is dead!");

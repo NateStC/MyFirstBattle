@@ -181,7 +181,7 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0">
                <children>
-                    <Button onAction="#showNewPlayerDialog" text="New Game" />
+                    <Button onAction="#startNewGame" text="New Game" />
                   <Button fx:id="loadGame" mnemonicParsing="false" text="Load Game" />
                </children>
             </HBox>

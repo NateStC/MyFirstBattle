@@ -1,0 +1,6 @@
+My first pet project. Simple tabletop RPG game using Java and JavaFX
+
+Roll your character, choose your weapon, then begin through a gauntlet of enemies.
+
+Version 0.1.0:
+Goblin Gang Gauntlet - Fight your way through 7 different goblins, each time you complete around, you can restart the round and keep grinding until you level up. After you have leveled up, the next round you start will regenerated the goblins with stats scaled to your new level.

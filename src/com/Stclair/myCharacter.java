@@ -20,15 +20,12 @@ public class myCharacter {
     private int charisma;
     private static String[] attributeNames = {"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
     private Weapon weapon;
+    private Armor armor;
     Inventory inventory = new Inventory();
 
 
     //empty constructor
     public myCharacter() {
-        this.name = "Character";
-        setDefaultStats();
-        fullHealth();
-        fullMana();
     }
 
     //simple named character w/default stats
@@ -47,9 +44,11 @@ public class myCharacter {
     }
 
     //construct character w/ attributes, exp, hp, and mana in Array
-    public myCharacter(String name, int[] allStats) {
+    public myCharacter(String name, int[] allStats, Weapon weapon, Armor armor) {
         this.name = name;
         setStats(allStats);
+        equipWeapon(weapon);
+        equipArmor(armor);
     }
 
     //load character constructor
@@ -70,7 +69,7 @@ public class myCharacter {
 
     //new character constructor
     public myCharacter(String name, int strength, int dexterity, int constitution, int intelligence, int wisdom,
-                       int charisma, Weapon weapon) {
+                       int charisma, Weapon weapon, Armor armor) {
         this.name = name;
         this.strength = strength;
         this.dexterity = dexterity;
@@ -78,9 +77,11 @@ public class myCharacter {
         this.intelligence = intelligence;
         this.wisdom = wisdom;
         this.charisma = charisma;
-        this.health = getMaxHealth();
         this.mana = getMaxMana();
         this.weapon = weapon;
+        this.armor = armor;
+
+        this.health = getMaxHealth();
     }
 
     public void assignStats(ArrayList<Integer> arrayRolls, Scanner scanner) {
@@ -329,8 +330,6 @@ public class myCharacter {
         this.wisdom = wis;
         this.charisma = cha;
         this.experience = 0;
-        fullMana();
-        fullHealth();
     }
 
     public void setStats(int str, int con, int dex, int intel, int wis, int cha, int lvl) {
@@ -341,8 +340,6 @@ public class myCharacter {
         this.wisdom = wis;
         this.charisma = cha;
         setLevel(lvl);
-        fullMana();
-        fullHealth();
     }
 
     public void setStats(int str, int con, int dex, int intel, int wis, int cha, int exp, int health, int mana) {
@@ -539,7 +536,7 @@ public class myCharacter {
     }
 
     public int getMaxHealth() {
-        return this.constitution * 3 + (getLevel() * 5);
+        return getConStat()* 3 + (getLevel() * 5);
     }
 
     public void fullHealth() {
@@ -622,31 +619,60 @@ public class myCharacter {
         return weapon;
     }
 
+    public int getStrBonus(){
+        return this.weapon.getStrBonus() + this.armor.getStrBonus();
+    }
+
+    public int getConBonus(){
+        return this.weapon.getConBonus() + this.armor.getConBonus();
+    }
+
+    public int getDexBonus(){
+        return this.weapon.getDexBonus() + this.armor.getDexBonus();
+    }
+
+    public int getIntBonus(){
+        return this.weapon.getIntBonus() + this.armor.getIntBonus();
+    }
+
+    public int getWisBonus(){
+        return this.weapon.getWisBonus() + this.armor.getWisBonus();
+    }
+
+    public int getChaBonus(){
+        return this.weapon.getCharBonus() + this.armor.getChaBonus();
+    }
+
     public void equipWeapon(Weapon weapon) {
         this.weapon = weapon;
+        weapon.setWielder(this);
+    }
+
+    public void equipArmor(Armor armor){
+        this.armor = armor;
     }
 
     public int getStrStat(){
-        return this.strength + this.weapon.getStrBonus();
+        return this.strength + this.getStrBonus();
     }
 
     public int getConStat(){
-        return this.constitution + this.weapon.getConBonus();
+        return this.constitution + this.getConBonus();
     }
 
     public int getDexStat(){
-        return this.dexterity + this.weapon.getDexBonus();
+        return this.dexterity + this.getDexBonus();
     }
 
     public int getIntStat(){
-        return this.intelligence + this.weapon.getIntBonus();
+        return this.intelligence + this.getIntBonus();
     }
 
     public int getWisStat(){
-        return this.wisdom + this.weapon.getWisBonus();
+        return this.wisdom + this.getWisBonus();
     }
 
     public int getChaStat(){
-        return  this.charisma + this.weapon.getCharBonus();
+        return  this.charisma + this.getChaBonus();
     }
 }

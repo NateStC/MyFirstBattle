@@ -1,8 +1,6 @@
 package com.Stclair.battlePane;
 
-import com.Stclair.Weapon;
-import com.Stclair.myCharacter;
-import com.Stclair.Dice;
+import com.Stclair.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -82,7 +80,7 @@ public class newPlayerController {
         });
 
         ObservableList<Weapon> weapons = FXCollections.observableArrayList();
-        weapons.addAll(Weapon.swordShort(), Weapon.longSword(), Weapon.daggers(), Weapon.staff(), Weapon.mace());
+        weapons.addAll(Weapons.swordShort(), Weapons.longSword(), Weapons.daggers(), Weapons.staff(), Weapons.mace());
         weaponListView.setItems(weapons);
         weaponListView.setCellFactory(lv -> new ListCell<>(){
             @Override
@@ -134,8 +132,9 @@ public class newPlayerController {
         if (!playerNameField.getText().isEmpty() || newStrength == 0 || newDexterity == 0 || newConstitution == 0 ||
                 newIntelligence == 0 || newWisdom == 0 || newCharisma == 0) {
 
+            //todo add way to choose armor for player
             battlePaneController.player = new myCharacter(playerNameField.getText().trim(), newStrength, newDexterity,
-                    newConstitution, newIntelligence, newWisdom, newCharisma, weaponListView.getSelectionModel().getSelectedItem());
+                    newConstitution, newIntelligence, newWisdom, newCharisma, weaponListView.getSelectionModel().getSelectedItem(), Armors.scrapLeathers());
             System.out.println("new player created");
 
             //todo how to pass new character to battlePaneController from create character button and not close button

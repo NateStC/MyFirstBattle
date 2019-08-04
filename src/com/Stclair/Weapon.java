@@ -45,11 +45,12 @@ public class Weapon extends Item {
         this.wisBonus = 0;
         this.charBonus = 0;
 
-        ArrayList<Attack> attacks = new ArrayList<>();;
+        ArrayList<Attack> attacks = new ArrayList<>();
+        ;
         attacks.add(Attack.stab());
     }
 
-    public void addAttack (Attack attack){
+    public void addAttack(Attack attack) {
         this.attackList.add(attack);
     }
 
@@ -94,7 +95,7 @@ public class Weapon extends Item {
         return charBonus;
     }
 
-    public ArrayList<Attack> getAttackList(){
+    public ArrayList<Attack> getAttackList() {
         return this.attackList;
     }
 }

@@ -29,6 +29,24 @@ public class Weapons {
                 1, 1, 0, 0, 1, 1, attacks);
     }
 
+    public static Weapon shortSword(int lvl) {
+        String name = Item.getLvledMetalName(lvl) + " Short Sword";
+        int physDmg = Dice.d6() + lvl;
+        int spellDmg = (Dice.d6() + lvl) / 2;
+        int strBonus = Dice.die(2, lvl);
+        int dexBonus = Dice.die(2, lvl);
+        int wisBonus = Dice.die(2, lvl);
+
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(Attack.swordSlice());
+        attacks.add(Attack.stab());
+        attacks.add(Attack.bash());
+        attacks.add(Attack.elementalStrike());
+
+        return new Weapon(name, 4.0, 5, 6, physDmg, spellDmg, strBonus, dexBonus, 0,
+                0, wisBonus, 0, attacks);
+    }
+
     public static Weapon longSword() {
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(Attack.swordSlice());

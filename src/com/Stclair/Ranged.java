@@ -3,9 +3,19 @@ package com.Stclair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ranged extends Spell {
+public class Ranged extends Attack {
+    //todo add ammo type?
+
 
     //basic ranged attack constructor;
+    public Ranged (String name, int dmgDie, double dexMultiplier, double lvlMultiplier){
+        setName(name);
+        setPhysDmgDie(dmgDie);
+        setDexMultiplier(dexMultiplier);
+        setLvlMultiplier(lvlMultiplier);
+    }
+
+
     public Ranged(String name, double dexMultiplier, double accMultiplier, double lvlMultiplier,
                   double physDmgMultiplier, int hitPoint, int critPoint, int dmgDie) {
         this.setName(name);
@@ -16,7 +26,7 @@ public class Ranged extends Spell {
         this.setSpellDmgMultiplier(0);
         this.setHitPoint(hitPoint);
         this.setCritPoint(critPoint);
-        this.setDmgDie(dmgDie);
+        this.setPhysDmgDie(dmgDie);
         this.setDmgRolls(1);
         this.setStrMultiplier(0);
         this.setIntMultiplier(0);
@@ -39,7 +49,7 @@ public class Ranged extends Spell {
         this.setSpellDmgMultiplier(0);
         this.setHitPoint(hitPoint);
         this.setCritPoint(critPoint);
-        this.setDmgDie(dmgDie);
+        this.setPhysDmgDie(dmgDie);
         this.setDmgRolls(dmgRolls);
         this.setStrMultiplier(strMultiplier);
         this.setIntMultiplier(0);
@@ -62,7 +72,7 @@ public class Ranged extends Spell {
         this.setSpellDmgMultiplier(spellDmgMultiplier);
         this.setHitPoint(hitPoint);
         this.setCritPoint(critPoint);
-        this.setDmgDie(dmgDie);
+        this.setPhysDmgDie(dmgDie);
         this.setStrMultiplier(0);
         this.setIntMultiplier(intMultiplier);
         this.setWisMultiplier(wisMultiplier);
@@ -72,13 +82,13 @@ public class Ranged extends Spell {
 
 
     //full constructor
-    public Ranged(String name, double strMultiplier, double dexMultiplier, double lvlMultiplier,
-                  double physDmgMultiplier, double spellDmgMultiplier, int hitPoint, int critPoint, int dmgDie,
-                  int dmgRolls, int numOfAttacks, int dexAccMultiplier, int manaCost, int healDie, double intMultiplier,
-                  double wisMultiplier, double chaMultiplier, double hpDrainmultiplier) {
-        super(name, strMultiplier, dexMultiplier, lvlMultiplier, physDmgMultiplier, spellDmgMultiplier, hitPoint,
-                critPoint, dmgDie, dmgRolls, numOfAttacks, dexAccMultiplier, manaCost, healDie, intMultiplier,
-                wisMultiplier, chaMultiplier, hpDrainmultiplier);
+    public Ranged(String name, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier,
+                  double chaMultiplier, double lvlMultiplier, double physDmgMultiplier, double spellDmgMultiplier,
+                  int hitPoint, int critPoint, int dmgDie, int dmgRolls, int numOfAttacks, int healDie,
+                  double accMultiplier, int manaCost, double hpDrainMultiplier, double costMultiplier) {
+        super(name, strMultiplier, dexMultiplier, intMultiplier, wisMultiplier, chaMultiplier, lvlMultiplier,
+                physDmgMultiplier, spellDmgMultiplier, hitPoint, critPoint, dmgDie, dmgRolls, numOfAttacks, healDie,
+                accMultiplier, manaCost, hpDrainMultiplier, costMultiplier);
     }
 
     @Override
@@ -87,8 +97,8 @@ public class Ranged extends Spell {
         System.out.println(attacker.getName() + " using " + this.getName());
         for (int i = 0; i < this.getNumOfAttacks(); i++) {
             int cost = this.getManaCost();
-            if (i == 0) {
-                if (cost > 0) {
+            if (i == 0) { // only costs mana for first cast if more than one attack
+                if (cost > 0) { // calculates manaCost
                     cost += (attacker.getLevel() * this.getLvlMultiplier());
                     cost -= (attacker.getWisStat() * this.getWisMultiplier());
                 }
@@ -107,14 +117,14 @@ public class Ranged extends Spell {
             }
             int physDmg = 0;
             if (this.getPhysDmgMultiplier() > 0) {
-                physDmg += Dice.die(this.getDmgDie(), this.getDmgRolls()) +
+                physDmg += Dice.die(this.getPhysDmgDie(), this.getDmgRolls()) +
                         (int) (attacker.getStrStat() * this.getStrMultiplier()) +
                         (int) (attacker.getDexStat() * this.getDexMultiplier()) +
                         (int) (attacker.getWeapon().getPhysDamage() * this.getPhysDmgMultiplier());
             }
             int spellDmg = 0;
             if (this.getSpellDmgMultiplier()>0) {
-                spellDmg += Dice.die(this.getDmgDie(), this.getDmgRolls()) +
+                spellDmg += Dice.die(this.getPhysDmgDie(), this.getDmgRolls()) +
                         (int) (attacker.getIntStat() * this.getIntMultiplier())+
                         (int) (attacker.getWeapon().getSpellDmg() * this.getSpellDmgMultiplier());
             }

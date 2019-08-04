@@ -23,6 +23,10 @@ public class Enemies {
         return enemies;
     }
 
+
+    //***** GOBLINS ******
+
+
     public static Enemy goblinGrunt(int lvl) {
         int str = 5 + (lvl);
         int con = 5 + (lvl * 2);
@@ -41,7 +45,7 @@ public class Enemies {
 
     public static Enemy goblinShaman(int lvl) {
         int str = 3 + (lvl / 2);
-        int con = 4 + Dice.die(8,lvl/2);
+        int con = 4 + Dice.die(8, lvl / 2);
         int dex = 3 + (lvl / 2);
         int intel = 6 + (lvl * 2);
         int wis = 5 + (int) (lvl * 1.66);
@@ -89,8 +93,6 @@ public class Enemies {
     }
 
     public static Enemy goblinKing(int lvl) {
-        new Enemy("Goblin King", 8 + (lvl * 2), 9 + (lvl * 3), 8 + (lvl * 2), 7 + (lvl), 7 + lvl, 7 + lvl,
-                1 + lvl, Weapons.longSword(), Armors.goblinKingArmor(lvl));
         int str = Dice.die(6, (lvl / 2) + 2);
         int con = 7 + Dice.die(8, lvl);
         int dex = Dice.die(6, lvl * 2);
@@ -105,6 +107,21 @@ public class Enemies {
 
         return new Enemy("Goblin King", str, con, dex, intel, wis, cha, lvl, Weapons.goblinScepter(lvl),
                 Armors.goblinPlate(lvl), ent);
+    }
+
+
+    // ***** UNDEAD ******
+
+    public static Enemy skeleton(int lvl) {
+        int str = Dice.die(6, lvl) + 2;
+        int dex = Dice.die(6, lvl) + 4;
+        int con = Dice.die(6, lvl) + 3;
+        int intel = 3 + lvl + Dice.d6();
+        int wis = 4 + lvl + Dice.d6();
+        int cha = Dice.die(6, lvl) / 2 + 3;
+
+        return new Enemy("Skeleton", str, con, dex, intel, wis, cha, lvl, Weapons.shortSword(lvl),
+                Armors.chain(lvl));
     }
 
 }

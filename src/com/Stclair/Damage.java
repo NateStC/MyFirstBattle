@@ -2,7 +2,7 @@ package com.Stclair;
 
 public class Damage {
     private String attackName;
-    private int physDamage;
+    private int physDamage = 0;
     private int magicDamage = 0;
     private int manaCost = 0;
     private int heal = 0;
@@ -17,13 +17,11 @@ public class Damage {
         this.crit = crit;
     }
 
-    //not enough mana for attack
-    public Damage(String attackName, int manaCost) {
+    // OOM - Out Of Mana - not enough mana for attack
+    public Damage(String attackName) {
         this.attackName = attackName;
         this.OOM = true;
         this.hit = false;
-        this.physDamage = 0;
-        this.manaCost = manaCost;
     }
 
     //missed attack
@@ -37,7 +35,6 @@ public class Damage {
     public Damage(String attackName, boolean hit, int manaCost) {
         this.attackName = attackName;
         this.hit = false;
-        this.physDamage = 0;
         this.manaCost = manaCost;
     }
 

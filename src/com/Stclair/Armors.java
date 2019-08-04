@@ -44,19 +44,47 @@ public class Armors {
         return new Armor(name, wt, armorRating, magicDefRating, str, con, dex, intl, wis, cha);
     }
 
-    public static Armor plate(int lvl){
+    public static Armor leathers(int lvl) {
+        String name = Item.getLvledLeatherName(lvl) + " Leathers";
+        int wt = lvl / 3 + 4;
+        int armorRating = 2 + lvl;
+        int magicDef = lvl;
+        int str = Dice.die(2, lvl) - lvl;
+        int con = Dice.die(2, lvl) / 2;
+        int dex = Dice.die(3, lvl) + 2;
+        int intl = Dice.die(2, lvl) - lvl;
+        int wis = Dice.die(2, lvl);
+        int cha = Dice.die(2, lvl);
+
+        return new Armor(name, wt, armorRating, magicDef, str, con, dex, intl, wis, cha);
+    }
+
+    public static Armor plate(int lvl) {
         String name = Item.getLvledMetalName(lvl) + " Platemail";
-        int wt = lvl/3 + 9;
+        int wt = lvl / 3 + 9;
         int armorRating = 5 + lvl;
         int magicDef = 0;
-        int str = Dice.die(3,lvl);
-        int con = Dice.die(3,lvl);
-        int dex = Dice.die(2,lvl)/2;
+        int str = Dice.die(3, lvl);
+        int con = Dice.die(3, lvl);
+        int dex = Dice.die(2, lvl) / 2;
         int intel = 0;
-        int wis = Dice.die(2,lvl)/3;
-        int cha = Dice.die(2,lvl)/3;
+        int wis = Dice.die(2, lvl) / 3;
+        int cha = Dice.die(2, lvl) / 3;
 
         return new Armor(name, wt, armorRating, magicDef, str, con, dex, intel, wis, cha);
+    }
+
+    public static Armor beast(int lvl) {
+        int armor = 3 + lvl;
+        int magicDef = 1 + lvl;
+        int str = Dice.die(2,lvl);
+        int con = Dice.die(3,lvl);
+        int dex = Dice.die(3,lvl);
+        int intl = 0;
+        int wis = 0;
+        int cha = 0;
+
+        return new Armor("beast", 0, armor, magicDef, str, con, dex, intl, wis, cha);
     }
 
 

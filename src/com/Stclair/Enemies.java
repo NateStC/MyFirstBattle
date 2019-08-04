@@ -124,4 +124,54 @@ public class Enemies {
                 Armors.chain(lvl));
     }
 
+    public static Enemy zombie(int lvl) {
+        int str = Dice.die(8, lvl) + 2;
+        int dex = Dice.die(4, lvl) + 3;
+        int con = Dice.die(8, lvl * 2) / 2 + 2;
+        int intl = 4 + Dice.die(2, lvl);
+        int wis = 4 + Dice.die(2, lvl);
+        int cha = 4 + lvl;
+
+        return new Enemy("Zombie", str, con, dex, intl, wis, cha, lvl, Weapons.zombieTeeth(lvl),
+                Armors.scrapLeathers());
+    }
+
+    public static Enemy vampire(int lvl) {
+        int str = Dice.die(4, lvl + 2);
+        int dex = Dice.die(6, lvl + 1);
+        int con = Dice.die(4, lvl * 2);
+        int intl = Dice.die(8, lvl + 2);
+        int wis = Dice.die(6, lvl + 3);
+        int cha = Dice.die(8, lvl + 2);
+
+        return new Enemy("Vampire", str, con, dex, intl, wis, cha, lvl, Weapons.vampireTeeth(lvl),
+                Armors.leathers(lvl));
+    }
+
+
+    //*** BEASTS ***
+
+    public static Enemy wolf(int lvl) {
+        int str = Dice.die(6, lvl + 1);
+        int con = Dice.die(4, lvl * 2);
+        int dex = Dice.die(6, lvl + 1);
+        int intl = Dice.die(3, lvl + 1 + 2);
+        int wis = Dice.die(2, lvl + 1) + 2;
+        int cha = Dice.die(2, lvl + 1) + 2;
+
+        return new Enemy("Wolf", str, con, dex, intl, wis, cha, lvl, Weapons.beast(lvl), Armors.beast(lvl));
+
+    }
+
+    public static Enemy bear(int lvl) {
+        int str = Dice.die(4, lvl * 2) + 6;
+        int con = Dice.die(4, lvl * 2) + 6;
+        int dex = Dice.die(4, lvl + 1);
+        int intl = Dice.die(3, lvl) + 2;
+        int wis = Dice.die(3, lvl) + 2;
+        int cha = Dice.die(2,lvl) + 2;
+
+        return new Enemy("Bear", str, con, dex, intl, wis, cha, lvl, Weapons.beast(lvl), Armors.beast(lvl));
+    }
+
 }

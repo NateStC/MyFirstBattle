@@ -1,19 +1,33 @@
 package com.Stclair;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Attack {
 
+    //todo move manaCost and spellDamage from Spell to attack
+    // Attack/doAttack() goes off of str and dex, Spell/doAttack() goes off of int and wis
+    // Ranged/doAttack() goes off of dex and factors hit chances
+
     private String name;
-    private double strMultiplier = 1;
-    private double dexMultiplier = 1;
+    private int dmgDie = 6;
+    private double strMultiplier = 0;
+    private double dexMultiplier = 0;
+    private double intMultiplier = 0;
+    private double wisMultiplier = 0;
+    private double chaMultiplier = 0;
     private double lvlMultiplier = 1;
     private double physDmgMultiplier = 1;
     private double spellDmgMultiplier = 0;
     private int hitPoint = 1;
     private int critPoint = 20;
-    private int dmgDie =6;
-    private int dmgRolls =1;
+    private int dmgRolls = 1;
     private int numOfAttacks = 1;
+    private int healDie = 0;
     private double accMultiplier = 0;
+    private int manaCost = 0;
+    private double hpDrainMultiplier = 0;
+    private double costMultiplier = 1;
 
     //todo find a way to apply buffs/debuffs to attacks
     //todo add description String for attacks?
@@ -23,6 +37,7 @@ public class Attack {
     //empty constructor
     public Attack() {
         this.name = "Bash";
+        dexMultiplier = .33;
     }
 
     public Attack(String name, int dmgDie, double strMultiplier, double dexMultiplier) {
@@ -32,6 +47,7 @@ public class Attack {
         this.dexMultiplier = dexMultiplier;
     }
 
+    //simple attack
     public Attack(String name, int dmgDie, double strMultiplier, double dexMultiplier,
                   double lvlMultiplier, double physDmgMultiplier) {
         this.name = name;
@@ -42,13 +58,38 @@ public class Attack {
         this.physDmgMultiplier = physDmgMultiplier;
     }
 
-    //full constructor
-    public Attack(String name, double strMultiplier, double dexMultiplier, double lvlMultiplier,
-                  double physDmgMultiplier, double spellDmgMultiplier, int hitPoint, int critPoint, int dmgDie,
-                  int dmgRolls, int numOfAttacks, double accMultiplier) {
+    public Attack(String name, int dmgDie, int dmgRolls, int numOfAttacks, double strMultiplier, double dexMultiplier) {
+        this.name = name;
+        this.dmgDie = dmgDie;
+        this.dmgRolls = dmgRolls;
+        this.numOfAttacks = numOfAttacks;
+        this.strMultiplier = strMultiplier;
+        this.dexMultiplier = dexMultiplier;
+    }
+
+    public Attack(String name, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier,
+                  double chaMultiplier, double lvlMultiplier, double physDmgMultiplier) {
         this.name = name;
         this.strMultiplier = strMultiplier;
         this.dexMultiplier = dexMultiplier;
+        this.intMultiplier = intMultiplier;
+        this.wisMultiplier = wisMultiplier;
+        this.chaMultiplier = chaMultiplier;
+        this.lvlMultiplier = lvlMultiplier;
+        this.physDmgMultiplier = physDmgMultiplier;
+    }
+
+    //full constructor
+    public Attack(String name, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier,
+                  double chaMultiplier, double lvlMultiplier, double physDmgMultiplier, double spellDmgMultiplier,
+                  int hitPoint, int critPoint, int dmgDie, int dmgRolls, int numOfAttacks, int healDie,
+                  double accMultiplier, int manaCost, double hpDrainMultiplier, double costMultiplier) {
+        this.name = name;
+        this.strMultiplier = strMultiplier;
+        this.dexMultiplier = dexMultiplier;
+        this.intMultiplier = intMultiplier;
+        this.wisMultiplier = wisMultiplier;
+        this.chaMultiplier = chaMultiplier;
         this.lvlMultiplier = lvlMultiplier;
         this.physDmgMultiplier = physDmgMultiplier;
         this.spellDmgMultiplier = spellDmgMultiplier;
@@ -57,43 +98,77 @@ public class Attack {
         this.dmgDie = dmgDie;
         this.dmgRolls = dmgRolls;
         this.numOfAttacks = numOfAttacks;
+        this.healDie = healDie;
         this.accMultiplier = accMultiplier;
+        this.manaCost = manaCost;
+        this.hpDrainMultiplier = hpDrainMultiplier;
+        this.costMultiplier = costMultiplier;
     }
 
-    public Damage doAttack(myCharacter attacker) {
+    //todo finish multiAttack
+    public List<Damage> doAttack(myCharacter attacker) {
         System.out.println(attacker.getName() + " using " + this.getName());
-        int acc = Dice.d20();
-        int critRoll = critPoint;
-        //auto miss if rolled 1
-        if (acc == 1) {
-            return new Damage(this.getName(),false);
-        }
-        if (accMultiplier > 0) {
-            acc += (int) (this.accMultiplier * attacker.getDexStat()) - (int) (attacker.getLevel() * this.lvlMultiplier);
-            critRoll += (int) (attacker.getLevel() * this.lvlMultiplier);
-            //missed if accuracy is not high enough
-            if (acc < hitPoint + (int)(attacker.getLevel() * this.lvlMultiplier)) {
-                return new Damage(this.getName(), false);
+        ArrayList<Damage> damages = new ArrayList<>();
+        for (int i = 0; i < this.numOfAttacks; i++) {
+            boolean crit = false;
+            int cost = 0;
+            if (i == 0) {
+                cost = manaCost;
             }
+            //check if attack costs mana
+            if (cost > 0) {
+                cost += (attacker.getLevel() * this.getLvlMultiplier());
+                cost -= (attacker.getWisStat() * wisMultiplier);
+            }
+            //attack roll
+            int acc = Dice.d20();
+            //auto miss if rolled 1
+            if (acc == 1) {
+                damages.add(new Damage(this.getName(), false));
+                continue;
+            }
+            // natural crit
+            if (acc == 20) {
+                crit = true;
+            }
+            //if attack has accuracy modifier, factor it in
+            if (accMultiplier > 0) {
+                acc += (int) (this.accMultiplier * attacker.getDexStat()) - (int) (attacker.getLevel() * this.lvlMultiplier);
+                //missed if accuracy is not high enough
+                if (acc < hitPoint + (int) (attacker.getLevel() * this.lvlMultiplier)) {
+                    damages.add(new Damage(this.getName(), false));
+                    continue;
+                }
+                //crit check if accuracy + dexBonus > critPoint + lvlBonus;
+                if (acc + (attacker.getDexStat() * this.accMultiplier) > this.critPoint + (attacker.getLevel() * this.getLvlMultiplier())) {
+                    crit = true;
+                }
+            }
+            //damage rolls
+            int physDmg = 0;
+            if (physDmgMultiplier>0){
+                physDmg += Dice.die(this.dmgDie, this.dmgRolls) +
+                        (int) (attacker.getStrStat() * this.strMultiplier) +
+                        (int) (attacker.getWeapon().getPhysDamage() * physDmgMultiplier);
+            }
+            int spellDmg = 0;
+            if (spellDmgMultiplier >0){
+                spellDmg += Dice.die(this.dmgDie, this.dmgRolls) +
+                        (int) (attacker.getIntStat() * this.getIntMultiplier()) +
+                        (int) (attacker.getWeapon().getSpellDmg() * spellDmgMultiplier);
+            }
+            if (crit) {
+                physDmg *= 2;
+                System.out.println("Critical Hit!");
+            }
+            damages.add(new Damage(this.name, physDmg, cost, crit));
         }
-        int dmg = Dice.die(this.dmgDie, this.dmgRolls) +
-                (int) (attacker.getLevel() * this.getLvlMultiplier()) +
-                (int) (attacker.getStrStat() * this.strMultiplier) +
-                (int) (attacker.getLevel() * this.lvlMultiplier) +
-                (int) (attacker.getWeapon().getPhysDamage() * physDmgMultiplier) +
-                (int) (attacker.getWeapon().getSpellDmg() * spellDmgMultiplier);
-        boolean crit = false;
-        if (acc >= critRoll) {
-            crit = true;
-            System.out.println("Critical hit");
-            dmg *= 2;
-        }
-        return new Damage(this.name, dmg, crit);
+        return damages;
     }
 
     //basic attack
     public static Attack stab() {
-        return new Attack("Stab", 6, 0.5, 1);
+        return new Attack("Stab", 6, 0.5, 0.5);
     }
 
     //todo test with spellcaster
@@ -104,15 +179,21 @@ public class Attack {
     //dagger attack that relies on dexterity for damage and better crit change
     //todo test daggerSlice attack and find a better name, (maybe eviscerate?)
     public static Attack daggerSlice() {
-        return new Attack ("Dagger Slice", 6, 0, 2);
+        return new Attack("Dagger Slice", 6, 0.5, 1, 1, 1.5);
+    }
+
+    public static Attack daggerFlurry() {
+        new Attack("Dagger Flurry", )
+        return new Attack("Dagger Flurry", 0, 1.25, 1, 1,
+                0, 2, 20, 4, 1, 4, 0);
     }
 
     public static Attack swordSlice() {
-        return new Attack("Sword Slice", 12,1,0.5,1,1.5);
+        return new Attack("Sword Slice", 8, 1, 0.5, 1, 1.5);
     }
 
     public static Attack smash() {
-        return new Attack("Smash", 6, 1.5, 1, 1, 1);
+        return new Attack("Smash", 8, 1.25, 0, 1, 1);
     }
 
     public String getName() {
@@ -209,6 +290,62 @@ public class Attack {
 
     public void setAccMultiplier(double accMultiplier) {
         this.accMultiplier = accMultiplier;
+    }
+
+    public int getManaCost() {
+        return manaCost;
+    }
+
+    public void setManaCost(int manaCost) {
+        this.manaCost = manaCost;
+    }
+
+    public double getIntMultiplier() {
+        return intMultiplier;
+    }
+
+    public void setIntMultiplier(double intMultiplier) {
+        this.intMultiplier = intMultiplier;
+    }
+
+    public double getWisMultiplier() {
+        return wisMultiplier;
+    }
+
+    public void setWisMultiplier(double wisMultiplier) {
+        this.wisMultiplier = wisMultiplier;
+    }
+
+    public double getChaMultiplier() {
+        return chaMultiplier;
+    }
+
+    public void setChaMultiplier(double chaMultiplier) {
+        this.chaMultiplier = chaMultiplier;
+    }
+
+    public int getHealDie() {
+        return healDie;
+    }
+
+    public void setHealDie(int healDie) {
+        this.healDie = healDie;
+    }
+
+    public double getHpDrainMultiplier() {
+        return hpDrainMultiplier;
+    }
+
+    public void setHpDrainMultiplier(double hpDrainMultiplier) {
+        this.hpDrainMultiplier = hpDrainMultiplier;
+    }
+
+    public double getCostMultiplier() {
+        return costMultiplier;
+    }
+
+    public void setCostMultiplier(double costMultiplier) {
+        this.costMultiplier = costMultiplier;
     }
 
     //    public String getDescription() {

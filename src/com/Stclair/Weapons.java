@@ -12,7 +12,7 @@ public class Weapons {
         attackList.add(Ranged.knifeThrow());
         attackList.add(Spell.healingHands());
 
-        return new Weapon("Rusty Dagger", 1.5, 5, 6, 2, 0,
+        return new Weapon("Rusty Dagger", 1.5, 5, 6, 1, 0,
                 0, 0, 0, 0, 0, 0, attackList);
     }
 
@@ -44,6 +44,7 @@ public class Weapons {
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(Attack.daggerSlice());
         attacks.add(Attack.stab());
+        attacks.add(Attack.daggerFlurry());
         attacks.add(Spell.drainLife());
 
         return new Weapon("Twin Daggers", 3.5, 5, 8, 3, 1,
@@ -55,6 +56,7 @@ public class Weapons {
         ArrayList<Attack> attacks = new ArrayList<>();
         attacks.add(Spell.fireball());
         attacks.add(Spell.staticShock());
+        attacks.add(Spell.magicMissile());
         attacks.add(Spell.healingHands());
         attacks.add(Attack.bash());
 
@@ -86,8 +88,8 @@ public class Weapons {
     ///// GOBLIN WEAPONS
 
     public static Weapon goblinSpear(int lvl) {
-        int physDmg = 5 + lvl;
-        int spellDmg = 3 + (lvl / 2);
+        int physDmg = 3 + lvl;
+        int spellDmg = 1 + (lvl / 2);
         int dex = 3 + (int) (lvl * 1.5);
         int intel = 1 + (lvl / 3);
 
@@ -101,9 +103,22 @@ public class Weapons {
                 0, intel, 0, 0, attacks);
     }
 
+    public static Weapon goblinClub(int lvl) {
+        int physDmg = 3 + (int) (lvl * 1.5);
+        int str = 4 + (lvl * 2);
+        int con = 1 + lvl;
+
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(Attack.bash());
+        attacks.add(Attack.smash());
+        attacks.add(Spell.healingHands());
+        return new Weapon("Goblin Club", 9, 4, 2, physDmg, 0, str, 0, con,
+                0, 0, 0, attacks);
+    }
+
     public static Weapon goblinBow(int lvl) {
-        int dex = 3 + lvl;
-        int physDmg = 4 + lvl;
+        int dex = +lvl;
+        int physDmg = 3 + (lvl / 2);
         int intel = 1 + (lvl / 3);
         int wis = 1 + (lvl / 2);
         int cha = 1 + (lvl / 3);
@@ -116,5 +131,24 @@ public class Weapons {
 
         return new Weapon("Goblin Bow", 6, 6, 4, physDmg, 0, 0, dex,
                 0, intel, wis, cha, attacks);
+    }
+
+    public static Weapon goblinScepter(int lvl) {
+        int physDmg = 2 + (int) (lvl * 1.5);
+        int spellDmg = 2 + lvl;
+        int str = 1 + lvl;
+        int con = 1 + lvl;
+        int dex = 1 + lvl;
+        int intel = 1 + lvl;
+        int wis = 1 + lvl;
+        int cha = 1 + lvl;
+
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(Attack.bash());
+        attacks.add(Attack.smash());
+        attacks.add(Spell.drainLife());
+
+        return new Weapon("Goblin Scepter", 6, 5, 5, physDmg, spellDmg, str, con, dex,
+                intel, wis, cha, attacks);
     }
 }

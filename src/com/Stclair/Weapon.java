@@ -13,14 +13,11 @@ public class Weapon extends Item {
     private int intBonus;
     private int wisBonus;
     private int charBonus;
-    private myCharacter wielder;
     private ArrayList<Attack> attackList = new ArrayList<>();
 
-    //todo find if there's a better arrayList than type string for listing attacks
     public Weapon(String name, double weight, int accuracy, int speed, int physDmg, int spellDmg, int strBonus, int dexBonus,
                   int conBonus, int intBonus, int wisBonus, int charBonus, ArrayList<Attack> attacks) {
         super(name, weight);
-        this.wielder = new myCharacter();
         this.accuracy = accuracy;
         this.speed = speed;
         this.physDamage = physDmg;
@@ -48,9 +45,7 @@ public class Weapon extends Item {
         this.wisBonus = 0;
         this.charBonus = 0;
 
-        ArrayList<Attack> attacks = new ArrayList<>();
-        Attack att = new Attack();
-        att.stab();
+        ArrayList<Attack> attacks = new ArrayList<>();;
         attacks.add(Attack.stab());
     }
 
@@ -101,13 +96,5 @@ public class Weapon extends Item {
 
     public ArrayList<Attack> getAttackList(){
         return this.attackList;
-    }
-
-    public myCharacter getWielder() {
-        return wielder;
-    }
-
-    public void setWielder(myCharacter wielder) {
-        this.wielder = wielder;
     }
 }

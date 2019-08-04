@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public class battlePaneController {
 
@@ -105,7 +104,7 @@ public class battlePaneController {
 
     //     dialog popup window to create new player
     @FXML
-    private void startNewGame() {
+    private void rollNewCharacter() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -123,10 +122,44 @@ public class battlePaneController {
 
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.CLOSE && player != null) {
-            setPlayer();
             startGame();
             System.out.println("Game Starting");
         }
+    }
+
+    @FXML
+    private void newSpellSword() {
+        player = new myCharacter("Trofasthet the Spell-Sword", 11, 9, 13, 12,
+                10, 8, Weapons.swordShort(), Armors.tinChainmail());
+        startGame();
+
+    }
+
+    @FXML
+    private void newRogue() {
+        player = new myCharacter("John the Silent-but-Deadly", 7, 14, 10, 8,
+                9, 11, Weapons.daggers(), Armors.scrapLeathers());
+        startGame();
+    }
+
+    @FXML
+    private void newWarrior() {
+        player = new myCharacter("Volstagg the Burly", 14, 8, 13, 8, 9,
+                7, Weapons.mace(), Armors.tinPlatemail());
+        startGame();
+    }
+
+    @FXML
+    private void newWizard() {
+        player = new myCharacter("Dinklebot the Astute", 6, 8, 9, 15, 13,
+                11, Weapons.staff(), Armors.initiateRobes());
+        startGame();
+    }
+
+    @FXML
+    private void newRanger() {
+        player = new myCharacter("Colton the Ranger", 8, 14, 10, 10, 10,
+                8, Weapons.bow(), Armors.scrapLeathers());
     }
 
     @FXML
@@ -175,6 +208,7 @@ public class battlePaneController {
     }
 
     public void startGame() {
+        setPlayer();
         enemiesDefeated = 0;
         restorePlayer();
         showActionList();
@@ -201,16 +235,53 @@ public class battlePaneController {
             Button button = new Button(a.getName());
             button.setPrefWidth(100);
             button.setOnAction(e -> {
-                Damage result = a.doAttack(player);
-                if (result.getHpDamage() > 0) {
-                    if (enemy.isDead()) {
-                        actionList.add("Enemy is already dead");
-                    } else {
-                        playerAttack(result);
+                List<Damage> result = a.doAttack(player);
+                int atks = 0;
+                //build a button for each attack
+                for (Damage d : result) {
+                    if (enemy.isDead() && d.getPhysDamage() > 0) {
+                        actionList.add("Enemy is already dead!");
+                        break;
                     }
-                } else if (result.getHeal() > 0 && !player.healthIsFull()) {
-                    player.heal(result.getHeal());
-                    enemyTurn();
+                    if (d.getPhysDamage() == 0 && d.getHeal()>0 && player.healthIsFull()){
+                        actionList.add(player.getName() + " is already at full health");
+                        break;
+                    }
+                    if (atks == 0) {
+                        actionList.add(player.getName() + " uses " + d.getAttackName());
+                    }
+                    playerDrainMana(d.getManaCost());
+                    atks++;
+
+                    if (!d.isHit()) {
+                        if (result.size() == 1) {
+                            ALPause(500, d.getAttackName() + " missed.");
+                            enemyTurn();
+                            break;
+                        } else {
+                            ALPause(500, firstOrSecond(atks) + " attack missed!");
+                        }
+                    }
+                    if (d.isCrit()) {
+                        ALPause(500, "Critical hit!");
+                    }
+                    if (d.getPhysDamage() > 0) {
+                        if (result.size() == 1){
+                            ALPause(50,enemy.getName() + " takes " + d.getPhysDamage() + " damage");
+                        } else {
+                            ALPause(50, firstOrSecond(atks) + " strike deals " + d.getPhysDamage());
+                        }
+                        enemyTakeDamage(d.getPhysDamage());
+                    }
+                    if (d.getHeal() > 0 && !player.healthIsFull()) {
+                        playerHeal(d.getHeal());
+                    }
+                    if (enemy.isDead()){
+                        break;
+                    }
+                    if (atks == result.size()){
+                        enemyTurn();
+                    }
                 }
             });
             attacks.add(button);
@@ -239,6 +310,48 @@ public class battlePaneController {
             cc.setFillWidth(true);
         }
 
+    }
+
+    private String firstOrSecond(int num) {
+        switch (num) {
+            case 1:
+                return "First";
+            case 2:
+                return "Second";
+            case 3:
+                return "Third";
+            case 4:
+                return "Fourth";
+            case 5:
+                return "Fifth";
+            case 6:
+                return "Sixth";
+            default:
+                return "";
+        }
+    }
+
+    private void playerAttack(Damage damage) {
+        if (player.isDead()) {
+            actionList.add(player.getName() + " is dead!");
+            return;
+        }
+        ALPause(500, player.getName() + " uses " + damage.getAttackName());
+        playerDrainMana(damage.getManaCost());
+        if (!damage.isHit()) {
+            actionList.add(player.getName() + " missed!");
+            enemyTurn();
+            return;
+        }
+        if (damage.isCrit()) {
+            ALPause(500, "Critical Hit!");
+        }
+        if (damage.getPhysDamage() > 0) {
+            enemyTakeDamage(damage.getPhysDamage());
+        }
+        if (damage.getHeal() > 0) {
+            playerHeal(damage.getHeal());
+        }
     }
 
 
@@ -427,7 +540,7 @@ public class battlePaneController {
     }
 
     private void playerHeal(int health) {
-        ALPause(250, player.getName() + " restores " + " health.");
+        ALPause(250, player.getName() + " restores " + health + " health.");
         player.heal(health);
         setHpBar();
 
@@ -457,11 +570,10 @@ public class battlePaneController {
     }
 
     private void enemyTakeDamage(int damage) {
-        ALPause(500, enemy.getName() + " takes " + damage + " damage");
+//        ALPause(500, enemy.getName() + " takes " + damage + " damage");
         if (enemy.takeDamage(damage)) {
             ALPause(500, enemy.getName() + " has " + enemy.getHealth() + "hp left");
             setEnemyHpBar();
-            enemyTurn();
         } else {
             setEnemyHpBar();
             ALPause(500, enemy.getName() + " has died!");
@@ -482,7 +594,7 @@ public class battlePaneController {
     }
 
     private void enemyDrainMana(int mana) {
-        if (mana >0) {
+        if (mana > 0) {
             enemy.drainMana(mana);
             setEnemyManaBar();
         }
@@ -493,29 +605,31 @@ public class battlePaneController {
         enemyAttack(enemy.defaultAttack());
     }
 
-    private void enemyAttack(Damage damage) {
-        if (damage.isOom()) {
-            enemyAttack(enemy.defaultAttack());
-            return;
-        }
-        ALPause(500, enemy.getName() + " uses " + damage.getAttackName());
-        enemyDrainMana(damage.getManaCost());
-        int dmg = damage.getHpDamage();
-        int heal = damage.getHeal();
-        if (!damage.isHit()) {
-            actionList.add(enemy.getName() + " missed!");
-            return;
-        }
-        if (damage.isCrit()) {
-            ALPause(250, "Critical Hit!");
-        }
-        if (dmg > 0) {
-            actionList.add(enemy.getName() + " deals " + dmg + " damage" + " to " + player.getName());
-            playerTakeDamage(dmg);
-        }
-        if (heal > 0) {
-            ALPause(500, enemy.getName() + " heals for " + heal + " damage");
-            enemyHeal(heal);
+    private void enemyAttack(List<Damage> damage) {
+        for (Damage d : damage) {
+            if (d.isOOM()) {
+                enemyAttack(enemy.defaultAttack());
+                return;
+            }
+            ALPause(500, enemy.getName() + " uses " + d.getAttackName());
+            enemyDrainMana(d.getManaCost());
+            int dmg = d.getPhysDamage();
+            int heal = d.getHeal();
+            if (!d.isHit() && d.getPhysDamage()>0) {
+                actionList.add(enemy.getName() + " missed!");
+                break;
+            }
+            if (d.isCrit()) {
+                ALPause(250, "Critical Hit!");
+            }
+            if (dmg > 0) {
+                actionList.add(enemy.getName() + " deals " + dmg + " damage" + " to " + player.getName());
+                playerTakeDamage(dmg);
+            }
+            if (heal > 0) {
+                ALPause(500, enemy.getName() + " heals for " + heal + " damage");
+                enemyHeal(heal);
+            }
         }
     }
 
@@ -644,28 +758,5 @@ public class battlePaneController {
         player.fullMana();
         setManaBar();
         setHpBar();
-    }
-
-    private void playerAttack(Damage damage) {
-        if (player.isDead()) {
-            actionList.add(player.getName() + " is dead!");
-            return;
-        }
-        ALPause(500, player.getName() + " uses " + damage.getAttackName());
-        playerDrainMana(damage.getManaCost());
-        if (!damage.isHit()) {
-            actionList.add(player.getName() + " missed!");
-            enemyTurn();
-            return;
-        }
-        if (damage.isCrit()) {
-            ALPause(500, "Critical Hit!");
-        }
-        if (damage.getHpDamage() > 0) {
-            enemyTakeDamage(damage.getHpDamage());
-        }
-        if (damage.getHeal() > 0) {
-            playerHeal(damage.getHeal());
-        }
     }
 }

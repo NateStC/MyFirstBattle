@@ -21,7 +21,7 @@ public class Armors {
     }
 
     //beginner chainmail
-    public static Armor timChainmail(){
+    public static Armor tinChainmail(){
         return new Armor("Tin Chainmail",5,4,0,1,1,1,
                 0,1,0);
     }

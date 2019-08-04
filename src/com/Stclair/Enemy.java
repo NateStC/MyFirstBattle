@@ -80,82 +80,13 @@ public class Enemy extends myCharacter {
         return entrance.get(rand.nextInt(entrance.size()));
     }
 
-    public Damage defaultAttack() {
+    public List<Damage> defaultAttack() {
         //todo finish change for ArrayList<Attack>
         // look for healing spells if health is low enough and if enemy is smart enough
         Random rand = new Random();
 
         return this.getWeapon().getAttackList().get(rand.nextInt(this.getWeapon().getAttackList().size())).doAttack(this);
     }
-
-//        //chooses random attack from list of attacks for weapon
-//        Random rand = new Random();
-//        String att = attackArray.get(rand.nextInt(attackArray.size()));
-//        Attack attack = new Attack();
-//        switch (att.toLowerCase()) {
-//            case "stab":
-//                return attack.stab();
-//            case "bash":
-//                return Attack.bash(this);
-//            case "daggerslice":
-//                return Attack.daggerSlice(this);
-//            case "swordslice":
-//                return attack.swordSlice(this);
-//            case "smash":
-//                return Attack.smash(this);
-//            case "arrowstrike":
-//                return Ranged.arrowStrike(this);
-//            case "headshot":
-//                return Ranged.headShot(this);
-//            case "spearThrow":
-//                return Ranged.spearThrow(this);
-//
-////          if there isn't enough mana for spells, it rerolls with
-//            case "fireball":
-//                if (this.getMana() >= Spell.getFireBallCost(this)) {
-//                    return Spell.fireball(this);
-//                } else {
-//                    return noManaAttacks();
-//                }
-//            case "staticshock":
-//                if (this.getMana() >= Spell.getStaticShockCost(this)) {
-//                    return Spell.staticShock(this);
-//                } else {
-//                    return noManaAttacks();
-//                }
-//            case "firearrow":
-//                if (this.getMana() >= Spell.getFireArrowCost(this)) {
-//                    return Spell.fireArrow(this);
-//                } else {
-//                    return noManaAttacks();
-//                }
-//        }
-//        return Attack.bash(this);
-//    }
-//
-//    private Attack noManaAttacks() {
-//        Random rand = new Random();
-//        String att = this.getWeapon().getAttacks().get(rand.nextInt(this.getWeapon().getAttacks().size()));
-//        switch (att.toLowerCase()) {
-//            case "stab":
-//                return Attack.stab(this);
-//            case "bash":
-//                return Attack.bash(this);
-//            case "daggerslice":
-//                return Attack.daggerSlice(this);
-//            case "swordslice":
-//                return Attack.swordSlice(this);
-//            case "smash":
-//                return Attack.smash(this);
-//            case "arrowStrike":
-//                return Attack.arrowStrike(this);
-//            case "headShot":
-//                return Attack.headShot(this);
-//            default:
-//                //recalls the method until it gets a match to an attack that doesn't cost mana;
-//                return noManaAttacks();
-//        }
-//    }
 
     // returns experience gained on defeat
     // 2x level times the average of all base stats

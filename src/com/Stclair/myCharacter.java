@@ -536,7 +536,7 @@ public class myCharacter {
     }
 
     public int getMaxHealth() {
-        return getConStat()* 3 + (getLevel() * 5);
+        return getConStat()* 5 + (getLevel() * 5);
     }
 
     public void fullHealth() {
@@ -645,7 +645,6 @@ public class myCharacter {
 
     public void equipWeapon(Weapon weapon) {
         this.weapon = weapon;
-        weapon.setWielder(this);
     }
 
     public void equipArmor(Armor armor){

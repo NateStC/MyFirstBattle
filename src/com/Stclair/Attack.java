@@ -236,6 +236,14 @@ public class Attack {
                 .5, .5, .5);
     }
 
+    public static Attack bite(){
+        return new Attack ("Bite", 6, .5,0);
+    }
+
+    public static Attack scratch(){
+        return new Attack ("Scratch", 8, .25, .5);
+    }
+
     public String getName() {
         return name;
     }

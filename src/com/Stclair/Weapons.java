@@ -102,6 +102,37 @@ public class Weapons {
                 0, 5, 0, 1, 1, 1, attacks);
     }
 
+    public static Weapon zombieTeeth(int lvl) {
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(Attack.bash());
+        attacks.add(Attack.bite());
+        attacks.add(Attack.scratch());
+
+
+        return new Weapon("Zombie teeth", 0, 5, 5, lvl, lvl / 4, lvl,
+                lvl / 2, 0, 0, 0, 0, attacks);
+    }
+
+    public static Weapon vampireTeeth(int lvl) {
+        ArrayList<Attack> attacks = new ArrayList<>();
+        attacks.add(Attack.bite());
+        attacks.add(Attack.drainLife());
+        attacks.add(Spell.staticShock());
+
+        return new Weapon("Vampire teeth", 0, 5, 5, lvl * 2, lvl, 1,
+                lvl / 2, lvl, lvl * 2, lvl * 2, lvl * 2, attacks);
+    }
+
+    //beast teeth and claws
+    public static Weapon beast(int lvl) {
+        ArrayList<Attack> atks = new ArrayList<>();
+        atks.add(Attack.bite());
+        atks.add(Attack.scratch());
+
+        return new Weapon("Beast", 0, 5, 6, lvl * 2, 0, 1 + lvl / 2,
+                1 + lvl / 2, 0, 0, 0, 0, atks);
+    }
+
 
     ///// GOBLIN WEAPONS
 

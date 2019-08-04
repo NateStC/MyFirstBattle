@@ -13,12 +13,10 @@ public class Weapon extends Item {
     private int intBonus;
     private int wisBonus;
     private int charBonus;
-    private ArrayList<String> attacks = new ArrayList<>();
-//    private ArrayList<Attack> attackList = new ArrayList<>();
+    private ArrayList<Attack> attackList = new ArrayList<>();
 
-    //todo find if there's a better arrayList than type string for listing attacks
     public Weapon(String name, double weight, int accuracy, int speed, int physDmg, int spellDmg, int strBonus, int dexBonus,
-                  int conBonus, int intBonus, int wisBonus, int charBonus, ArrayList<String> attacks) {
+                  int conBonus, int intBonus, int wisBonus, int charBonus, ArrayList<Attack> attacks) {
         super(name, weight);
         this.accuracy = accuracy;
         this.speed = speed;
@@ -30,7 +28,7 @@ public class Weapon extends Item {
         this.intBonus = intBonus;
         this.wisBonus = wisBonus;
         this.charBonus = charBonus;
-        this.attacks = attacks;
+        this.attackList = attacks;
     }
 
     //weapon w/no bonuses
@@ -39,84 +37,24 @@ public class Weapon extends Item {
         this.accuracy = accuracy;
         this.speed = speed;
         this.physDamage = physDamage;
+        this.spellDmg = 0;
+        this.strBonus = 0;
+        this.dexBonus = 0;
+        this.conBonus = 0;
+        this.intBonus = 0;
+        this.wisBonus = 0;
+        this.charBonus = 0;
+
+        ArrayList<Attack> attacks = new ArrayList<>();
+        ;
+        attacks.add(Attack.stab());
     }
 
-    //default weapon
-    public static Weapon dagger() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("stab");
-        attacks.add("bash");
-
-        return new Weapon("Dagger", 1.5, 5, 6, 2, 0,
-                0, 0, 0, 0, 0, 0, attacks);
+    public void addAttack(Attack attack) {
+        this.attackList.add(attack);
     }
-
-    //basic weapons
-    //balanced for spellSword
-    public static Weapon swordShort() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("swordSlice");
-        attacks.add("stab");
-        attacks.add("fireball");
-        attacks.add("healingHands");
-        return new Weapon("Sword Short", 4.0, 5, 6, 2, 2,
-                1, 1, 0, 0, 1, 1, attacks);
-    }
-
-    public static Weapon longSword() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("swordSlice");
-        attacks.add("stab");
-        attacks.add("bash");
-        return new Weapon("Long Sword", 5.0, 5, 4, 3, 0,
-                2, 1, 0, 0, 0, 0, attacks);
-    }
-
-    //fast, high dps, high crit
-    public static Weapon daggers() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("daggerSlice");
-        attacks.add("stab");
-        attacks.add("drainLife");
-        return new Weapon("Daggers", 3.5, 5, 8, 3, 1,
-                0, 3, 0, 0, 0, 1, attacks);
-    }
-
-    //spellcaster
-    public static Weapon staff() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("fireball");
-        attacks.add("staticShock");
-        attacks.add("healingHands");
-        attacks.add("bash");
-        return new Weapon("Staff", 5.0, 5, 3, 0, 5,
-                -1, 0, -1, 3, 2, 2, attacks);
-    }
-
-    //tank
-    public static Weapon mace() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("bash");
-        attacks.add("smash");
-        attacks.add("healingHands");
-        return new Weapon("Mace", 10.0, 4, 2, 5, 0,
-                3, 1, 1, -1, -1, -1, attacks);
-    }
-
-    public static Weapon bow() {
-        ArrayList<String> attacks = new ArrayList<>();
-        attacks.add("arrowStrike");
-        attacks.add("bash");
-        attacks.add("headShot");
-        attacks.add("fireArrow");
-        return new Weapon("Bow", 6.0, 6, 4, 4, 0,
-                0, 5, 0, 1, 1, 1, attacks);
-    }
-
 
     /// **** GETTERS AND SETTERS BELOW ****
-
-
     public int getAccuracy() {
         return accuracy;
     }
@@ -157,7 +95,7 @@ public class Weapon extends Item {
         return charBonus;
     }
 
-    public ArrayList<String> getAttacks() {
-        return attacks;
+    public ArrayList<Attack> getAttackList() {
+        return this.attackList;
     }
 }

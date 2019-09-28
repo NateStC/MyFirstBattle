@@ -126,6 +126,10 @@ public class newPlayerController {
             }
         });
         weaponListView.getSelectionModel().selectFirst();
+
+        createPlayerButton.setOnAction(e -> {
+
+        });
     }
 
     public void createNewPlayer() {

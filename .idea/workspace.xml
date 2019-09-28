@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="Began work on rebalancing attacks to work through the doAttack() method&#10;Moved intMultiplier and wisMultiplier, etc from spell class to the attack class&#10;Now spell and ranged classes are just to override doAttack()">
-      <change afterPath="$PROJECT_DIR$/src/com/Stclair/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Stclair/bugLog.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Attack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Attack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/newPlayerController.java" afterDir="false" />
-    </list>
+    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +179,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564881967161</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Began work on rebalancing attacks to work through the doAttack() method&#10;Moved intMultiplier and wisMultiplier, etc from spell class to the attack class&#10;Now spell and ranged classes are just to override doAttack()">
+      <created>1569690436666</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1569690436666</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">

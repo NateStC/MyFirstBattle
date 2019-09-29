@@ -57,6 +57,10 @@ public class Damage {
         this.crit = crit;
     }
 
+    public int getDamage(){
+        return this.physDamage + this.magicDamage;
+    }
+
     public String getAttackName() {
         return attackName;
     }

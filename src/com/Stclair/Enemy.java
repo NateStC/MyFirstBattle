@@ -80,14 +80,6 @@ public class Enemy extends myCharacter {
         return entrance.get(rand.nextInt(entrance.size()));
     }
 
-    public List<Damage> defaultAttack() {
-        //todo finish change for ArrayList<Attack>
-        // look for healing spells if health is low enough and if enemy is smart enough
-        Random rand = new Random();
-
-        return this.getWeapon().getAttackList().get(rand.nextInt(this.getWeapon().getAttackList().size())).doAttack(this);
-    }
-
     // returns experience gained on defeat
     // 2x level times the average of all base stats
     public int getExperienceGained() {

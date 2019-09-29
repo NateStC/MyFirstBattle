@@ -120,4 +120,10 @@ public class Armors {
                 2 + (int) (lvl * 1.5), 1 + lvl, 1 + lvl, 0, 0, 0);
     }
 
+    public static Armor rags(){
+        return new Armor("Rags", 2,2);
+    }
+
+    // **** UNDEAD ARMORS ****
+
 }

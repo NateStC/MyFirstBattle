@@ -20,16 +20,20 @@ public class Attack {
     private double lvlMultiplier = 1;
     private double physDmgMultiplier = 1;
     private double spellDmgMultiplier = 0;
-    private int hitPoint = 1;
-    private int critPoint = 20;
     private int dmgRolls = 1;
     private int numOfAttacks = 1;
     private int healDie = 0;
-    private double accMultiplier = 0;
+
+    //todo modify attacks to have a hit/mis point
+
+    //        private int hitPoint = 1;
+//    private int critPoint = 20;
+//    private double accMultiplier = 0;
     private int manaCost = 0;
     private double hpDrainMultiplier = 0;
     private double costMultiplier = 1;
-    private int coolDown = 0;
+    //todo add cooldown for attacks
+//    private int coolDown = 0;
 
     //todo find a way to apply buffs/debuffs to attacks
     //todo add description String for attacks?
@@ -38,11 +42,9 @@ public class Attack {
 
     //empty constructor
     public Attack() {
-        this.name = "Bash";
-        dexMultiplier = .33;
-        strMultiplier = .33;
     }
 
+    //simple attack
     public Attack(String name, int dmgDie, double strMultiplier, double dexMultiplier) {
         this.name = name;
         this.physDmgDie = dmgDie;
@@ -50,30 +52,27 @@ public class Attack {
         this.dexMultiplier = dexMultiplier;
     }
 
-    //simple attack
-    public Attack(String name, int physDmgDie, double strMultiplier, double dexMultiplier, double lvlMultiplier, double physDmgMultiplier, int coolDown){
+    public Attack(String name, int physDmgDie, double strMultiplier, double dexMultiplier, double lvlMultiplier, double physDmgMultiplier){
         this.name = name;
         this.physDmgDie = physDmgDie;
         this.strMultiplier = strMultiplier;
         this.dexMultiplier = dexMultiplier;
         this. lvlMultiplier = lvlMultiplier;
         this.physDmgMultiplier = physDmgMultiplier;
-        this.coolDown = coolDown;
     }
 
-    public Attack(String name, int dmgDie, int dmgRolls, int numOfAttacks, double strMultiplier, double dexMultiplier, int coolDown) {
+    public Attack(String name, int dmgDie, int dmgRolls, int numOfAttacks, double strMultiplier, double dexMultiplier) {
         this.name = name;
         this.physDmgDie = dmgDie;
         this.dmgRolls = dmgRolls;
         this.numOfAttacks = numOfAttacks;
         this.strMultiplier = strMultiplier;
         this.dexMultiplier = dexMultiplier;
-        this.coolDown = coolDown;
     }
 
     //spell physical attack
     public Attack(String name, int physDmgDie, int spellDmgDie, int numOfAttacks, double strMultiplier, double dexMultiplier,
-                  double intMultiplier, double physDmgMultiplier, double spellDmgMultiplier, int coolDown) {
+                  double intMultiplier, double physDmgMultiplier, double spellDmgMultiplier) {
         this.name = name;
         this.physDmgDie = physDmgDie;
         this.spellDmgDie = spellDmgDie;
@@ -83,7 +82,6 @@ public class Attack {
         this.intMultiplier = intMultiplier;
         this.physDmgMultiplier = physDmgMultiplier;
         this.spellDmgMultiplier = spellDmgMultiplier;
-        this.coolDown = coolDown;
     }
 
     public Attack(String name, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier,
@@ -101,7 +99,10 @@ public class Attack {
     //full constructor
 
 
-    public Attack(String name, int physDmgDie, int spellDmgDie, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier, double chaMultiplier, double lvlMultiplier, double physDmgMultiplier, double spellDmgMultiplier, int hitPoint, int critPoint, int dmgRolls, int numOfAttacks, int healDie, double accMultiplier, int manaCost, double hpDrainMultiplier, double costMultiplier, int coolDown) {
+    public Attack(String name, int physDmgDie, int spellDmgDie, double strMultiplier, double dexMultiplier,
+                  double intMultiplier, double wisMultiplier, double chaMultiplier, double lvlMultiplier,
+                  double physDmgMultiplier, double spellDmgMultiplier, int dmgRolls, int numOfAttacks, int healDie,
+                  int manaCost, double hpDrainMultiplier, double costMultiplier) {
         this.name = name;
         this.physDmgDie = physDmgDie;
         this.spellDmgDie = spellDmgDie;
@@ -113,20 +114,16 @@ public class Attack {
         this.lvlMultiplier = lvlMultiplier;
         this.physDmgMultiplier = physDmgMultiplier;
         this.spellDmgMultiplier = spellDmgMultiplier;
-        this.hitPoint = hitPoint;
-        this.critPoint = critPoint;
         this.dmgRolls = dmgRolls;
         this.numOfAttacks = numOfAttacks;
         this.healDie = healDie;
-        this.accMultiplier = accMultiplier;
         this.manaCost = manaCost;
         this.hpDrainMultiplier = hpDrainMultiplier;
         this.costMultiplier = costMultiplier;
-        this.coolDown = coolDown;
     }
 
     //todo finish multiAttack
-    public List<Damage> doAttack(myCharacter attacker) {
+    public List<Damage> doAttack(myCharacter attacker, myCharacter target) {
         System.out.println(attacker.getName() + " using " + this.getName());
         ArrayList<Damage> damages = new ArrayList<>();
         for (int i = 0; i < this.numOfAttacks; i++) {
@@ -179,7 +176,7 @@ public class Attack {
 
             //damage rolls
             int physDmg = 0;
-            if (physDmgMultiplier > 0 && this.getPhysDmgDie() > 0) {
+            if (this.physDmgMultiplier > 0 && this.physDmgDie > 0) {
                 physDmg += Dice.die(this.physDmgDie, this.dmgRolls) +
                         (int) (attacker.getStrStat() * this.strMultiplier) +
                         attacker.getWeapon().getPhysDamage();
@@ -207,41 +204,74 @@ public class Attack {
     }
 
     //todo test with spellcaster
+    //todo find a way to make weight affect damage
     public static Attack bash() {
-        return new Attack();
+        Attack bash = new Attack();
+        bash.setName("Bash");
+        return bash;
     }
 
     //dagger attack that relies on dexterity for damage and better crit change
     //todo test daggerSlice attack and find a better name, (maybe eviscerate?)
     public static Attack daggerSlice() {
-        return new Attack("Dagger Slice", 6, 0.5, 1, 1, 1.5,1);
+        //return new Attack("Dagger Slice", 6, 0.5, 1, 1, 1.5,1);
+        Attack slice = new Attack();
+        slice.setName("Dagger Slice");
+        slice.setPhysDmgDie(6);
+        slice.setStrMultiplier(0.5);
+        slice.setDexMultiplier(1);
+        slice.setPhysDmgMultiplier(1.5);
+        return slice;
     }
 
     public static Attack daggerFlurry() {
-        return new Attack("Dagger Flurry", 4, 1, 4, .5, 1,3);
+        Attack flurry = new Attack();
+        flurry.setName("Dagger Flurry");
+        flurry.setPhysDmgMultiplier(.75);
+        flurry.setNumOfAttacks(4);
+        flurry.setStrMultiplier(0.5);
+        flurry.setDexMultiplier(1);
+
+        return flurry;
     }
 
     //fixme overpowered
     public static Attack swordSlice() {
-        return new Attack("Sword Slice", 6, 1, 0.5, 1, 1.5,1);
+        Attack ss = new Attack();
+        ss.setName("Sword Slice");
+        ss.setPhysDmgDie(6);
+        ss.setStrMultiplier(1.5);
+        ss.setDexMultiplier(1);
+
+        return new Attack("Sword Slice", 6,1.5,1);
     }
 
     //fixme overpowered
     public static Attack smash() {
-        return new Attack("Smash", 6, 1.25, 0, 1, 1,1);
+        return new Attack("Smash", 6, 1.25, 0, 1, 1);
+    }
+
+    //todo test earthquake attack
+    public static Attack earthQuake(){
+        return new Attack("Smash",4,2,4,.75,0);
     }
 
     //lvlReq 3?
     //todo test drainLife spell
     public static Attack drainLife() {
         return new Attack("Drain Life", 5, 6, 1, .5, 1,
-                1, .5, .5,3);
+                1, .5, .5);
     }
 
     //todo add elemental damage types to attacks, weapons, damage
     public static Attack elementalStrike() {
         return new Attack("Elemental Strike", 6, 8, 1, .5, .25,
-                .5, .5, .5,1);
+                .5, .5, .5);
+    }
+
+    public static Attack zombieDrain(){
+        return new Attack ("Zombie Drain",8,0,1,1,1,
+                0,1,0);
     }
 
     public static Attack bite(){
@@ -250,6 +280,10 @@ public class Attack {
 
     public static Attack scratch(){
         return new Attack ("Scratch", 6, .25, .5);
+    }
+
+    public boolean isHealingSpell(){
+        return ((spellDmgDie + physDmgDie == 0) && (healDie > 0));
     }
 
     public String getName() {
@@ -268,14 +302,6 @@ public class Attack {
         return lvlMultiplier;
     }
 
-    public void setCritPoint(int critPoint) {
-        this.critPoint = critPoint;
-    }
-
-    public int getCritPoint() {
-        return critPoint;
-    }
-
     public int getPhysDmgDie() {
         return physDmgDie;
     }
@@ -290,14 +316,6 @@ public class Attack {
 
     public void setDmgRolls(int dmgRolls) {
         this.dmgRolls = dmgRolls;
-    }
-
-    public int getHitPoint() {
-        return hitPoint;
-    }
-
-    public void setHitPoint(int hitPoint) {
-        this.hitPoint = hitPoint;
     }
 
     public double getStrMultiplier() {
@@ -338,14 +356,6 @@ public class Attack {
 
     public void setNumOfAttacks(int numOfAttacks) {
         this.numOfAttacks = numOfAttacks;
-    }
-
-    public double getAccMultiplier() {
-        return accMultiplier;
-    }
-
-    public void setAccMultiplier(double accMultiplier) {
-        this.accMultiplier = accMultiplier;
     }
 
     public int getManaCost() {
@@ -410,14 +420,6 @@ public class Attack {
 
     public void setSpellDmgDie(int spellDmgDie) {
         this.spellDmgDie = spellDmgDie;
-    }
-
-    public int getCoolDown() {
-        return coolDown;
-    }
-
-    public void setCoolDown(int coolDown) {
-        this.coolDown = coolDown;
     }
 
     //    public String getDescription() {

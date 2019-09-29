@@ -24,7 +24,7 @@ public class Spell extends Attack {
     public Spell(String name, int manaCost, int dmgDie, double intMultiplier, double wisMultiplier, double lvlMultiplier) {
         this.setName(name);
         setManaCost(manaCost);
-        this.setPhysDmgDie(dmgDie);
+        this.setSpellDmgDie(dmgDie);
         setIntMultiplier(intMultiplier);
         setWisMultiplier(wisMultiplier);
         this.setLvlMultiplier(lvlMultiplier);
@@ -35,6 +35,7 @@ public class Spell extends Attack {
         this.setName(name);
         setManaCost(manaCost);
         this.setPhysDmgDie(0);
+        this.setSpellDmgDie(0);
         setHealDie(healDie);
         setIntMultiplier(intMultiplier);
         setWisMultiplier(wisMultiplier);
@@ -47,7 +48,7 @@ public class Spell extends Attack {
     public Spell(String name, int manaCost, int dmgDie, int dmgRolls, int numOfAttacks, double intMultiplier, double wisMultiplier,
                  double chaMultiplier, double lvlMultiplier, double spellDmgMultiplier, double accMultiplier, double costMultiplier) {
         this.setName(name);
-        this.setPhysDmgDie(dmgDie);
+        this.setSpellDmgDie(dmgDie);
         this.setDmgRolls(dmgRolls);
         this.setNumOfAttacks(numOfAttacks);
         this.setLvlMultiplier(lvlMultiplier);
@@ -56,98 +57,62 @@ public class Spell extends Attack {
         setChaMultiplier(chaMultiplier);
         setManaCost(manaCost);
         this.setSpellDmgMultiplier(spellDmgMultiplier);
-        this.setAccMultiplier(accMultiplier);
         setCostMultiplier(costMultiplier);
         this.setPhysDmgMultiplier(0);
     }
 
-    public Spell(String name, int manaCost, int dmgDie, double intMultiplier, double wisMultiplier, double chaMultiplier,
-                 double lvlMultiplier, double spellDmgMultiplier, double hpDrainMultiplier, double costMultiplier) {
-        this.setName(name);
-        this.setNumOfAttacks(1);
-        setManaCost(manaCost);
-        this.setPhysDmgDie(dmgDie);
-        setIntMultiplier(intMultiplier);
-        setWisMultiplier(wisMultiplier);
-        setChaMultiplier(chaMultiplier);
-        this.setLvlMultiplier(lvlMultiplier);
-        this.setSpellDmgMultiplier(spellDmgMultiplier);
-        setHpDrainMultiplier(hpDrainMultiplier);
-        setCostMultiplier(costMultiplier);
-    }
-
-    //full constructor
-    public Spell(String name, double strMultiplier, double dexMultiplier, double intMultiplier, double wisMultiplier,
-                 double chaMultiplier, double lvlMultiplier, double physDmgMultiplier, double spellDmgMultiplier,
-                 int hitPoint, int critPoint, int dmgDie, int dmgRolls, int numOfAttacks, int healDie,
-                 double accMultiplier, int manaCost, double hpDrainMultiplier, double costMultiplier,
-                 double spellDmgMultiplier1, double wisMultiplier1, double physDmgMultiplier1, double strMultiplier1,
-                 double dexMultiplier1, double chaMultiplier1) {
-        super(name, strMultiplier, dexMultiplier, intMultiplier, wisMultiplier, chaMultiplier, lvlMultiplier,
-                physDmgMultiplier, spellDmgMultiplier, hitPoint, critPoint, dmgDie, dmgRolls, numOfAttacks, healDie,
-                accMultiplier, manaCost, hpDrainMultiplier, costMultiplier);
-        this.spellDmgMultiplier = spellDmgMultiplier1;
-        setWisMultiplier(wisMultiplier);
-        this.physDmgMultiplier = physDmgMultiplier1;
-        this.strMultiplier = strMultiplier1;
-        this.dexMultiplier = dexMultiplier1;
-        setChaMultiplier(chaMultiplier);
-    }
-
     @Override
-    public List<Damage> doAttack(myCharacter attacker) {
-        System.out.println(attacker.getName() + " using " + this.getName());
-        return cast(attacker);
-    }
-
-    public List<Damage> cast(myCharacter caster) {
+    public List<Damage> doAttack(myCharacter caster, myCharacter target) {
         ArrayList<Damage> damages = new ArrayList<>();
         int manaCost = this.getManaCost() - (int) (caster.getWisStat() * this.getWisMultiplier() / 4) + (int) (caster.getLevel() * this.getCostMultiplier());
         if (manaCost > caster.getMana()) {
+            // returns Out of Mana if insuficient mana to cast
             damages.add(new Damage(this.getName()));
             return damages;
         }
         for (int i = 0; i < this.getNumOfAttacks(); i++) {
             if (i > 0) {
+                //Only costs mana once if there are multiple attacks
                 manaCost = 0;
             }
             int heal = 0;
             int acc = Dice.d20();
-            System.out.println("Accuracy roll is " + acc);
+//            System.out.println("Accuracy roll is " + acc);
             //critical fail
             if (acc == 1) {
                 damages.add(new Damage(this.getName(), false, manaCost));
                 continue;
             }
-            if (this.getAccMultiplier() > 0) {
-                //intelligence raises accuracy
-                acc += (this.getAccMultiplier() * (caster.getIntStat() / 4)) + caster.getWeapon().getAccuracy();
-            }
-            //wisdom lowers critical hit min
-            System.out.println(this.getName() + " accuracy is " + acc);
-            boolean crit = (acc > ((20 + caster.getLevel() * 5) - (int) (caster.getWisStat() / 3 * this.getWisMultiplier())));
-            //calls healing spell because healing spell can't miss
-            if (getHealDie() > 0 && getPhysDmgDie() == 0) {
+//            //wisdom lowers critical hit min
+//            System.out.println(this.getName() + " accuracy is " + acc);
+            boolean crit = (acc == 20);
+
+            //todo make wisdom & lvl affect crit chance
+//          if (!crit) crit = (acc > ((20 + caster.getLevel() * 5) - (int) (caster.getWisStat() / 3 * this.getWisMultiplier())));
+
+
+            if (isHealingSpell()) {
+                //calls healing spell because healing spell can't miss
                 damages.add(healingSpell(caster, manaCost, crit));
                 continue;
             }
-            //returns a miss if does not meet hit minimum and is not a non-dmg spell (healing)
-            if (acc <= getHitPoint() + caster.getLevel() && getPhysDmgDie() > 0) {
-                damages.add(new Damage(this.getName(), false, manaCost));
-                continue;
-            }
+
             //dmg is intelligence and dice
-            int damage = Dice.die(getPhysDmgDie(), getDmgRolls()) +
+            int spellDmg = Dice.die(this.getSpellDmgDie(), this.getDmgRolls()) +
                     (int) (caster.getIntStat() * this.getIntMultiplier() / 3) +
                     (int) (caster.getWeapon().getSpellDmg() * this.getSpellDmgMultiplier());
+            if (getPhysDmgDie()>0){
+
+            }
             if (crit) {
-                damage *= 2;
+                spellDmg *= 2;
             }
             //factors in hpDrain if applicable
             if (getHpDrainMultiplier() != 0) {
-                heal += (int) (damage * getHpDrainMultiplier());
+                heal += (int) (spellDmg * getHpDrainMultiplier());
             }
-            damages.add(new Damage(this.getName(), 0, damage, heal, manaCost, crit));
+            damages.add(new Damage(this.getName(), 0, spellDmg, manaCost, heal, crit));
+            System.out.println(caster.getName() + "'s " + this.getName() + " deals " + spellDmg + " dmg");
         }
 
         return damages;

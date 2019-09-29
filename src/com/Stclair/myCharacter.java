@@ -18,10 +18,12 @@ public class myCharacter {
     private int intelligence;
     private int wisdom;
     private int charisma;
-    private static String[] attributeNames = {"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
-    private Weapon weapon;
-    private Armor armor;
+    private int gold;
+    private Weapon weapon = new Weapon();
+    private Armor armor = new Armor();
     Inventory inventory = new Inventory();
+
+    public static String[] attributeNames = {"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
 
 
     //empty constructor
@@ -152,6 +154,11 @@ public class myCharacter {
         } else {
             this.mana += mana;
         }
+    }
+
+    public void fullRestore(){
+        fullMana();
+        fullHealth();
     }
 
 
@@ -467,11 +474,8 @@ public class myCharacter {
 
     //returns true if leveled up
     public boolean gainExp(int exp) {
-        System.out.println("gained " + exp + " EXP");
         int nextlvl = getNextLvlExp();
         this.experience += exp;
-        System.out.println(this.name + " has " + experience + " total EXP");
-        System.out.println("myCharatcter.gainExp() testing if " + this.getExperience() + " >= " + nextlvl);
         return this.getExperience() >= nextlvl;
     }
 
@@ -536,7 +540,7 @@ public class myCharacter {
     }
 
     public int getMaxHealth() {
-        return getConStat()* 5 + (getLevel() * 5);
+        return getConStat()* 10 + (getLevel() * 15);
     }
 
     public void fullHealth() {
@@ -552,7 +556,7 @@ public class myCharacter {
     }
 
     public int getMaxMana() {
-        return this.intelligence * 3 + getLevel() * 5;
+        return this.getIntStat() * 5 + getLevel() * 5;
     }
 
     public void fullMana() {
@@ -673,5 +677,17 @@ public class myCharacter {
 
     public int getChaStat(){
         return  this.charisma + this.getChaBonus();
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }

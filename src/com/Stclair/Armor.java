@@ -1,8 +1,8 @@
 package com.Stclair;
 
-public class Armor extends Item{
+public class Armor extends Item {
 
-    private int armorRating;
+    private int armorRating = 1;
     private int magicDefRating = 0;
     private int strBonus = 0;
     private int conBonus = 0;
@@ -16,7 +16,11 @@ public class Armor extends Item{
 
     //todo figure out a way to add art/graphic
 
-//full constructor
+    public Armor(){
+        setName("Rags");
+    }
+
+    //full constructor
     public Armor(String name, double weight, int armorRating, int magicDefRating, int strBonus, int conBonus, int dexBonus, int intBonus, int wisBonus, int chaBonus) {
         super(name, weight);
         this.armorRating = armorRating;

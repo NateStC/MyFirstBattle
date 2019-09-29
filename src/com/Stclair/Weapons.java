@@ -1,29 +1,26 @@
 package com.Stclair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Weapons {
 
     //default weapon
     public static Weapon dagger() {
-        ArrayList<Attack> attackList = new ArrayList<>();
-        attackList.add(Attack.stab());
-        attackList.add(Attack.bash());
-        attackList.add(Ranged.knifeThrow());
-        attackList.add(Spell.healingHands());
-
         return new Weapon("Rusty Dagger", 1.5, 5, 6, 1, 0,
-                0, 0, 0, 0, 0, 0, attackList);
+                0, 0, 0, 0, 0, 0, daggerAttacks());
     }
 
     //basic weapons
     //balanced for spellSword
     public static Weapon swordShort() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.swordSlice());
-        attacks.add(Attack.stab());
-        attacks.add(Spell.fireball());
-        attacks.add(Spell.healingHands());
+        ArrayList<Attack> attacks = new ArrayList<>(Arrays.asList(
+                Attack.swordSlice(),
+                Attack.stab(),
+                Spell.fireball(),
+                Spell.healingHands()
+        ));
 
         return new Weapon("Iron Sword Short", 4.0, 5, 6, 2, 2,
                 1, 1, 0, 0, 1, 1, attacks);
@@ -37,87 +34,81 @@ public class Weapons {
         int dexBonus = Dice.die(2, lvl);
         int wisBonus = Dice.die(2, lvl);
 
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.swordSlice());
-        attacks.add(Attack.stab());
-        attacks.add(Attack.bash());
-        attacks.add(Attack.elementalStrike());
-
         return new Weapon(name, 4.0, 5, 6, physDmg, spellDmg, strBonus, dexBonus, 0,
-                0, wisBonus, 0, attacks);
+                0, wisBonus, 0, shortSwordAttacks());
     }
 
-    public static Weapon longSword() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.swordSlice());
-        attacks.add(Attack.stab());
-        attacks.add(Attack.bash());
 
+    //todo add more attacks for longSword (lung, some sort of multi-attack)
+    public static Weapon longSword() {
         return new Weapon("Iron Long Sword", 5.0, 5, 4, 3, 0,
-                2, 1, 0, 0, 0, 0, attacks);
+                2, 1, 0, 0, 0, 0, longSwordAttacks());
     }
 
     //fast, high dps, high crit
     public static Weapon daggers() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.daggerSlice());
-        attacks.add(Attack.stab());
-        attacks.add(Attack.daggerFlurry());
-        attacks.add(Spell.drainLife());
-
         return new Weapon("Twin Daggers", 3.5, 5, 8, 3, 1,
-                0, 3, 0, 0, 0, 1, attacks);
+                0, 3, 0, 0, 0, 1, daggerAttacks());
     }
 
     //spellcaster
     public static Weapon staff() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Spell.fireball());
-        attacks.add(Spell.staticShock());
-        attacks.add(Spell.magicMissile());
-        attacks.add(Spell.healingHands());
-        attacks.add(Attack.bash());
-
         return new Weapon("Oak Staff", 5.0, 5, 3, 0, 5,
-                -1, 0, -1, 3, 2, 2, attacks);
+                -1, 0, -1, 3, 2, 2, staffAttacks());
     }
 
     //tank
     public static Weapon mace() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.bash());
-        attacks.add(Attack.smash());
-        attacks.add(Spell.healingHands());
         return new Weapon("Dull Spiked Mace", 10.0, 4, 2, 5, 0,
-                3, 1, 1, -1, -1, -1, attacks);
+                3, 1, 1, -1, -1, -1, maceAttacks());
     }
 
     public static Weapon bow() {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Ranged.arrowStrike());
-        attacks.add(Attack.bash());
-        attacks.add(Ranged.headShot());
-        attacks.add(Ranged.fireArrow());
         return new Weapon("Oak Bow", 6.0, 6, 4, 4, 0,
-                0, 5, 0, 1, 1, 1, attacks);
+                0, 5, 0, 1, 1, 1, bowAttacks());
     }
 
+
+    //**** UNDEAD WEAPONS ****
+
     public static Weapon zombieTeeth(int lvl) {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.bash());
-        attacks.add(Attack.bite());
-        attacks.add(Attack.scratch());
+        ArrayList<Attack> attacks = new ArrayList<>(Arrays.asList(
+                Attack.bash(),
+                Attack.bite(),
+                Attack.scratch(),
+                Attack.drainLife()
+        ));
 
-
-        return new Weapon("Zombie teeth", 0, 5, 5, lvl, lvl / 4, lvl,
+        return new Weapon("Zombie teeth", 1, 5, 5, lvl, lvl / 4, lvl,
                 lvl / 2, 0, 0, 0, 0, attacks);
     }
 
+    public static Weapon zombieFists(int lvl) {
+        Weapon fists = new Weapon("Zombie Fists", 6 + lvl, 3 + lvl, 2 + lvl, 0,
+                lvl * 1, maceAttacks());
+        fists.addAttack(Attack.earthQuake());
+        fists.setValue(5 + (int) fists.getWeight());
+        Attack bash = Attack.bash();
+        bash.setPhysDmgDie((int)fists.getWeight());
+        fists.addAttack(bash);
+
+        return fists;
+    }
+
+    public static Weapon boneBow(int lvl) {
+        Weapon boneBow = bow();
+        boneBow.setName("Bone Bow");
+        bowAttacks().add(Ranged.drainArrow());
+
+        return boneBow;
+    }
+
     public static Weapon vampireTeeth(int lvl) {
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.bite());
-        attacks.add(Attack.drainLife());
-        attacks.add(Spell.staticShock());
+        ArrayList<Attack> attacks = new ArrayList<>(Arrays.asList(
+                Attack.bite(),
+                Attack.drainLife(),
+                Spell.staticShock()
+        ));
 
         return new Weapon("Vampire teeth", 0, 5, 5, lvl * 2, lvl, 1,
                 lvl / 2, lvl, lvl * 2, lvl * 2, lvl * 2, attacks);
@@ -125,9 +116,8 @@ public class Weapons {
 
     //beast teeth and claws
     public static Weapon beast(int lvl) {
-        ArrayList<Attack> atks = new ArrayList<>();
-        atks.add(Attack.bite());
-        atks.add(Attack.scratch());
+        ArrayList<Attack> atks = new ArrayList<>(Arrays.asList(
+                Attack.bite(), Attack.scratch()));
 
         return new Weapon("Beast", 0, 5, 6, lvl * 2, 0, 1 + lvl / 2,
                 1 + lvl / 2, 0, 0, 0, 0, atks);
@@ -136,20 +126,25 @@ public class Weapons {
 
     ///// GOBLIN WEAPONS
 
+    public static Weapon goblinSword(int lvl) {
+        int phyDmg = 2 + lvl;
+        int spellDmg = 1 + (lvl / 2);
+        int dex = 2 + (lvl / 2);
+        int con = lvl / 2 + 1;
+        int str = lvl;
+
+        return new Weapon("Goblin Sword", 3, 5, 5, phyDmg, spellDmg, str, dex, con,
+                0, 0, 0, shortSwordAttacks());
+    }
+
     public static Weapon goblinSpear(int lvl) {
         int physDmg = 3 + lvl;
         int spellDmg = 1 + (lvl / 2);
         int dex = 3 + (int) (lvl * 1.5);
         int intel = 1 + (lvl / 3);
 
-
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.stab());
-        attacks.add(Attack.bash());
-        attacks.add(Ranged.spearThrow());
-
         return new Weapon("Goblin Spear", 5, 5, 6, physDmg, spellDmg, lvl, dex,
-                0, intel, 0, 0, attacks);
+                0, intel, 0, 0, spearAttacks());
     }
 
     public static Weapon goblinClub(int lvl) {
@@ -157,29 +152,19 @@ public class Weapons {
         int str = 4 + (lvl * 2);
         int con = 1 + lvl;
 
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.bash());
-        attacks.add(Attack.smash());
-        attacks.add(Spell.healingHands());
         return new Weapon("Goblin Club", 9, 4, 2, physDmg, 0, str, 0, con,
-                0, 0, 0, attacks);
+                0, 0, 0, maceAttacks());
     }
 
     public static Weapon goblinBow(int lvl) {
-        int dex = +lvl;
+        int dex = 2 + lvl;
         int physDmg = 3 + (lvl / 2);
         int intel = 1 + (lvl / 3);
         int wis = 1 + (lvl / 2);
         int cha = 1 + (lvl / 3);
 
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Ranged.arrowStrike());
-        attacks.add(Attack.bash());
-        attacks.add(Ranged.headShot());
-        attacks.add(Ranged.fireArrow());
-
         return new Weapon("Goblin Bow", 6, 6, 4, physDmg, 0, 0, dex,
-                0, intel, wis, cha, attacks);
+                0, intel, wis, cha, bowAttacks());
     }
 
     public static Weapon goblinScepter(int lvl) {
@@ -192,12 +177,104 @@ public class Weapons {
         int wis = 1 + lvl;
         int cha = 1 + lvl;
 
-        ArrayList<Attack> attacks = new ArrayList<>();
-        attacks.add(Attack.bash());
-        attacks.add(Attack.smash());
-        attacks.add(Spell.drainLife());
+        ArrayList<Attack> attacks = new ArrayList<>(Arrays.asList(
+                Attack.bash(),
+                Attack.smash(),
+                Spell.drainLife()
+        ));
 
         return new Weapon("Goblin Scepter", 6, 5, 5, physDmg, spellDmg, str, con, dex,
                 intel, wis, cha, attacks);
+    }
+
+    public static Weapon woodSword() {
+        Weapon wood = new Weapon("Wooden Sword", 4, 5, 5, 1);
+        wood.getAttackList().add(Attack.bash());
+        return wood;
+    }
+
+    public static Weapon godSword() {
+        ArrayList<Attack> attacks = new ArrayList<>(Arrays.asList(
+                Attack.swordSlice(),
+                Attack.smash(),
+                Attack.drainLife(),
+                Attack.daggerFlurry()
+        ));
+
+        return new Weapon("God Sword", 7, 5, 5, 10, 10, 10,
+                10, 10, 10, 10, 10, attacks);
+    }
+
+    // **** DEFAULT ATTACK LISTS ****
+
+    public static ArrayList<Attack> daggerAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.daggerSlice(),
+                Attack.stab(),
+                Attack.daggerFlurry(),
+                Ranged.knifeThrow(),
+                Attack.drainLife()
+        ));
+    }
+
+    public static ArrayList<Attack> shortSwordAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.swordSlice(),
+                Attack.stab(),
+                Attack.bash(),
+                Attack.elementalStrike()
+        ));
+    }
+
+    public static ArrayList<Attack> longSwordAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.swordSlice(),
+                Attack.stab(),
+                Attack.bash()
+        ));
+    }
+
+    public static ArrayList<Attack> spearAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.stab(),
+                Attack.bash(),
+                Ranged.spearThrow()
+        ));
+    }
+
+    public static ArrayList<Attack> clubAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.bash(),
+                Attack.smash(),
+                Spell.healingHands()
+        ));
+    }
+
+    public static ArrayList<Attack> staffAttacks() {
+        return new ArrayList<>(Arrays.asList(
+
+                Spell.fireball(),
+                Spell.staticShock(),
+                Spell.magicMissile(),
+                Spell.healingHands(),
+                Attack.bash()
+        ));
+    }
+
+    public static ArrayList<Attack> maceAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Attack.bash(),
+                Attack.smash(),
+                Attack.earthQuake()
+        ));
+    }
+
+    public static ArrayList<Attack> bowAttacks() {
+        return new ArrayList<>(Arrays.asList(
+                Ranged.arrowStrike(),
+                Attack.bash(),
+                Ranged.headShot(),
+                Ranged.fireArrow()
+        ));
     }
 }

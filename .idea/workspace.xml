@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="" />
+    <list default="true" id="7611c16f-552f-48bd-93b1-62bc5c002e1b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/com/Stclair/AttackList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/Stclair/Lootable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Dice.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Dice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Enemy.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Enemy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Item.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Weapon.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MyFirstBattle/com/Stclair/Weapon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Armor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Armor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Armors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Armors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Attack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Attack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Damage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Damage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Dice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Dice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Enemies.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Enemies.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Ranged.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Ranged.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Spell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Spell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Weapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Weapon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/Weapons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/Weapons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePane.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/battlePane/battlePaneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Stclair/myCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Stclair/myCharacter.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +51,7 @@
         <option value="Singleton" />
         <option value="FxmlFile" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -42,17 +69,21 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="rollNewPlayer" />
+        <entry key="$PROJECT_DIR$" value="selectMonsters" />
       </map>
     </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectId" id="1RTSsiF0tfdGi23nIvWAsvlynKW" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555329611322" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../Public/Downloads" />
@@ -116,6 +147,7 @@
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.BattleMain" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.BattleMain" />
       </list>
     </recent_temporary>
   </component>
@@ -186,17 +218,22 @@
       <option name="project" value="LOCAL" />
       <updated>1569690436666</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Fixed doAttack() to not include accuracy features until I figure out a way to add them later&#10;Fixed spells not doing damage">
+      <created>1569696038031</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1569696038031</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Successfully implemented buttons to select different group of enemies after defeating a round">
+      <created>1569708586306</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1569708586306</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -233,7 +270,9 @@
     <MESSAGE value="Reworked the layout of the newPlayerDialog in an attempt to make it a scene in the main UI as opposed to a popup window. Failed to make it work." />
     <MESSAGE value="RDid an overhaul to the attack system, now instead of retuning a new instance of attack each time you use it, there is only one instance of each attack the player has, and using it generates a Damage result&#10;Balance has to be completely reworked though." />
     <MESSAGE value="Began work on rebalancing attacks to work through the doAttack() method&#10;Moved intMultiplier and wisMultiplier, etc from spell class to the attack class&#10;Now spell and ranged classes are just to override doAttack()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Began work on rebalancing attacks to work through the doAttack() method&#10;Moved intMultiplier and wisMultiplier, etc from spell class to the attack class&#10;Now spell and ranged classes are just to override doAttack()" />
+    <MESSAGE value="Fixed doAttack() to not include accuracy features until I figure out a way to add them later&#10;Fixed spells not doing damage" />
+    <MESSAGE value="Successfully implemented buttons to select different group of enemies after defeating a round" />
+    <option name="LAST_COMMIT_MESSAGE" value="Successfully implemented buttons to select different group of enemies after defeating a round" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MyFirstBattle$BattleMain.ic" NAME="BattleMain Coverage Results" MODIFIED="1562457724438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

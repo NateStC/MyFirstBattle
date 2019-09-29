@@ -30,7 +30,7 @@ public class Main {
         System.out.println();
 
     Inventory inventory = new Inventory();
-    Weapon dagger = new Weapon("copper dagger", 0.5, 90, 75, 2);
+    Weapon dagger = new Weapon("Wooden dagger", 0.5, 90, 75, 2);
 
         inventory.addItem(dagger);
 

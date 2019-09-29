@@ -1,7 +1,5 @@
 package com.Stclair;
 
-import javafx.collections.ObservableList;
-
 import java.util.Random;
 
 public class Dice {

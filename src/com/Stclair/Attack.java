@@ -362,6 +362,10 @@ public class Attack {
         return manaCost;
     }
 
+    public int getTotalManaCost(myCharacter caster){
+        return manaCost;
+    }
+
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
     }

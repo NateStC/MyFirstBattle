@@ -64,7 +64,7 @@ public class Spell extends Attack {
     @Override
     public List<Damage> doAttack(myCharacter caster, myCharacter target) {
         ArrayList<Damage> damages = new ArrayList<>();
-        int manaCost = this.getManaCost() - (int) (caster.getWisStat() * this.getWisMultiplier() / 4) + (int) (caster.getLevel() * this.getCostMultiplier());
+        int manaCost = this.getTotalManaCost(caster);
         if (manaCost > caster.getMana()) {
             // returns Out of Mana if insuficient mana to cast
             damages.add(new Damage(this.getName()));
@@ -116,6 +116,13 @@ public class Spell extends Attack {
         }
 
         return damages;
+    }
+
+    @Override
+    public int getTotalManaCost(myCharacter caster) {
+        return this.getManaCost() -
+                (int) (caster.getWisStat() * this.getWisMultiplier() / 4) +
+                (int) (caster.getLevel() * this.getCostMultiplier());
     }
 
     private Damage healingSpell(myCharacter caster, int manaCost, boolean crit) {

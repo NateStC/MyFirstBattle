@@ -131,7 +131,7 @@ public class battlePaneController {
 
     @FXML
     private void newSpellSword() {
-        player = new Player("Trofasthet the Spell-Sword", player.getMaxHealth(), 9, 13, 12,
+        player = new Player("Trofasthet the Spell-Sword", 10, 9, 13, 12,
                 10, 8, Weapons.swordShort(), Armors.tinChainmail());
         startGame();
 
@@ -399,30 +399,6 @@ public class battlePaneController {
         }
     }
 
-    private void playerAttack(Damage damage) {
-        if (player.isDead()) {
-            actionList.add(player.getName() + " is dead!");
-            return;
-        }
-        ALPause(500, player.getName() + " uses " + damage.getAttackName());
-        playerDrainMana(damage.getManaCost());
-        if (!damage.isHit()) {
-            actionList.add(player.getName() + " missed!");
-            enemyTurn();
-            return;
-        }
-        if (damage.isCrit()) {
-            ALPause(500, "Critical Hit!");
-        }
-        if (damage.getDamage() > 0) {
-            enemyTakeDamage(damage.getDamage());
-        }
-        if (damage.getHeal() > 0) {
-            playerHeal(damage.getHeal());
-        }
-    }
-
-
     //fixme I want to be able to pause between messages, but it pauses displaying them but continues to generate them, and dumps them all at the same time
 //    private void actionPause(String message){
 //        actionList.add(message);
@@ -548,6 +524,7 @@ public class battlePaneController {
 
     private void setEnemy(Enemy enemy) {
         this.enemy = enemy;
+        enemyGrid.setVisible(true);
 
         enemyNameLabel.setText(enemy.getName());
         enemyHpLabel.setText(enemy.getHealth() + "");
@@ -568,10 +545,7 @@ public class battlePaneController {
 
 
     private void setEnemyHpBar() {
-        double progress = (double) enemy.getHealth() / (double) enemy.getMaxHealth();
-        System.out.println("health % = " + progress);
-        enemyHpBar.setProgress(progress);
-        System.out.println("Enemy has " + enemy.getHealth() + " health left");
+        enemyHpBar.setProgress(enemy.getHealthPct());
         enemyHpLabel.setText(enemy.getHealth() + "");
 
         //broken bindings
@@ -676,17 +650,21 @@ public class battlePaneController {
     }
 
     private void enemyAttack(List<Damage> damage) {
+        int atks = 0;
         for (Damage d : damage) {
+            atks++;
             if (d.isOOM()) {
                 enemyAttack(enemyDefaultAttack());
                 return;
             }
-            ALPause(500, enemy.getName() + " uses " + d.getAttackName());
-            enemyDrainMana(d.getManaCost());
+            if (atks == 1) {
+                ALPause(500, enemy.getName() + " uses " + d.getAttackName());
+                enemyDrainMana(d.getManaCost());
+            }
             int dmg = d.getDamage();
             int heal = d.getHeal();
 //            if (!d.isHit() && d.getPhysDamage() > 0) {
-            if (!d.isHit()){
+            if (!d.isHit()) {
                 actionList.add(enemy.getName() + " missed!");
                 break;
             }
@@ -705,20 +683,37 @@ public class battlePaneController {
     }
 
     public List<Damage> enemyDefaultAttack() {
-        //todo find a way to remove spells from ArrayList if OOM
         //todo finish change for ArrayList<Attack>
         // look for healing spells if health is low enough and if enemy is smart enough
         Random rand = new Random();
+        ArrayList<Attack> attacks = new ArrayList<>(enemy.getWeapon().getAttackList());
+        ArrayList<Integer> indicesToRemove = new ArrayList<>();
+        for (Attack a: attacks){
+            if (a.getTotalManaCost(enemy)>enemy.getMana()){
+                indicesToRemove.add(attacks.indexOf(a));
+            }
+        }
+        for (Integer i : indicesToRemove){
+            attacks.remove((int)i);
+        }
 
-        return enemy.getWeapon().getAttackList().get(rand.nextInt(enemy.getWeapon().getAttackList().size())).doAttack(enemy, player);
+        if (enemy.getHealthPct()<.20 && enemy.isSmart()){
+            for (Attack a : attacks){
+                if (a.isHealingSpell()){
+                    return a.doAttack(enemy,player);
+                }
+            }
+        }
+
+        return attacks.get(rand.nextInt(attacks.size())).doAttack(enemy,player);
     }
 
     private void gameOver() {
         deaths += 1;
         actionList.add("Oh no! You died!\nGame over.");
-        actionList.add("Rounds Completed: " + roundsCompleted +
-                "\nDeaths: " + deaths +
-                "\nTotal Kills: " + totalKills);
+        actionList.add("Rounds Completed: " + player.getRoundsCompleted() +
+                "\nDeaths: " + player.getDeaths() +
+                "\nTotal Kills: " + player.getTotalKills());
 //        stabButton.setDisable(true);
 //        spellButton.setDisable(true);
 //        healButton.setDisable(true);
@@ -740,8 +735,8 @@ public class battlePaneController {
 //        healButton.setDisable(false);
     }
 
-    private void restoreEnemies(){
-        for (int i =0; i<enemies.size(); i++) {
+    private void restoreEnemies() {
+        for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).fullRestore();
         }
     }

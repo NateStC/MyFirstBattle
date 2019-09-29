@@ -131,7 +131,6 @@ public class myCharacter {
             System.out.println(this.name + " died!");
             return false;
         }
-        System.out.println(this.name + " has " + this.health + " health left.");
         return true; // continue battle
     }
 
@@ -156,7 +155,7 @@ public class myCharacter {
         }
     }
 
-    public void fullRestore(){
+    public void fullRestore() {
         fullMana();
         fullHealth();
     }
@@ -433,7 +432,6 @@ public class myCharacter {
     }
 
     public int getNextLvlExp() {
-        System.out.println("Next lvl is level " + (this.getLevel()+1));
         return (getExpForLvl(this.getLevel() + 1));
     }
 
@@ -484,11 +482,11 @@ public class myCharacter {
         return (getExpForLvl(lvl + 1) - getExpForLvl(lvl));
     }
 
-    public double getExpProgPct(){
+    public double getExpProgPct() {
         double prog = getExpProgress();
         double expForLvl = getExpDifferenceForLvl(this.getLevel());
 
-        return prog/expForLvl;
+        return prog / expForLvl;
     }
 
     //returns experience gained since last lvl up
@@ -515,13 +513,22 @@ public class myCharacter {
     }
 
     //returns true
-    public boolean castCheck(Spell spell){
-        return (this.mana>spell.getManaCost());
+    public boolean castCheck(Spell spell) {
+        return (this.mana > spell.getManaCost());
     }
 
 //    public SimpleDoubleProperty getExpObsv() {
 //        return new SimpleDoubleProperty(new SimpleDoubleProperty(this.getExpProgress()).doubleValue() / ((double) this.getNextLvlExp()));
 //    }
+
+    public boolean hasHealingSpell() {
+        for (Attack a: weapon.getAttackList()){
+            if (a.isHealingSpell()){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public int getLevel() {
         return getLevel(this.experience);
@@ -540,11 +547,15 @@ public class myCharacter {
     }
 
     public int getMaxHealth() {
-        return getConStat()* 10 + (getLevel() * 15);
+        return getConStat() * 10 + (getLevel() * 15);
     }
 
     public void fullHealth() {
         this.health = getMaxHealth();
+    }
+
+    public double getHealthPct() {
+        return (double) this.health / (double) this.getMaxHealth();
     }
 
     public int getMana() {
@@ -623,27 +634,27 @@ public class myCharacter {
         return weapon;
     }
 
-    public int getStrBonus(){
+    public int getStrBonus() {
         return this.weapon.getStrBonus() + this.armor.getStrBonus();
     }
 
-    public int getConBonus(){
+    public int getConBonus() {
         return this.weapon.getConBonus() + this.armor.getConBonus();
     }
 
-    public int getDexBonus(){
+    public int getDexBonus() {
         return this.weapon.getDexBonus() + this.armor.getDexBonus();
     }
 
-    public int getIntBonus(){
+    public int getIntBonus() {
         return this.weapon.getIntBonus() + this.armor.getIntBonus();
     }
 
-    public int getWisBonus(){
+    public int getWisBonus() {
         return this.weapon.getWisBonus() + this.armor.getWisBonus();
     }
 
-    public int getChaBonus(){
+    public int getChaBonus() {
         return this.weapon.getCharBonus() + this.armor.getChaBonus();
     }
 
@@ -651,32 +662,32 @@ public class myCharacter {
         this.weapon = weapon;
     }
 
-    public void equipArmor(Armor armor){
+    public void equipArmor(Armor armor) {
         this.armor = armor;
     }
 
-    public int getStrStat(){
+    public int getStrStat() {
         return this.strength + this.getStrBonus();
     }
 
-    public int getConStat(){
+    public int getConStat() {
         return this.constitution + this.getConBonus();
     }
 
-    public int getDexStat(){
+    public int getDexStat() {
         return this.dexterity + this.getDexBonus();
     }
 
-    public int getIntStat(){
+    public int getIntStat() {
         return this.intelligence + this.getIntBonus();
     }
 
-    public int getWisStat(){
+    public int getWisStat() {
         return this.wisdom + this.getWisBonus();
     }
 
-    public int getChaStat(){
-        return  this.charisma + this.getChaBonus();
+    public int getChaStat() {
+        return this.charisma + this.getChaBonus();
     }
 
     public void setExperience(int experience) {

@@ -10,6 +10,7 @@ public class Armor extends Item {
     private int intBonus = 0;
     private int wisBonus = 0;
     private int chaBonus = 0;
+    private boolean equipable = true;
 
     //todo figure out a slot system for multiple armor items
     //private BodyPart slot

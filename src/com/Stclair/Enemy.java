@@ -88,4 +88,8 @@ public class Enemy extends myCharacter {
         double b = a / 5;
         return (int) (b * (this.getLevel() * 2));
     }
+
+    public boolean isSmart() {
+        return (this.getIntStat() + this.getWisStat() > this.getLevel() * 7);
+    }
 }

@@ -7,6 +7,10 @@ public class Item {
     private String name;
     private double weight;
     private int value = 0;
+    private boolean equipable;
+    private boolean saleable = true;
+    private boolean stackable = false;
+    private int quantity;
 
     public Item(String name, double weight) {
         this.name = name;
@@ -112,6 +116,49 @@ public class Item {
 
     public int getValue() {
         return value;
+    }
+
+    public boolean isEquipable() {
+        return equipable;
+    }
+
+    public void setEquipable(boolean equipable) {
+        this.equipable = equipable;
+    }
+
+    public boolean isSaleable() {
+        if (value<=0){
+            return false;
+        }
+        return saleable;
+    }
+
+    public void setSaleable(boolean saleable) {
+        this.saleable = saleable;
+    }
+
+    public boolean isStackable() {
+        return stackable;
+    }
+
+    public void setStackable(boolean stackable) {
+        this.stackable = stackable;
+    }
+
+    public boolean addCount(int count){
+        if (stackable){
+            this.quantity += count;
+            return true;
+        }
+        return false;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
 

@@ -8,6 +8,8 @@ public class Ranged extends Attack {
     private double strMultiplier = 0;
     private double dexMultiplier = 1;
     private double accMultiplier = .5; //Determines bonus added to accuracy roll; multiply dexterity + weaponAccuracy times accMultiplier
+    private int hitPoint = 2;
+    private int critPoint = 25;
 
 
     //basic ranged attack constructor;
@@ -80,7 +82,8 @@ public class Ranged extends Attack {
         ArrayList<Damage> damages = new ArrayList<>();
         System.out.println(attacker.getName() + " using " + this.getName());
         for (int i = 0; i < this.getNumOfAttacks(); i++) {
-            int cost = this.getManaCost();
+            int cost = 0;
+            if (i > 0) cost = this.getManaCost();
             //TODO figure how to factor wisdom & lvl into manacost
 //            if (i == 0) { // only costs mana for first cast if more than one attack
 //                if (cost > 0) { // calculates manaCost
@@ -89,28 +92,31 @@ public class Ranged extends Attack {
 //                }
 //            }
             int acc = Dice.d20();
+            System.out.println("Accuracy roll is " + acc);
             boolean crit = false;
             switch (acc) {
                 case 2:            //critical fail
                     //auto miss
-                    damages.add(new Damage(this.getName(), false));
-                    continue;
-                case 20:
+                    damages.add(new Damage(this.getName(), false, cost));
+                    return damages;
+                case 20:  //natural crit
                     crit = true;
             }
             //todo work out adding hitPoint and critPoint to ranged attack
-            int hitPoint = 2 + attacker.getLevel();
-            int critPoint = (int) (attacker.getLevel() * this.getLvlMultiplier()) + 19;
-            //accuracy is increased by dexterity and weapon accuracy
-            acc += this.accMultiplier * (attacker.getDexStat() + attacker.getWeapon().getAccuracy());
-            System.out.printf("Accuracy is %d and critPoint is %d\n", acc, critPoint);
-            crit = (acc>critPoint);
-            //returns missed attack
-//            if (acc < hitPoint + (attacker.getLevel() * this.getLvlMultiplier())) {
-//                damages.add(new Damage(this.getName(), false, cost));
-//                continue;
-//            }
-
+            if (!crit) {
+                int newHitPoint = hitPoint + (int) ((target.getLevel() * this.getLvlMultiplier()) + target.getDexStat() * this.dexMultiplier);
+                int newCritPoint = critPoint + (int) (attacker.getLevel() * this.getLvlMultiplier());
+                //accuracy is increased by dexterity and weapon accuracy
+                acc += accModified(attacker);
+                acc -= target.getDexStat() / 2;
+                System.out.printf("Accuracy is %d --- hitPoint is %d and critPoint is %d\n", acc, newHitPoint, newCritPoint);
+                crit = (acc > newCritPoint);
+                //returns missed attack
+                if (acc < newHitPoint) { //return a miss
+                    damages.add(new Damage(this.getName(), false, cost));
+                    continue;
+                }
+            }
             int physDmg = 0;
             if (this.getPhysDmgMultiplier() > 0) {
                 physDmg += Dice.die(this.getPhysDmgDie(), this.getDmgRolls()) +
@@ -138,6 +144,13 @@ public class Ranged extends Attack {
         return damages;
     }
 
+    private int accModified(myCharacter attacker) {
+        return (int) (this.accMultiplier * (
+                attacker.getDexStat() +
+                        attacker.getWeapon().getAccuracy()
+        ));
+    }
+
     public static Ranged arrowStrike() {
         return new Ranged("Arrow Strike", 8, 1, 1);
     }
@@ -145,7 +158,7 @@ public class Ranged extends Attack {
     //aim for headshot, higher crit chance, higher crit damage?, higher miss chance;
     //todo test for balance
     public static Ranged headShot() {
-        return new Ranged("HeadShot", 2, 2, 2, 12);
+        return new Ranged("HeadShot", 2, 3, 1, 12);
     }
 
     public static Ranged spearThrow() {
@@ -163,9 +176,9 @@ public class Ranged extends Attack {
         return new Ranged("Knife Throw", 1, 1, 1, 6);
     }
 
-    public static Ranged drainArrow(){
-        return new Ranged("Draining Arrow", .5,2,.5,
-                .5,4,4,.5,.5,10,
+    public static Ranged drainArrow() {
+        return new Ranged("Draining Arrow", .5, 2, .5,
+                .5, 4, 4, .5, .5, 10,
                 .75);
     }
 }

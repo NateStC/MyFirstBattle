@@ -137,7 +137,7 @@ public class newPlayerController {
                 newIntelligence == 0 || newWisdom == 0 || newCharisma == 0) {
 
             //todo add way to choose armor for player
-            battlePaneController.player = new myCharacter(playerNameField.getText().trim(), newStrength, newDexterity,
+            battlePaneController.player = new Player(playerNameField.getText().trim(), newStrength, newDexterity,
                     newConstitution, newIntelligence, newWisdom, newCharisma, weaponListView.getSelectionModel().getSelectedItem(), Armors.scrapLeathers());
             System.out.println("new player created");
 

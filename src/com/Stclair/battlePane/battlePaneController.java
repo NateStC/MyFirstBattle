@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -13,15 +15,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class battlePaneController {
+
+    //todo make a window to view Weapons
 
     @FXML
     private BorderPane mainBorderPane;
 
     @FXML
     private GridPane actionsGrid, playerGrid, enemyGrid;
+
+    @FXML
+    private AnchorPane centerPane;
+
+    private Label nameFieldLabel = new Label();
+    private TextField nameField = new TextField();
 
     @FXML
     private Label playerNameLabel, playerLvlLabel, strLabel, conLabel, dexLabel, intLabel, wisLabel, chaLabel,
@@ -48,7 +57,7 @@ public class battlePaneController {
 
     private Enemies.EnemyGroup enemies;
 
-    private int enemiesDefeated, roundsCompleted, deaths, totalKills, skillPoints;
+    private int enemiesDefeated, skillPoints;
 
     private ObservableList<String> actionList;
 
@@ -57,6 +66,7 @@ public class battlePaneController {
         skillPoints = 0;
         showLvlUpButtons(false);
         enemyGrid.setVisible(false);
+
         //set actions list view to wrap text  from Ryotsu on StackOverflow
         actionListView.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -74,6 +84,7 @@ public class battlePaneController {
                 }
             }
         });
+        startNewGame();
     }
 
     private void showActionList() {
@@ -83,26 +94,67 @@ public class battlePaneController {
 
     }
 
+    @FXML
+    private void startNewGame() {
+        actionListView.setVisible(false);
+        Button newCharacter = new Button("Roll New Character");
+        newCharacter.setOnAction(e -> rollNewCharacter());
+        newCharacter.setPrefWidth(120);
 
-//    @FXML
-//    private void startNewGame() {
-//        FXMLLoader Loader = new FXMLLoader();
-//        try {
-//            Loader.setLocation(FXMLLoader.load(getClass().getResource("newPlayerDialog.fxml")));
-//        } catch (IOException e){
-//            System.out.println("Could not set the loader");
-//            e.printStackTrace();
-//        }
-//        Parent p = Loader.getRoot();
-//        mainBorderPane.setCenter(p);
+        Button loadCharacter = new Button("Load Game");
+        loadCharacter.setPrefWidth(120);
+        //todo finish load character button
 
-//        try {
-//            mainBorderPane.setCenter(FXMLLoader.load(getClass().getResource("newPlayerDialog.fxml")));
-//        } catch (IOException e) {
-//            System.out.println("Unable to load roof dialog");
-//            e.printStackTrace();
-//        }
-//    }
+        Button spellSword = new Button("Spell Sword");
+        spellSword.setOnAction(e -> newSpellSword());
+        spellSword.setPrefWidth(120);
+
+        Button rogue = new Button("Rogue");
+        rogue.setPrefWidth(120);
+        rogue.setOnAction(e -> newRogue());
+
+        Button warrior = new Button("Warrior");
+        warrior.setOnAction(e -> newWarrior());
+        warrior.setPrefWidth(120);
+
+        Button wizard = new Button("Wizard");
+        wizard.setOnAction(e -> newWizard());
+        wizard.setPrefWidth(120);
+
+        Button ranger = new Button("Ranger");
+        ranger.setOnAction(e -> newRanger());
+        ranger.setPrefWidth(120);
+
+        GridPane grid = new GridPane();
+        grid.getColumnConstraints().setAll(new ColumnConstraints(120));
+        grid.setHgap(10);
+        grid.setAlignment(Pos.CENTER);
+        grid.alignmentProperty().setValue(Pos.CENTER);
+
+        GridPane.setColumnSpan(nameFieldLabel, 2);
+        GridPane.setHalignment(nameFieldLabel, HPos.CENTER);
+        nameFieldLabel.setText("Or select a pre-rolled character");
+
+        //todo find a way to limit number of characters entered to textfield;
+        GridPane.setColumnSpan(nameField, 2);
+        nameField.setPromptText("Player Name");
+
+        grid.setVgap(10);
+        grid.add(newCharacter, 0, 0);
+        grid.add(loadCharacter, 1, 0);
+        grid.add(nameFieldLabel, 0, 1);
+        grid.add(nameField, 0, 2);
+        grid.add(spellSword, 0, 3);
+        grid.add(rogue, 1, 3);
+        grid.add(warrior, 0, 4);
+        grid.add(wizard, 1, 4);
+        grid.add(ranger, 0, 5);
+
+        AnchorPane.setLeftAnchor(grid, 80.0);
+        AnchorPane.setTopAnchor(grid, 60.0);
+
+        mainBorderPane.setCenter(grid);
+    }
 
     //     dialog popup window to create new player
     @FXML
@@ -120,6 +172,9 @@ public class battlePaneController {
             return;
         }
 
+        //todo find a way to make button that closes, validates dialog data, creates player, and closes
+//        ButtonType createButton = new ButtonType("Create Player", ButtonBar.ButtonData.FINISH);
+
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
 
         Optional<ButtonType> result = dialog.showAndWait();
@@ -129,40 +184,80 @@ public class battlePaneController {
         }
     }
 
+    private boolean nameCheck() {
+        if (nameField.getText().length() > 30) {
+            nameFieldLabel.setText("Name must be 30 or fewer characters");
+            nameFieldLabel.setStyle("-fx-color: red");
+            nameField.clear();
+            return false;
+        }
+        return true;
+    }
+
+    //TODO make each button part of a buttonGroup and return a new player that can be used by one method
     @FXML
     private void newSpellSword() {
-        player = new Player("Trofasthet the Spell-Sword", 10, 9, 13, 12,
-                10, 8, Weapons.swordShort(), Armors.tinChainmail());
-        startGame();
-
+        if (nameCheck()) {
+            String name = "Trofasthet the Spell-Sword";
+            if (!nameField.getText().isBlank()) {
+                name = nameField.getText().trim();
+            }
+            player = new Player(name, 10, 9, 13, 12,
+                    10, 8, Weapons.swordShort(), Armors.tinChainmail());
+            startGame();
+        }
     }
 
     @FXML
     private void newRogue() {
-        player = new Player("John the Silent-but-Deadly", 7, 14, 10, 8,
-                9, 11, Weapons.daggers(), Armors.scrapLeathers());
-        startGame();
+        if (nameCheck()) {
+            String name = "John the Silent-but-Deadly";
+            if (!nameField.getText().isBlank()) {
+                name = nameField.getText().trim();
+            }
+            player = new Player(name, 7, 14, 10, 8,
+                    9, 11, Weapons.daggers(), Armors.scrapLeathers());
+            startGame();
+        }
     }
 
     @FXML
     private void newWarrior() {
-        player = new Player("Volstagg the Burly", 14, 8, 13, 8, 9,
-                7, Weapons.mace(), Armors.tinPlatemail());
-        startGame();
+        if (nameCheck()) {
+            String name = "Volstagg the Burly";
+            if (!nameField.getText().isBlank()) {
+                name = nameField.getText().trim();
+            }
+            player = new Player(name, 14, 8, 13, 8, 9,
+                    7, Weapons.mace(), Armors.tinPlatemail());
+            startGame();
+        }
     }
 
     @FXML
     private void newWizard() {
-        player = new Player("Dinklebot the Astute", 6, 8, 9, 15, 13,
-                11, Weapons.staff(), Armors.initiateRobes());
-        startGame();
+        if (nameCheck()) {
+            String name = "Dinklebot the Astute";
+            if (!nameField.getText().isBlank()) {
+                name = nameField.getText().trim();
+            }
+            player = new Player(name, 6, 8, 9, 15, 13,
+                    11, Weapons.staff(), Armors.initiateRobes());
+            startGame();
+        }
     }
 
     @FXML
     private void newRanger() {
-        player = new Player("Colton the Ranger", 8, 14, 10, 10, 10,
-                8, Weapons.bow(), Armors.scrapLeathers());
-        startGame();
+        if (nameCheck()) {
+            String name = "Colton the Ranger";
+            if (!nameField.getText().isBlank()) {
+                name = nameField.getText().trim();
+            }
+            player = new Player(name, 8, 14, 10, 10, 10,
+                    8, Weapons.bow(), Armors.scrapLeathers());
+            startGame();
+        }
     }
 
     @FXML
@@ -170,6 +265,11 @@ public class battlePaneController {
         player = new Player("Test God", 20, 20, 20, 20, 20,
                 20, Weapons.godSword(), Armors.chain(5));
         startGame();
+    }
+
+    @FXML
+    private void saveGame(){
+        //todo save character
     }
 
     @FXML
@@ -184,36 +284,36 @@ public class battlePaneController {
     }
 
     private void nextEnemy() {
-        if (enemy.getHealth() < 1) {
+        if (enemy.isDead()) {
             enemiesDefeated += 1;
-            totalKills += 1;
+            player.addKill();
             System.out.println("enemies defeated: " + enemiesDefeated);
             actionList.clear();
             if (enemiesDefeated < enemies.size()) {
-                if (!player.manaIsFull()) {
-                    int mp = (player.getIntStat() + player.getWisStat());
-                    playerRestoreMana(mp);
-                    actionList.add("You rest between enemies and restore " + mp + " mana.");
-                }
-                if (!player.healthIsFull()) {
-                    int hp = player.getConStat() + player.getLevel();
-                    playerHeal(hp);
-                    actionList.add("In the respite between battles you restore " + hp + " health.");
-                }
+                playerRest();
                 setEnemy(enemies.get(enemiesDefeated));
 //                nextButton.setDisable(true);
             } else {
                 actionList.add("You have defeated all of the enemies!");
-                roundsCompleted += 1;
+                player.roundCompleted();
                 nextButton.setText("New Round");
                 nextButton.setOnAction(event -> newRound());
-//                nextButton.setDisable(false);
-//                spellButton.setDisable(true);
-//                healButton.setDisable(true);
-//                stabButton.setDisable(true);
             }
         } else {
             actionList.add(enemy.getName() + " stands in your way, refusing to let you continue.");
+        }
+    }
+
+    public void playerRest() {
+        if (!player.manaIsFull()) {
+            int mp = player.getIntStat() * 2 + player.getWisStat() * 3;
+            playerRestoreMana(mp);
+            actionList.add("You rest between enemies and restore " + mp + " mana.");
+        }
+        if (!player.healthIsFull()) {
+            int hp = player.getConStat() * 4 + player.getLevel() * 2;
+            playerHeal(hp);
+            actionList.add("In the respite between battles you restore " + hp + " health.");
         }
     }
 
@@ -227,11 +327,51 @@ public class battlePaneController {
         setEnemy(enemies.get(0));
     }
 
+    private int  setActionsGrid(List<Button> buttons){
+        actionsGrid.getChildren().clear();
+        int column = 0, row = 0;
+
+        for (Button b : buttons) {
+            actionsGrid.add(b, column, row);
+            column += 1;
+            if (column > 1) {
+                column = 0;
+                row++;
+            }
+        }
+        for (int col = 0; col < actionsGrid.getColumnCount(); col++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setFillWidth(true);
+        }
+        return row;
+    }
+
+    private void setActionsGrid(List<Button> buttons, Button lastButton){
+        int lastRow = setActionsGrid(buttons) + 1;
+        actionsGrid.add(lastButton,1,lastRow);
+    }
+
     public void newRound() {
         enemiesDefeated = 0;
         restorePlayer();
         actionsGrid.getChildren().clear();
+        setActionsGrid(getEnemyGroupButtons());
+    }
 
+    public void startNewRound() {
+        setAttacks();
+        setUpEnemies(enemies);
+        setEnemy(enemies.get(0));
+    }
+
+    private void setAttacks() {
+        nextButton = new Button("Next Enemy");
+        nextButton.setPrefWidth(100);
+        nextButton.setOnAction(e -> nextEnemy());
+        setActionsGrid(getAttackButtons(), nextButton);
+    }
+
+    private List<Button> getEnemyGroupButtons(){
         List<Enemies.EnemyGroup> groups = Enemies.enemyGroups(player.getLevel());
         List<Button> buttonList = new ArrayList<>();
 
@@ -245,39 +385,10 @@ public class battlePaneController {
             });
             buttonList.add(button);
         }
-        int column = 0, row = 0;
-
-        //populate gridPane with buttons for attacks player is able to cast with that weapon
-        for (Button b : buttonList) {
-            actionsGrid.add(b, column, row);
-            column += 1;
-            if (column > 1) {
-                column = 0;
-                row++;
-            }
-        }
-
-        Button button = new Button("Test Dummy");
-        button.setPrefWidth(100);
-        button.setOnAction(e -> {
-            this.enemies = Enemies.dummyTest(player.getLevel());
-            startNewRound();
-        });
-        actionsGrid.add(button, column, row);
-
-        for (int col = 0; col < actionsGrid.getColumnCount(); col++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setFillWidth(true);
-        }
+        return buttonList;
     }
 
-    public void startNewRound() {
-        setActions();
-        setUpEnemies(enemies);
-        setEnemy(enemies.get(0));
-    }
-
-    private void setActions() {
+    private List<Button> getAttackButtons(){
         ArrayList<Button> attacks = new ArrayList<>();
 
         //Todo figure out how to use Optional<Button>
@@ -293,50 +404,50 @@ public class battlePaneController {
                 if (player.isDead()) {
                     actionList.add("You can't use " + a.getName() + ", you are dead!");
                 } else {
-                    List<Damage> result = a.doAttack(player, enemy);
+                    List<ActionResult> result = a.action(player, enemy);
                     int atks = 0;
                     //build a button for each attack
-                    for (Damage d : result) {
-                        if (enemy.isDead() && d.getPhysDamage() > 0) {
+                    for (ActionResult r : result) {
+                        if (enemy.isDead() && r.getPhysDamage() > 0) {
                             actionList.add("Enemy is already dead!");
                             break;
                         }
-                        if (d.getPhysDamage() == 0 && d.getHeal() > 0 && player.healthIsFull()) {
+                        if (r.getPhysDamage() == 0 && r.getHeal() > 0 && player.healthIsFull()) {
                             actionList.add(player.getName() + " is already at full health");
                             break;
                         }
-                        if (d.isOOM()) {
-                            actionList.add("Not enough mana to cast " + d.getAttackName());
+                        if (r.isOOM()) {
+                            actionList.add("Not enough mana to cast " + r.getAttackName());
                             break;
                         }
                         if (atks == 0) {
-                            actionList.add(player.getName() + " uses " + d.getAttackName());
+                            actionList.add(player.getName() + " uses " + r.getAttackName());
                         }
-                        playerDrainMana(d.getManaCost());
+                        playerDrainMana(r.getManaCost());
                         atks++;
 
-                        if (!d.isHit()) {
+                        if (!r.isHit()) {
                             if (result.size() == 1) {
-                                ALPause(500, d.getAttackName() + " missed.");
+                                ALPause(500, r.getAttackName() + " missed.");
                                 enemyTurn();
                                 break;
                             } else {
                                 ALPause(500, firstOrSecond(atks) + " attack missed!");
                             }
                         }
-                        if (d.isCrit()) {
+                        if (r.isCrit()) {
                             ALPause(500, "Critical hit!");
                         }
-                        if (d.getDamage() > 0) {
+                        if (r.getDamage() > 0) {
                             if (result.size() == 1) {
-                                ALPause(50, enemy.getName() + " takes " + d.getDamage() + " damage");
+                                ALPause(50, enemy.getName() + " takes " + r.getDamage() + " damage");
                             } else {
-                                ALPause(50, firstOrSecond(atks) + " strike deals " + d.getDamage());
+                                ALPause(50, firstOrSecond(atks) + " strike deals " + r.getDamage());
                             }
-                            enemyTakeDamage(d.getDamage());
+                            enemyTakeDamage(r.getDamage());
                         }
-                        if (d.getHeal() > 0 && !player.healthIsFull()) {
-                            playerHeal(d.getHeal());
+                        if (r.getHeal() > 0 && !player.healthIsFull()) {
+                            playerHeal(r.getHeal());
                         }
                         if (enemy.isDead()) {
                             break;
@@ -350,34 +461,7 @@ public class battlePaneController {
             });
             attacks.add(button);
         }
-
-
-        int row = 0;
-        int column = 0;
-
-        //populate gridPane with buttons for attacks player is able to cast with that weapon
-        for (Button b : attacks) {
-            actionsGrid.add(b, column, row);
-            column += 1;
-            if (column > 1) {
-                column = 0;
-                row++;
-            }
-        }
-
-        //adds Next Enemy Button at bottom of actionGrid
-        nextButton = new Button("Next Enemy");
-        nextButton.setPrefWidth(100);
-        nextButton.setOnAction(e -> nextEnemy());
-        if (column == 1) {
-            row++;
-        }
-        actionsGrid.add(nextButton, 1, row);
-
-        for (int col = 0; col < actionsGrid.getColumnCount(); col++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setFillWidth(true);
-        }
+        return attacks;
     }
 
     private String firstOrSecond(int num) {
@@ -426,7 +510,7 @@ public class battlePaneController {
 //        experience = new SimpleIntegerProperty(player.getExperience());
 
         setPlayerStats();
-        setActions();
+        setAttacks();
 
         //broken listeners in an attempt to bind labels to stats
 //        experience.addListener((observable, oldValue, newValue) -> {
@@ -578,7 +662,7 @@ public class battlePaneController {
         if (player.takeDamage(damage)) {
             actionList.add(player.getName() + " has " + player.getHealth() + "hp left");
         } else {
-            gameOver();
+            playerDied();
         }
         setHpBar();
     }
@@ -642,19 +726,18 @@ public class battlePaneController {
             enemy.drainMana(mana);
             setEnemyManaBar();
         }
-//        System.out.println("enemy has " + enemy.getMana() + " mana left");
     }
 
     private void enemyTurn() {
-        enemyAttack(enemyDefaultAttack());
+        enemyAttack(enemy.defaultAttack(player));
     }
 
-    private void enemyAttack(List<Damage> damage) {
+    private void enemyAttack(List<ActionResult> actionResult) {
         int atks = 0;
-        for (Damage d : damage) {
+        for (ActionResult d : actionResult) {
             atks++;
-            if (d.isOOM()) {
-                enemyAttack(enemyDefaultAttack());
+            if (d.isOOM()) { // rolls new attack if enemy doesn't have enough mana to cast
+                enemyAttack(enemy.defaultAttack(player));
                 return;
             }
             if (atks == 1) {
@@ -682,45 +765,19 @@ public class battlePaneController {
         }
     }
 
-    public List<Damage> enemyDefaultAttack() {
-        //todo finish change for ArrayList<Attack>
-        // look for healing spells if health is low enough and if enemy is smart enough
-        Random rand = new Random();
-        ArrayList<Attack> attacks = new ArrayList<>(enemy.getWeapon().getAttackList());
-        ArrayList<Integer> indicesToRemove = new ArrayList<>();
-        for (Attack a: attacks){
-            if (a.getTotalManaCost(enemy)>enemy.getMana()){
-                indicesToRemove.add(attacks.indexOf(a));
-            }
-        }
-        for (Integer i : indicesToRemove){
-            attacks.remove((int)i);
-        }
-
-        if (enemy.getHealthPct()<.20 && enemy.isSmart()){
-            for (Attack a : attacks){
-                if (a.isHealingSpell()){
-                    return a.doAttack(enemy,player);
-                }
-            }
-        }
-
-        return attacks.get(rand.nextInt(attacks.size())).doAttack(enemy,player);
-    }
-
-    private void gameOver() {
-        deaths += 1;
+    private void playerDied() {
+        player.addDeath();
         actionList.add("Oh no! You died!\nGame over.");
         actionList.add("Rounds Completed: " + player.getRoundsCompleted() +
-                "\nDeaths: " + player.getDeaths() +
+                "\nDeaths: " + player.getTotalDeaths() +
                 "\nTotal Kills: " + player.getTotalKills());
-//        stabButton.setDisable(true);
-//        spellButton.setDisable(true);
-//        healButton.setDisable(true);
 
         nextButton.setText("Restart Round");
         nextButton.setOnAction(event -> restartRound());
-//        nextButton.setDisable(false);
+        int gold = player.getGold();
+        if (gold > 0){
+            player.loseGold((int)(gold/10));
+        }
     }
 
     private void restartRound() {
@@ -730,9 +787,6 @@ public class battlePaneController {
         enemiesDefeated = 0;
         setEnemy(enemies.get(0));
         restorePlayer();
-//        stabButton.setDisable(false);
-//        spellButton.setDisable(false);
-//        healButton.setDisable(false);
     }
 
     private void restoreEnemies() {

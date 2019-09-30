@@ -14,7 +14,7 @@ public class Spell extends Attack {
     }
 
     //basic attack spell constructor
-    public Spell (String name, int manaCost, int dmgDie, double intMultiplier){
+    public Spell(String name, int manaCost, int dmgDie, double intMultiplier) {
         this.setName(name);
         this.setManaCost(manaCost);
         this.setPhysDmgDie(dmgDie);
@@ -30,26 +30,12 @@ public class Spell extends Attack {
         this.setLvlMultiplier(lvlMultiplier);
     }
 
-    //basic healing constructor
-    public Spell(String name, int manaCost, int healDie, double intMultiplier, double wisMultiplier, double chaMultiplier, double lvlMultiplier) {
-        this.setName(name);
-        setManaCost(manaCost);
-        this.setPhysDmgDie(0);
-        this.setSpellDmgDie(0);
-        setHealDie(healDie);
-        setIntMultiplier(intMultiplier);
-        setWisMultiplier(wisMultiplier);
-        setChaMultiplier(chaMultiplier);
-        this.setLvlMultiplier(lvlMultiplier);
-        this.setPhysDmgMultiplier(0);
-    }
-
     //advanced attack spell constructor
     public Spell(String name, int manaCost, int dmgDie, int dmgRolls, int numOfAttacks, double intMultiplier, double wisMultiplier,
-                 double chaMultiplier, double lvlMultiplier, double spellDmgMultiplier, double accMultiplier, double costMultiplier) {
+                 double chaMultiplier, double lvlMultiplier, double spellDmgMultiplier) {
         this.setName(name);
         this.setSpellDmgDie(dmgDie);
-        this.setDmgRolls(dmgRolls);
+        this.setRolls(dmgRolls);
         this.setNumOfAttacks(numOfAttacks);
         this.setLvlMultiplier(lvlMultiplier);
         setIntMultiplier(intMultiplier);
@@ -57,51 +43,45 @@ public class Spell extends Attack {
         setChaMultiplier(chaMultiplier);
         setManaCost(manaCost);
         this.setSpellDmgMultiplier(spellDmgMultiplier);
-        setCostMultiplier(costMultiplier);
         this.setPhysDmgMultiplier(0);
     }
 
+    //todo make a class of type buff or heal to change this method to override doAttack
+    //healing spell or spells that only affect caster
+
+
+    public List<ActionResult> cast(myCharacter caster, myCharacter target) {
+        return action(caster, target);
+    }
+
     @Override
-    public List<Damage> doAttack(myCharacter caster, myCharacter target) {
-        ArrayList<Damage> damages = new ArrayList<>();
+    public List<ActionResult> action(myCharacter caster, myCharacter target) {
+        ArrayList<ActionResult> actionResults = new ArrayList<>();
         int manaCost = this.getTotalManaCost(caster);
-        if (manaCost > caster.getMana()) {
-            // returns Out of Mana if insuficient mana to cast
-            damages.add(new Damage(this.getName()));
-            return damages;
-        }
         for (int i = 0; i < this.getNumOfAttacks(); i++) {
             if (i > 0) {
                 //Only costs mana once if there are multiple attacks
                 manaCost = 0;
+            } else if (manaCost > caster.getMana()) {
+                // returns Out of Mana if insufficient mana to cast
+                actionResults.add(ActionResult.oom(this.getName()));
+                return actionResults;
             }
             int heal = 0;
             int acc = Dice.d20();
 //            System.out.println("Accuracy roll is " + acc);
-            //critical fail
-            if (acc == 1) {
-                damages.add(new Damage(this.getName(), false, manaCost));
+            if (acc == 1) {  //critical fail
+                actionResults.add(ActionResult.miss(this.getName(), manaCost));
                 continue;
             }
-//            //wisdom lowers critical hit min
 //            System.out.println(this.getName() + " accuracy is " + acc);
             boolean crit = (acc == 20);
 
-            //todo make wisdom & lvl affect crit chance
-//          if (!crit) crit = (acc > ((20 + caster.getLevel() * 5) - (int) (caster.getWisStat() / 3 * this.getWisMultiplier())));
-
-
-            if (isHealingSpell()) {
-                //calls healing spell because healing spell can't miss
-                damages.add(healingSpell(caster, manaCost, crit));
-                continue;
-            }
-
             //dmg is intelligence and dice
-            int spellDmg = Dice.die(this.getSpellDmgDie(), this.getDmgRolls()) +
+            int spellDmg = Dice.die(this.getSpellDmgDie(), this.getRolls()) +
                     (int) (caster.getIntStat() * this.getIntMultiplier() / 3) +
                     (int) (caster.getWeapon().getSpellDmg() * this.getSpellDmgMultiplier());
-            if (getPhysDmgDie()>0){
+            if (getPhysDmgDie() > 0) {
 
             }
             if (crit) {
@@ -111,50 +91,26 @@ public class Spell extends Attack {
             if (getHpDrainMultiplier() != 0) {
                 heal += (int) (spellDmg * getHpDrainMultiplier());
             }
-            damages.add(new Damage(this.getName(), 0, spellDmg, manaCost, heal, crit));
+            actionResults.add(new ActionResult(this.getName(), 0, spellDmg, manaCost, heal, crit));
             System.out.println(caster.getName() + "'s " + this.getName() + " deals " + spellDmg + " dmg");
         }
 
-        return damages;
+        return actionResults;
     }
 
-    @Override
-    public int getTotalManaCost(myCharacter caster) {
-        return this.getManaCost() -
-                (int) (caster.getWisStat() * this.getWisMultiplier() / 4) +
-                (int) (caster.getLevel() * this.getCostMultiplier());
-    }
-
-    private Damage healingSpell(myCharacter caster, int manaCost, boolean crit) {
-        int heal = Dice.die(getHealDie()) +
-                (int) (caster.getIntStat() * getIntMultiplier()) +
-                (int) (caster.getWisStat() * getWisMultiplier()) +
-                (int) (caster.getChaStat() * getChaMultiplier());
-        if (crit) {
-            heal *= 2;
+    public boolean critCheck(myCharacter caster, int roll) {   //wisdom lowers critical hit min
+        //todo test spell hit/miss/crit balance
+        if (roll == 20) {
+            return true;
         }
-        return new Damage(this.getName(), heal, manaCost, crit);
-    }
+        double rollMod = roll - (caster.getWisStat() * this.getWisMultiplier() /3);
+        double critPoint = 20 + caster.getLevel()*5;
+        System.out.printf("%s accuracy Roll = %d\n" +
+                "Accuracy modified = %d\n" +
+                "CritPoint = %d",
+                this.getName(), roll,(int) rollMod, (int)critPoint);
 
-    //basic attack spell
-    public static Spell fireball() {
-        return new Spell("Fireball", 15, 12, .75, 1, 1);
-    }
-
-    // Electrocution spell that relies more on player stats than dice
-    //todo test staticShock
-    public static Spell staticShock() {
-        return new Spell("Static Shock", 15, 6, 1.5, 1.5, 1.5);
-    }
-
-    //basic healing spell
-    public static Spell healingHands() {
-        return new Spell("Healing Hands", 15, 12, 0, .5, 1.5, 2);
-    }
-
-    public static Spell magicMissile() {
-        return new Spell("Magic Missile", 25, 6, 1, 3, .5,
-                .5, .5, 1, 1, 1, 2);
+        return rollMod>critPoint;
     }
 
     @Override

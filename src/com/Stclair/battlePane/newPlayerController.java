@@ -13,11 +13,18 @@ public class newPlayerController {
     @FXML
     private TextField playerNameField;
     @FXML
-    private Button createPlayerButton, rollStatsButton;
+    private Button rollStatsButton;
+
+    @FXML
+    private Button createPlayerButton;
+
+//    @FXML
+//    private ButtonType createPlayerButton;
+
     @FXML
     private Label instructionLabel;
 
-    private int newStrength, newConstitution, newDexterity, newIntelligence, newWisdom, newCharisma;
+    private int str, con, dex, intl, wis, cha;
 
     @FXML
     private ListView<Integer> statRollList;
@@ -26,19 +33,19 @@ public class newPlayerController {
     private ListView<Weapon> weaponListView;
 
     @FXML
-    private Label newStrLabel, newConLabel, newDexLabel,newIntelLabel, newWisLabel, newCharismaLabel;
+    private Label newStrLabel, newConLabel, newDexLabel, newIntelLabel, newWisLabel, newCharismaLabel;
     @FXML
     private Label newStrBonusLabel, newConBonusLabel, newDexBonusLabel, newIntBonusLabel, newWisBonusLabel, newChaBonusLabel;
 
     private Integer selectedRoll;
 
     public void initialize() {
-        newStrength = 0;
-        newConstitution = 0;
-        newDexterity = 0;
-        newIntelligence = 0;
-        newWisdom = 0;
-        newCharisma = 0;
+        str = 0;
+        con = 0;
+        dex = 0;
+        intl = 0;
+        wis = 0;
+        cha = 0;
         createPlayerButton.setDisable(true);
         rollStatsButton.setDisable(true);
         statRollList.setDisable(true);
@@ -82,11 +89,11 @@ public class newPlayerController {
         ObservableList<Weapon> weapons = FXCollections.observableArrayList();
         weapons.addAll(Weapons.swordShort(), Weapons.longSword(), Weapons.daggers(), Weapons.staff(), Weapons.mace());
         weaponListView.setItems(weapons);
-        weaponListView.setCellFactory(lv -> new ListCell<>(){
+        weaponListView.setCellFactory(lv -> new ListCell<>() {
             @Override
-            public void updateItem(Weapon weapon, boolean empty){
-                super.updateItem(weapon,empty);
-                if (empty){
+            public void updateItem(Weapon weapon, boolean empty) {
+                super.updateItem(weapon, empty);
+                if (empty) {
                     setText(null);
                 } else {
                     setText(weapon.getName());
@@ -127,22 +134,34 @@ public class newPlayerController {
         });
         weaponListView.getSelectionModel().selectFirst();
 
-        createPlayerButton.setOnAction(e -> {
-
-        });
+//        createPlayerButton.setOnAction(e -> {
+//
+//        });
     }
 
+    @FXML
     public void createNewPlayer() {
-        if (!playerNameField.getText().isEmpty() || newStrength == 0 || newDexterity == 0 || newConstitution == 0 ||
-                newIntelligence == 0 || newWisdom == 0 || newCharisma == 0) {
-
-            //todo add way to choose armor for player
-            battlePaneController.player = new Player(playerNameField.getText().trim(), newStrength, newDexterity,
-                    newConstitution, newIntelligence, newWisdom, newCharisma, weaponListView.getSelectionModel().getSelectedItem(), Armors.scrapLeathers());
-            System.out.println("new player created");
-
-            //todo how to pass new character to battlePaneController from create character button and not close button
+        if (playerNameField.getText().isEmpty()) {
+            System.out.println("Enter player name");
+            return;
         }
+        if (str == 0 || dex == 0 || con == 0 || intl == 0 || wis == 0 || cha == 0) {
+            System.out.println("Assign all stats");
+            return;
+        }
+        if (weaponListView.getSelectionModel().getSelectedItem() == null) {
+            System.out.println("Choose a weapon");
+            return;
+        }
+
+        //todo add way to choose armor for player
+
+        battlePaneController.player = new Player(playerNameField.getText().trim(), str, dex,
+                con, intl, wis, cha, weaponListView.getSelectionModel().getSelectedItem(), Armors.scrapLeathers());
+        System.out.println("new player created");
+
+        //todo how to pass new character to battlePaneController from create character button and not close button
+//        }
     }
 
     @FXML
@@ -171,104 +190,103 @@ public class newPlayerController {
 
     @FXML
     private void handleStrengthButton() {
-        if (this.newStrength == 0 && selectedRoll != null) {
+        if (this.str == 0 && selectedRoll != null) {
             Integer str = statRollList.getSelectionModel().getSelectedItem();
             newStrLabel.setText(str.toString());
-            this.newStrength = str;
+            this.str = str;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newStrength > 0) {
-            statRollList.getItems().add(newStrength);
-            this.newStrength = 0;
+        } else if (this.str > 0) {
+            statRollList.getItems().add(str);
+            this.str = 0;
             newStrLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
     }
 
     @FXML
     private void handleConstitutionButton() {
-        if (this.newConstitution == 0 && selectedRoll != null) {
+        if (this.con == 0 && selectedRoll != null) {
             Integer con = statRollList.getSelectionModel().getSelectedItem();
             newConLabel.setText(con.toString());
-            this.newConstitution = con;
+            this.con = con;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newConstitution > 0) {
-            statRollList.getItems().add(this.newConstitution);
-            this.newConstitution = 0;
+        } else if (this.con > 0) {
+            statRollList.getItems().add(this.con);
+            this.con = 0;
             newConLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
-
     }
 
     @FXML
     private void handleDexButton() {
-        if (this.newDexterity == 0 && selectedRoll != null) {
+        if (this.dex == 0 && selectedRoll != null) {
             Integer dex = statRollList.getSelectionModel().getSelectedItem();
             newDexLabel.setText(dex.toString());
-            this.newDexterity = dex;
+            this.dex = dex;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newDexterity > 0) {
-            statRollList.getItems().add(this.newDexterity);
-            this.newDexterity = 0;
+        } else if (this.dex > 0) {
+            statRollList.getItems().add(this.dex);
+            this.dex = 0;
             newDexLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
     }
 
     @FXML
     private void handleIntelligenceButton() {
-        if (this.newIntelligence == 0 && selectedRoll != null) {
+        if (this.intl == 0 && selectedRoll != null) {
             Integer intel = statRollList.getSelectionModel().getSelectedItem();
             newIntelLabel.setText(intel.toString());
-            this.newIntelligence = intel;
+            this.intl = intel;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newIntelligence > 0) {
-            statRollList.getItems().add(this.newIntelligence);
-            this.newIntelligence = 0;
+        } else if (this.intl > 0) {
+            statRollList.getItems().add(this.intl);
+            this.intl = 0;
             newIntelLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
     }
 
     @FXML
     private void handleWisdomButton() {
-        if (this.newWisdom == 0 && selectedRoll != null) {
+        if (this.wis == 0 && selectedRoll != null) {
             Integer wis = selectedRoll;
             newWisLabel.setText(wis.toString());
-            this.newWisdom = wis;
+            this.wis = wis;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newWisdom > 0) {
-            statRollList.getItems().add(this.newWisdom);
-            this.newWisdom = 0;
+        } else if (this.wis > 0) {
+            statRollList.getItems().add(this.wis);
+            this.wis = 0;
             newWisLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
     }
 
     @FXML
     private void handleCharismaButton() {
-        if (this.newCharisma == 0 && selectedRoll != null) {
+        if (this.cha == 0 && selectedRoll != null) {
             Integer charisma = selectedRoll;
             newCharismaLabel.setText(charisma.toString());
-            this.newCharisma = charisma;
+            this.cha = charisma;
             statRollList.getItems().remove(selectedRoll);
             statRollList.getSelectionModel().selectFirst();
-        } else if (this.newCharisma > 0) {
-            statRollList.getItems().add(this.newCharisma);
-            this.newCharisma = 0;
+        } else if (this.cha > 0) {
+            statRollList.getItems().add(this.cha);
+            this.cha = 0;
             newCharismaLabel.setText("");
-            selectedRoll = null;
             createPlayerButton.setDisable(true);
+            statRollList.getSelectionModel().selectLast();
         }
     }
 

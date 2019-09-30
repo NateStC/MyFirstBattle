@@ -3,6 +3,7 @@ package com.Stclair;
 import javafx.beans.property.SimpleDoubleProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -166,7 +167,7 @@ public class myCharacter {
     public int stab() {
 
         int att = Dice.d20();
-        int roll = d6roll();
+        int roll = Dice.d6();
         int damage = 0;
 
         if (att == 1) {
@@ -385,6 +386,7 @@ public class myCharacter {
 
     public static int getLevel(int experience) {
         //todo figure out how to loop to getExpForLvl() method
+        //todo test with debugger
 //        if (experience<100){
 //            return 1;
 //        }
@@ -472,9 +474,8 @@ public class myCharacter {
 
     //returns true if leveled up
     public boolean gainExp(int exp) {
-        int nextlvl = getNextLvlExp();
         this.experience += exp;
-        return this.getExperience() >= nextlvl;
+        return this.getExperience() >= getNextLvlExp();
     }
 
     //returns total exp per passed lvl ie 200xp for lvl 2 to 3;
@@ -485,7 +486,6 @@ public class myCharacter {
     public double getExpProgPct() {
         double prog = getExpProgress();
         double expForLvl = getExpDifferenceForLvl(this.getLevel());
-
         return prog / expForLvl;
     }
 
@@ -512,22 +512,8 @@ public class myCharacter {
         return (this.getMana() >= this.getMaxMana());
     }
 
-    //returns true
-    public boolean castCheck(Spell spell) {
-        return (this.mana > spell.getManaCost());
-    }
-
-//    public SimpleDoubleProperty getExpObsv() {
-//        return new SimpleDoubleProperty(new SimpleDoubleProperty(this.getExpProgress()).doubleValue() / ((double) this.getNextLvlExp()));
-//    }
-
-    public boolean hasHealingSpell() {
-        for (Attack a: weapon.getAttackList()){
-            if (a.isHealingSpell()){
-                return true;
-            }
-        }
-        return false;
+    public List<Attack> getAttacks(){
+        return this.getWeapon().getAttackList();
     }
 
     public int getLevel() {
@@ -634,6 +620,10 @@ public class myCharacter {
         return weapon;
     }
 
+    public Armor getArmor(){
+        return this.armor;
+    }
+
     public int getStrBonus() {
         return this.weapon.getStrBonus() + this.armor.getStrBonus();
     }
@@ -700,5 +690,13 @@ public class myCharacter {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public void gainGold(int gold){
+        this.gold += gold;
+    }
+
+    public void loseGold(int gold){
+        this.gold -= gold;
     }
 }

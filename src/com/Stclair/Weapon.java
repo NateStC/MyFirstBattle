@@ -19,7 +19,7 @@ public class Weapon extends Item {
         this.setName("Fists");
         this.physDamage = 1;
         this.spellDmg = 1;
-        Attack bash = Attack.bash();
+        Attack bash = Attacks.bash();
         bash.setPhysDmgDie((int) this.getWeight());
         addAttack(bash);
         this.setValue(0);
@@ -83,7 +83,7 @@ public class Weapon extends Item {
         this.dexBonus = 0;
         this.setValue(20);
 
-        this.attackList.add(Attack.bash());
+        this.attackList.add(Attacks.bash());
     }
 
     public void addAttack(Attack attack) {

@@ -56,6 +56,32 @@ public class Enemy extends myCharacter {
         this.entrance = entrance;
     }
 
+
+    public List<ActionResult> defaultAttack(myCharacter target) {
+        Random rand = new Random();
+        ArrayList<Attack> attacks = new ArrayList<>(this.getWeapon().getAttackList());
+        ArrayList<Integer> indicesToRemove = new ArrayList<>();
+        // remove spells from selection pool if OOM
+        for (Attack a : attacks) {
+            if (a.getTotalManaCost(this) > this.getMana()) {
+                indicesToRemove.add(attacks.indexOf(a));
+            }
+        }
+        for (int i : indicesToRemove) {
+            attacks.remove(i);
+        }
+
+        if (this.getHealthPct() < .20 && this.isSmart()) {
+            for (Attack a : attacks) {
+                if (a instanceof HealingSpell) {
+                    return a.action(this, target);
+                }
+            }
+        }
+
+        return attacks.get(rand.nextInt(attacks.size())).action(this, target);
+    }
+
     public String getEntrance() {
         if (entrance.isEmpty()) {
             Random rand = new Random();

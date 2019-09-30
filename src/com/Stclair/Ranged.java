@@ -29,15 +29,8 @@ public class Ranged extends Attack {
         this.setPhysDmgMultiplier(physDmgMultiplier);
         this.setSpellDmgMultiplier(0);
         this.setPhysDmgDie(dmgDie);
-        this.setDmgRolls(1);
-        this.setStrMultiplier(0);
-        this.setIntMultiplier(0);
-        this.setWisMultiplier(0);
-        this.setChaMultiplier(0);
+        this.setRolls(1);
         this.setNumOfAttacks(1);
-        this.setHpDrainMultiplier(0);
-        this.setHealDie(0);
-        this.setManaCost(0);
     }
 
     //ranged attack w/ strBonus
@@ -49,11 +42,8 @@ public class Ranged extends Attack {
         this.setPhysDmgMultiplier(physDmgMultiplier);
         this.setSpellDmgMultiplier(0);
         this.setPhysDmgDie(dmgDie);
-        this.setDmgRolls(dmgRolls);
+        this.setRolls(dmgRolls);
         this.setStrMultiplier(strMultiplier);
-        this.setIntMultiplier(0);
-        this.setWisMultiplier(0);
-        this.setChaMultiplier(0);
 
     }
 
@@ -78,8 +68,8 @@ public class Ranged extends Attack {
 
 
     @Override
-    public List<Damage> doAttack(myCharacter attacker, myCharacter target) {
-        ArrayList<Damage> damages = new ArrayList<>();
+    public List<ActionResult> action(myCharacter attacker, myCharacter target) {
+        ArrayList<ActionResult> actionResults = new ArrayList<>();
         System.out.println(attacker.getName() + " using " + this.getName());
         for (int i = 0; i < this.getNumOfAttacks(); i++) {
             int cost = 0;
@@ -93,33 +83,29 @@ public class Ranged extends Attack {
 //            }
             int acc = Dice.d20();
             System.out.println("Accuracy roll is " + acc);
-            boolean crit = false;
-            switch (acc) {
-                case 2:            //critical fail
-                    //auto miss
-                    damages.add(new Damage(this.getName(), false, cost));
-                    return damages;
-                case 20:  //natural crit
-                    crit = true;
+            boolean crit = (acc == 20);
+            if (acc <= 2) {
+                //auto-fail
+                actionResults.add(ActionResult.miss(this.getName(), cost));
+                continue;
             }
             //todo work out adding hitPoint and critPoint to ranged attack
             if (!crit) {
-                int newHitPoint = hitPoint + (int) ((target.getLevel() * this.getLvlMultiplier()) + target.getDexStat() * this.dexMultiplier);
-                int newCritPoint = critPoint + (int) (attacker.getLevel() * this.getLvlMultiplier());
-                //accuracy is increased by dexterity and weapon accuracy
-                acc += accModified(attacker);
-                acc -= target.getDexStat() / 2;
-                System.out.printf("Accuracy is %d --- hitPoint is %d and critPoint is %d\n", acc, newHitPoint, newCritPoint);
-                crit = (acc > newCritPoint);
-                //returns missed attack
-                if (acc < newHitPoint) { //return a miss
-                    damages.add(new Damage(this.getName(), false, cost));
-                    continue;
+                switch (hitCheck(attacker, target, acc)) {
+                    case MISS:
+                        actionResults.add(ActionResult.miss(this.getName(), cost));
+                        continue;
+                    case CRIT:
+                        crit = true;
+                        break;
+                    case HIT:
+                        break;
                 }
             }
+
             int physDmg = 0;
             if (this.getPhysDmgMultiplier() > 0) {
-                physDmg += Dice.die(this.getPhysDmgDie(), this.getDmgRolls()) +
+                physDmg += Dice.die(this.getPhysDmgDie(), this.getRolls()) +
                         (int) (attacker.getStrStat() * this.getStrMultiplier()) +
                         (int) (attacker.getDexStat() * this.getDexMultiplier()) +
                         (int) (attacker.getWeapon().getPhysDamage() * this.getPhysDmgMultiplier());
@@ -127,7 +113,7 @@ public class Ranged extends Attack {
 
             int spellDmg = 0;
             if (this.getSpellDmgMultiplier() > 0) {
-                spellDmg += Dice.die(this.getSpellDmgDie(), this.getDmgRolls()) +
+                spellDmg += Dice.die(this.getSpellDmgDie(), this.getRolls()) +
                         (int) (attacker.getIntStat() * this.getIntMultiplier()) +
                         (int) (attacker.getWeapon().getSpellDmg() * this.getSpellDmgMultiplier());
             }
@@ -139,16 +125,36 @@ public class Ranged extends Attack {
 
             int drain = (int) (physDmg * this.getHpDrainMultiplier());
 
-            damages.add(new Damage(this.getName(), physDmg, spellDmg, drain, cost, crit));
+            actionResults.add(new ActionResult(this.getName(), physDmg, spellDmg, drain, cost, crit));
         }
-        return damages;
+        return actionResults;
     }
 
-    private int accModified(myCharacter attacker) {
-        return (int) (this.accMultiplier * (
-                attacker.getDexStat() +
-                        attacker.getWeapon().getAccuracy()
-        ));
+    private int accuracyModifier(myCharacter attacker, myCharacter target) {
+        return (int)
+                (this.accMultiplier * (attacker.getDexStat() + attacker.getWeapon().getAccuracy())
+                        - target.getDexStat() / 3
+                );
+    }
+
+    private ActionResult.hmc hitCheck(myCharacter attacker, myCharacter target, int roll) {
+        //accuracy is increased by dexterity and weapon accuracy
+        roll += accuracyModifier(attacker, target);
+
+        int newHitPoint = hitPoint + (int) ((target.getLevel() * this.getLvlMultiplier()) +
+                target.getDexStat() * this.dexMultiplier);
+
+        int newCritPoint = critPoint + (int) (attacker.getLevel() * this.getLvlMultiplier());
+
+        System.out.printf("Accuracy is %d --- hitPoint is %d and critPoint is %d\n", roll, newHitPoint, newCritPoint);
+
+        if (roll > newCritPoint) {
+            return ActionResult.hmc.CRIT;
+        }
+        if (roll < newHitPoint) {
+            return ActionResult.hmc.MISS;
+        }
+        return ActionResult.hmc.HIT;
     }
 
     public static Ranged arrowStrike() {

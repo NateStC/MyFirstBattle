@@ -7,7 +7,7 @@ public class AttackList extends ArrayList<Attack> {
     @Override
     public Attack get(int index) {
         if (this.isEmpty()){
-            return Attack.bash();
+            return Attacks.bash();
         } else {
             return this.get(index);
         }

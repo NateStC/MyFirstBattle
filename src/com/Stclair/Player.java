@@ -6,7 +6,7 @@ public class Player extends myCharacter implements Serializable {
 
     private int totalKills = 0;
     private int roundsCompleted = 0;
-    private int deaths;
+    private int totalDeaths;
 
     //new player constructor
     public Player(String name, int strength, int dexterity, int constitution, int intelligence, int wisdom,
@@ -26,8 +26,20 @@ public class Player extends myCharacter implements Serializable {
         this.mana = mana;
         this.totalKills = totalKills;
         this.roundsCompleted = roundsCompleted;
-        this.deaths = deaths;
+        this.totalDeaths = deaths;
         this.inventory = inventory;
+    }
+
+    public void addDeath(){
+        this.totalDeaths++;
+    }
+
+    public void addKill(){
+        this.totalKills++;
+    }
+
+    public void roundCompleted(){
+        this.roundsCompleted ++;
     }
 
     public int getTotalKills(){
@@ -38,7 +50,7 @@ public class Player extends myCharacter implements Serializable {
         return this.roundsCompleted;
     }
 
-    public int getDeaths() {
-        return deaths;
+    public int getTotalDeaths() {
+        return totalDeaths;
     }
 }

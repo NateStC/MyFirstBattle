@@ -9,10 +9,7 @@ public class ActionResult {
     private boolean crit = false;
     private boolean hit = true;
     private boolean OOM = false;
-    private hmc result = ActionResult.hmc.HIT;
-
-    //todo implement enum over booleans
-    public enum hmc {HIT, MISS, CRIT, OOM}
+    private hmc result = hmc.HIT;
     //change from enum to subclasses?
 
     //basic attack damage

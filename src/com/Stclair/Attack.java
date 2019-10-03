@@ -1,11 +1,8 @@
 package com.Stclair;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Attack {
 
-    private String name;
+    private String name = "Attack";
     private int physDmgDie = 6;
     private int spellDmgDie = 0;
     private double strMultiplier = 0;
@@ -13,12 +10,17 @@ public class Attack {
     private double intMultiplier = 0;
     private double wisMultiplier = 0;
     private double chaMultiplier = 0;
-    private double lvlMultiplier = 1;
+    private double lvlMultiplier = 1; // how much lvl affects across the board on an attack
     private double physDmgMultiplier = 1;
     private double spellDmgMultiplier = 0;
-    private int rolls = 1;
+    private double critMultiplier = 2;
+    private int numOfRolls = 1;
     private int numOfAttacks = 1;
     private int manaCost = 0;
+    private int criticalHitMin = 20;
+    private int missPoint = 1;
+    private double accMultiplier = .5; // how much Dex (or wisdom for spells) and weaponAccuracy affects attack roll
+    private double critModifier = 0; // how much Dexterity (or wisdom for spells) affects crit chance
     private double hpDrainMultiplier = 0;
     private String description = "No description available";
 
@@ -30,6 +32,15 @@ public class Attack {
     //private int lvlReq;
 
     public Attack() {
+    }
+
+    public Attack(String name) {
+        this.name = name;
+    }
+
+    public Attack(String name, int dmgDie) {
+        this.name = name;
+        this.physDmgDie = dmgDie;
     }
 
     //simple attack
@@ -49,10 +60,10 @@ public class Attack {
         this.physDmgMultiplier = physDmgMultiplier;
     }
 
-    public Attack(String name, int dmgDie, int rolls, int numOfAttacks, double strMultiplier, double dexMultiplier) {
+    public Attack(String name, int dmgDie, int numOfRolls, int numOfAttacks, double strMultiplier, double dexMultiplier) {
         this.name = name;
         this.physDmgDie = dmgDie;
-        this.rolls = rolls;
+        this.numOfRolls = numOfRolls;
         this.numOfAttacks = numOfAttacks;
         this.strMultiplier = strMultiplier;
         this.dexMultiplier = dexMultiplier;
@@ -73,51 +84,37 @@ public class Attack {
     }
 
     // Physical attacks offer no accuracy bonus, just a straight d20 with 1 being miss, 20 being crit
-    public List<ActionResult> action(myCharacter attacker, myCharacter target) {
+    public ActionResultList action(myCharacter attacker, myCharacter target) {
         System.out.println(attacker.getName() + " using " + this.getName());
-        ArrayList<ActionResult> actionResults = new ArrayList<>();
+        ActionResultList actionResults = new ActionResultList();
         for (int i = 0; i < this.numOfAttacks; i++) {
             int manaCost = 0;
             int heal = 0;
+            boolean crit = false;
 
-            if (i == 1 && this.manaCost > 0) {
+            if (i == 1 && this.manaCost > 0) { //only costs mana for 1st strike in multi-attack
                 manaCost = getTotalManaCost(attacker);
+                if (manaCost > attacker.getMana()) { //returns OOM if player does not have enough mana to cast
+                    actionResults.add(ActionResult.oom(this.name));
+                    continue;
+                }
             }
-            //attack roll
-            int acc = Dice.d20();
-            //auto miss if rolled 1
-            if (acc == 1) {
-                actionResults.add(ActionResult.miss(this.name));
-                continue;
+            switch (hmcCheck(attacker, target)) {
+                case CRIT:
+                    crit = true;
+                    break;
+                case MISS:
+                    actionResults.add(ActionResult.miss(this.name, manaCost));
+                    continue;
             }
-
-            boolean crit = critCheck(attacker, acc);
 
             //damage rolls
-            int physDmg = 0;
-            if (this.physDmgMultiplier > 0) {
-                physDmg += Dice.die(this.physDmgDie, this.rolls);
-                if (this.physDmgDie > 0) {
-                    physDmg += (int) (attacker.getStrStat() * this.strMultiplier);
-                }
-                if (this.dexMultiplier > 0) {
-                    physDmg += (int) (attacker.getDexStat() * this.strMultiplier);
-                }
-                physDmg *= physDmgMultiplier;
-                physDmg -= target.getArmor().getArmorRating();
-            }
-            int spellDmg = 0;
-            if (this.spellDmgMultiplier > 0) {
-                spellDmg += Dice.die(this.physDmgDie, this.rolls);
-                if (this.intMultiplier > 0){
-                    spellDmg += (int) (attacker.getIntStat() * this.getIntMultiplier());
-                }
-                spellDmg *= spellDmgMultiplier;
-                spellDmg -= target.getArmor().getMagicDefRating();
-            }
+            int physDmg = calcPhysDmg(attacker, target);
+            int spellDmg = calcSpellDmg(attacker, target);
+
             if (crit) {
-                physDmg *= 2;
-                spellDmg *=2;
+                physDmg *= critMultiplier;
+                spellDmg *= critMultiplier;
                 System.out.println("Critical Hit!");
             }
             actionResults.add(new ActionResult(this.name, physDmg, spellDmg, manaCost, heal, crit));
@@ -125,8 +122,60 @@ public class Attack {
         return actionResults;
     }
 
-    boolean critCheck(myCharacter attacker, int roll) {
-        return (roll == 20);
+    public hmc hmcCheck(myCharacter attacker, myCharacter target) {
+        int roll = Dice.d20();
+        if (roll <= missPoint){ //auto-fail
+            return hmc.MISS;
+        }
+        if (roll >= criticalHitMin){ //natrual crit
+            System.out.println("Natural crit");
+            return hmc.CRIT;
+        }
+        roll += accuracyRollModifier(attacker);
+        if (roll > critPoint(attacker)){
+            return hmc.CRIT;
+        }
+        if (roll < hitPoint(target)){
+            return hmc.MISS;
+        }
+        return hmc.HIT;
+    }
+
+    public int critPoint(myCharacter attacker) {
+        return criticalHitMin + (int)(attacker.getDexStat() /4 * this.critModifier);
+    }
+
+    public int hitPoint(myCharacter target){
+        return missPoint + (int)(target.getDexStat() / 6);
+    }
+
+    public int accuracyRollModifier(myCharacter attacker) {
+        return (int) (
+                (attacker.getWeapon().getAccuracy() + attacker.getDexStat())
+                        * this.accMultiplier);
+    }
+
+    public int calcPhysDmg(myCharacter attacker, myCharacter target){
+        double dmg = Dice.die(this.physDmgDie, this.numOfRolls)
+                + attacker.getWeapon().getPhysDamage()
+                + (attacker.getDexStat() * this.strMultiplier)
+                + (attacker.getStrStat() * this.strMultiplier)
+                - target.getArmor().getArmorRating();
+        if (physDmgMultiplier > 0) {
+            dmg *= physDmgMultiplier;
+        }
+        return (int)dmg;
+    }
+
+    public int calcSpellDmg(myCharacter attacker, myCharacter target){
+        if (this.spellDmgDie == 0) return 0;
+        double dmg = Dice.die(this.spellDmgDie, this.numOfRolls)
+                + attacker.getIntStat() * this.getIntMultiplier() / 2.5
+                - target.getArmor().getMagicDefRating();
+        if (spellDmgMultiplier > 0) {
+            dmg *= spellDmgMultiplier;
+        }
+        return (int)dmg;
     }
 
     public int getTotalManaCost(myCharacter caster) {
@@ -141,6 +190,13 @@ public class Attack {
             return manaCost / 4;
         }
         return cost;
+    }
+
+    public void setRolls(int physDmgDie, int spellDmgDie, int numOfRolls, int numOfAttacks) {
+        this.physDmgDie = physDmgDie;
+        this.spellDmgDie = spellDmgDie;
+        this.numOfRolls = numOfRolls;
+        this.numOfAttacks = numOfAttacks;
     }
 
     public String getName() {
@@ -167,12 +223,12 @@ public class Attack {
         this.physDmgDie = physDmgDie;
     }
 
-    public int getRolls() {
-        return rolls;
+    public int getNumOfRolls() {
+        return numOfRolls;
     }
 
-    public void setRolls(int rolls) {
-        this.rolls = rolls;
+    public void setNumOfRolls(int numOfRolls) {
+        this.numOfRolls = numOfRolls;
     }
 
     public double getStrMultiplier() {
@@ -269,5 +325,45 @@ public class Attack {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getCritMultiplier() {
+        return critMultiplier;
+    }
+
+    public void setCritMultiplier(double critMultiplier) {
+        this.critMultiplier = critMultiplier;
+    }
+
+    public int getCriticalHitMin() {
+        return criticalHitMin;
+    }
+
+    public void setCriticalHitMin(int criticalHitMin) {
+        this.criticalHitMin = criticalHitMin;
+    }
+
+    public int getMissPoint() {
+        return missPoint;
+    }
+
+    public void setMissPoint(int missPoint) {
+        this.missPoint = missPoint;
+    }
+
+    public double getAccMultiplier() {
+        return accMultiplier;
+    }
+
+    public void setAccMultiplier(double accMultiplier) {
+        this.accMultiplier = accMultiplier;
+    }
+
+    public double getCritModifier() {
+        return critModifier;
+    }
+
+    public void setCritModifier(double critModifier) {
+        this.critModifier = critModifier;
     }
 }

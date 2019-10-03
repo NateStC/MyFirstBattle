@@ -3,7 +3,7 @@ package com.Stclair;
 import java.util.ArrayList;
 
 public class Weapon extends Item {
-    private int accuracy = 5;
+    private int accuracy = 1;
     private int speed = 5;
     private int physDamage;
     private int spellDmg;

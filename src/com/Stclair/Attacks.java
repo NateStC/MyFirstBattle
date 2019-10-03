@@ -16,6 +16,7 @@ public class Attacks {
     public static Attack bash() {
         Attack bash = new Attack();
         bash.setName("Bash");
+        bash.setLvlMultiplier(2);
         bash.setDescription("Strike the enemy with the hilt of your weapon as a last resort");
         return bash;
     }
@@ -44,21 +45,21 @@ public class Attacks {
         return flurry;
     }
 
-    //fixme swordslice is overpowered
+    //todo test swordslice for balance
     public static Attack swordSlice() {
         Attack ss = new Attack();
         ss.setName("Sword Slice");
         ss.setPhysDmgDie(6);
-        ss.setStrMultiplier(1.5);
-        ss.setDexMultiplier(1);
+        ss.setStrMultiplier(1.25);
+        ss.setDexMultiplier(.25);
         ss.setDescription("Basic strike with a sword. Reliable");
-
-        return new Attack("Sword Slice", 6, 1.5, 1);
+        return ss;
     }
 
     //fixme overpowered
     public static Attack smash() {
         Attack smash = new Attack();
+        smash.setName("Smash");
         smash.setStrMultiplier(1.25);
         smash.setDescription("Crush your opponent with the sheer heft of your weapon and your strength");
         return smash;
@@ -69,7 +70,7 @@ public class Attacks {
 //        return new Attack("Smash", 4, 2, 4, .75, 0);
         Attack earthQuake = new Attack();
         earthQuake.setPhysDmgDie(4);
-        earthQuake.setRolls(2);
+        earthQuake.setNumOfRolls(2);
         earthQuake.setNumOfAttacks(4);
         earthQuake.setStrMultiplier(.75);
         earthQuake.setDescription("Send out shockwaves of destruction by striking the ground as hard as you can");

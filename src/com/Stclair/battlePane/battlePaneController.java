@@ -31,6 +31,7 @@ public class battlePaneController {
 
     private Label nameFieldLabel = new Label();
     private TextField nameField = new TextField();
+    private Label attackDescription = new Label();
 
     @FXML
     private Label playerNameLabel, playerLvlLabel, strLabel, conLabel, dexLabel, intLabel, wisLabel, chaLabel,
@@ -66,6 +67,9 @@ public class battlePaneController {
         skillPoints = 0;
         showLvlUpButtons(false);
         enemyGrid.setVisible(false);
+        attackDescription.setWrapText(true);
+        GridPane.setColumnSpan(attackDescription, 2);
+        GridPane.setRowSpan(attackDescription,3);
 
         //set actions list view to wrap text  from Ryotsu on StackOverflow
         actionListView.setCellFactory(param -> new ListCell<>() {
@@ -268,7 +272,7 @@ public class battlePaneController {
     }
 
     @FXML
-    private void saveGame(){
+    private void saveGame() {
         //todo save character
     }
 
@@ -278,8 +282,8 @@ public class battlePaneController {
     }
 
     private void makeNextEnemyButton() {
-        nextButton.setText("Next Enemy");
-        nextButton.setDisable(enemy.getHealth() > 0);
+        nextButton = new Button("Next Enemy");
+        nextButton.setPrefWidth(120);
         nextButton.setOnAction(event -> nextEnemy());
     }
 
@@ -306,12 +310,12 @@ public class battlePaneController {
 
     public void playerRest() {
         if (!player.manaIsFull()) {
-            int mp = player.getIntStat() * 2 + player.getWisStat() * 3;
+            int mp = player.getIntStat() * 2 + player.getWisStat() * 2;
             playerRestoreMana(mp);
             actionList.add("You rest between enemies and restore " + mp + " mana.");
         }
         if (!player.healthIsFull()) {
-            int hp = player.getConStat() * 4 + player.getLevel() * 2;
+            int hp = player.getConStat() * 2 + player.getLevel() * 2;
             playerHeal(hp);
             actionList.add("In the respite between battles you restore " + hp + " health.");
         }
@@ -327,7 +331,7 @@ public class battlePaneController {
         setEnemy(enemies.get(0));
     }
 
-    private int  setActionsGrid(List<Button> buttons){
+    private int setActionsGrid(List<Button> buttons) {
         actionsGrid.getChildren().clear();
         int column = 0, row = 0;
 
@@ -346,9 +350,10 @@ public class battlePaneController {
         return row;
     }
 
-    private void setActionsGrid(List<Button> buttons, Button lastButton){
+    private int setActionsGrid(List<Button> buttons, Button lastButton) {
         int lastRow = setActionsGrid(buttons) + 1;
-        actionsGrid.add(lastButton,1,lastRow);
+        actionsGrid.add(lastButton, 1, lastRow);
+        return lastRow+1;
     }
 
     public void newRound() {
@@ -365,13 +370,12 @@ public class battlePaneController {
     }
 
     private void setAttacks() {
-        nextButton = new Button("Next Enemy");
-        nextButton.setPrefWidth(100);
-        nextButton.setOnAction(e -> nextEnemy());
-        setActionsGrid(getAttackButtons(), nextButton);
+        makeNextEnemyButton();
+        int row = setActionsGrid(getAttackButtons(), nextButton);
+        actionsGrid.add(attackDescription,0,row);
     }
 
-    private List<Button> getEnemyGroupButtons(){
+    private List<Button> getEnemyGroupButtons() {
         List<Enemies.EnemyGroup> groups = Enemies.enemyGroups(player.getLevel());
         List<Button> buttonList = new ArrayList<>();
 
@@ -388,7 +392,7 @@ public class battlePaneController {
         return buttonList;
     }
 
-    private List<Button> getAttackButtons(){
+    private List<Button> getAttackButtons() {
         ArrayList<Button> attacks = new ArrayList<>();
 
         //Todo figure out how to use Optional<Button>
@@ -396,19 +400,25 @@ public class battlePaneController {
         //TODO make spell buttons grayed out if not enough mana  ?BooleanBinding??
 
         //work your way through the weapon's attacks, creating a button for each
-        for (Attack a : player.getWeapon().getAttackList()) {
-            Button button = new Button(a.getName());
+
+        //todo implement stream for weapon attackList in getAttackButtons()
+        for (Attack action : player.getWeapon().getAttackList()) {
+            Button button = new Button(action.getName());
             button.setPrefWidth(130);
+
+//            button.setOnMouseDragOver(e-> attackDescription.setText(action.getDescription()));
+            button.setOnMouseEntered(event -> attackDescription.setText(action.getDescription()));
+            button.setOnMouseExited(e -> attackDescription.setText(""));
 
             button.setOnAction(e -> {
                 if (player.isDead()) {
-                    actionList.add("You can't use " + a.getName() + ", you are dead!");
+                    actionList.add("You can't use " + action.getName() + ", you are dead!");
                 } else {
-                    List<ActionResult> result = a.action(player, enemy);
+                    ActionResultList result = action.action(player, enemy);
                     int atks = 0;
                     //build a button for each attack
                     for (ActionResult r : result) {
-                        if (enemy.isDead() && r.getPhysDamage() > 0) {
+                        if (enemy.isDead() && r.getPhysDamage() > 0 && r.isHit()) {
                             actionList.add("Enemy is already dead!");
                             break;
                         }
@@ -440,14 +450,16 @@ public class battlePaneController {
                         }
                         if (r.getDamage() > 0) {
                             if (result.size() == 1) {
-                                ALPause(50, enemy.getName() + " takes " + r.getDamage() + " damage");
+                                actionList.add(enemy.getName() + " takes " + r.getDamage() + " damage");
                             } else {
-                                ALPause(50, firstOrSecond(atks) + " strike deals " + r.getDamage());
+                                ALPause(50, firstOrSecond(atks) + " strike deals " + r.getDamage() + " damage");
                             }
                             enemyTakeDamage(r.getDamage());
+                        } else if (!(action instanceof HealingSpell)) {
+                            actionList.add(enemy.getName() + " absorbed the blow");
                         }
-                        if (r.getHeal() > 0 && !player.healthIsFull()) {
-                            playerHeal(r.getHeal());
+                        if (atks == result.size() && result.getTotalHeals() > 0) {
+                            playerHeal(result.getTotalHeals());
                         }
                         if (enemy.isDead()) {
                             break;
@@ -659,9 +671,7 @@ public class battlePaneController {
     }
 
     private void playerTakeDamage(int damage) {
-        if (player.takeDamage(damage)) {
-            actionList.add(player.getName() + " has " + player.getHealth() + "hp left");
-        } else {
+        if (!player.takeDamage(damage)) {
             playerDied();
         }
         setHpBar();
@@ -698,11 +708,7 @@ public class battlePaneController {
     }
 
     private void enemyTakeDamage(int damage) {
-//        ALPause(500, enemy.getName() + " takes " + damage + " damage");
-        if (enemy.takeDamage(damage)) {
-            ALPause(500, enemy.getName() + " has " + enemy.getHealth() + "hp left");
-            setEnemyHpBar();
-        } else {
+        if (!enemy.takeDamage(damage)) {
             setEnemyHpBar();
             ALPause(500, enemy.getName() + " has died!");
             actionList.add(player.getName() + " gains " + enemy.getExperienceGained() + " experience points");
@@ -712,6 +718,7 @@ public class battlePaneController {
             setExpBar();
             nextButton.setDisable(false);
         }
+        setEnemyHpBar();
     }
 
     private void enemyHeal(int hp) {
@@ -729,34 +736,41 @@ public class battlePaneController {
     }
 
     private void enemyTurn() {
-        enemyAttack(enemy.defaultAttack(player));
-    }
-
-    private void enemyAttack(List<ActionResult> actionResult) {
+        if (enemy.isDead()) {
+            return;
+        }
+        Attack a = enemy.defaultAttack(player);
+        List<ActionResult> results = new ArrayList<>(a.action(enemy, player));
         int atks = 0;
-        for (ActionResult d : actionResult) {
+        //todo implement stream for ActionResults ArrayList in enemyTurn()
+        for (ActionResult r : results) {
             atks++;
-            if (d.isOOM()) { // rolls new attack if enemy doesn't have enough mana to cast
-                enemyAttack(enemy.defaultAttack(player));
+            if (r.isOOM()) { // rolls new attack if enemy doesn't have enough mana to cast // should have already been caught by defaultAttack()
+                enemyTurn();
                 return;
             }
+            ALPause(500, enemy.getName() + " uses " + r.getAttackName());
             if (atks == 1) {
-                ALPause(500, enemy.getName() + " uses " + d.getAttackName());
-                enemyDrainMana(d.getManaCost());
+                enemyDrainMana(r.getManaCost());
             }
-            int dmg = d.getDamage();
-            int heal = d.getHeal();
-//            if (!d.isHit() && d.getPhysDamage() > 0) {
-            if (!d.isHit()) {
+            if (!r.isHit()) {
                 actionList.add(enemy.getName() + " missed!");
-                break;
+                return;
             }
-            if (d.isCrit()) {
+            int dmg = r.getDamage();
+            int heal = r.getHeal();
+            if (r.isCrit()) {
                 ALPause(250, "Critical Hit!");
             }
             if (dmg > 0) {
-                actionList.add(enemy.getName() + " deals " + dmg + " damage" + " to " + player.getName());
+                if (results.size() == 1) {
+                    actionList.add(enemy.getName() + " deals " + dmg + " damage" + " to " + player.getName());
+                } else {
+                    actionList.add(firstOrSecond(atks) + " attack deals " + dmg + " damage");
+                }
                 playerTakeDamage(dmg);
+            } else if (!(a instanceof HealingSpell)) {
+                actionList.add(player.getName() + " absorbed the blow!");
             }
             if (heal > 0) {
                 ALPause(500, enemy.getName() + " heals for " + heal + " damage");
@@ -770,13 +784,15 @@ public class battlePaneController {
         actionList.add("Oh no! You died!\nGame over.");
         actionList.add("Rounds Completed: " + player.getRoundsCompleted() +
                 "\nDeaths: " + player.getTotalDeaths() +
-                "\nTotal Kills: " + player.getTotalKills());
+                "\nTotal Kills: " + player.getTotalKills() +
+                "\nRecord Kill Streak: " + player.getHighestKillStreak() +
+                "\nRecord Rounds Completed Streak: " + player.getRoundStreak());
 
         nextButton.setText("Restart Round");
         nextButton.setOnAction(event -> restartRound());
         int gold = player.getGold();
-        if (gold > 0){
-            player.loseGold((int)(gold/10));
+        if (gold > 0) {
+            player.loseGold((int) (gold / 10));
         }
     }
 

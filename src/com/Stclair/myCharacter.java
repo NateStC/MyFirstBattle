@@ -126,6 +126,9 @@ public class myCharacter {
 
     //returns true if still alive, false if dead
     public boolean takeDamage(int damage) {
+        if (damage == 0){
+            return true;
+        }
         this.health -= (damage);
         if (this.health <= 0) {
             health = (0);
@@ -533,7 +536,7 @@ public class myCharacter {
     }
 
     public int getMaxHealth() {
-        return getConStat() * 10 + (getLevel() * 15);
+        return getConStat() * 15 + (getLevel() * 20);
     }
 
     public void fullHealth() {

@@ -1,6 +1,5 @@
 package com.Stclair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Spell extends Attack {
@@ -11,6 +10,15 @@ public class Spell extends Attack {
     double dexMultiplier = 0;
 
     public Spell() {
+    }
+
+    public Spell(String name) {
+        super(name);
+    }
+
+    public Spell(String name, int dmgDie) {
+        super(name);
+        this.setSpellDmgDie(dmgDie);
     }
 
     //basic attack spell constructor
@@ -35,7 +43,7 @@ public class Spell extends Attack {
                  double chaMultiplier, double lvlMultiplier, double spellDmgMultiplier) {
         this.setName(name);
         this.setSpellDmgDie(dmgDie);
-        this.setRolls(dmgRolls);
+        this.setNumOfRolls(dmgRolls);
         this.setNumOfAttacks(numOfAttacks);
         this.setLvlMultiplier(lvlMultiplier);
         setIntMultiplier(intMultiplier);
@@ -54,102 +62,111 @@ public class Spell extends Attack {
         return action(caster, target);
     }
 
-    @Override
-    public List<ActionResult> action(myCharacter caster, myCharacter target) {
-        ArrayList<ActionResult> actionResults = new ArrayList<>();
-        int manaCost = this.getTotalManaCost(caster);
-        for (int i = 0; i < this.getNumOfAttacks(); i++) {
-            if (i > 0) {
-                //Only costs mana once if there are multiple attacks
-                manaCost = 0;
-            } else if (manaCost > caster.getMana()) {
-                // returns Out of Mana if insufficient mana to cast
-                actionResults.add(ActionResult.oom(this.getName()));
-                return actionResults;
-            }
-            int heal = 0;
-            int acc = Dice.d20();
-//            System.out.println("Accuracy roll is " + acc);
-            if (acc == 1) {  //critical fail
-                actionResults.add(ActionResult.miss(this.getName(), manaCost));
-                continue;
-            }
-//            System.out.println(this.getName() + " accuracy is " + acc);
-            boolean crit = (acc == 20);
+//    @Override
+//    public ActionResultList action(myCharacter caster, myCharacter target) {
+//        ActionResultList actionResults = new ActionResultList();
+//        int manaCost = this.getTotalManaCost(caster);
+//        for (int i = 0; i < this.getNumOfAttacks(); i++) {
+//
+//            hmcCheck(caster, target);
+//
+//
+//            if (i > 0) {
+//                //Only costs mana once if there are multiple attacks
+//                manaCost = 0;
+//            } else if (manaCost > caster.getMana()) {
+//                // returns Out of Mana if insufficient mana to cast
+//                actionResults.add(ActionResult.oom(this.getName()));
+//                return actionResults;
+//            }
+//            int heal = 0;
+//            int acc = Dice.d20();
+//            if (acc == 1) {  //critical fail
+//                actionResults.add(ActionResult.miss(this.getName(), manaCost));
+//                continue;
+//            }
+//            boolean crit = (acc == 20);
+//
+//            //dmg is intelligence and dice
+//            double spellDmg = 0;
+//            if (this.getSpellDmgDie() > 0) {
+//                spellDmg = Dice.die(this.getSpellDmgDie(), this.getNumOfRolls())
+//                        + caster.getWeapon().getSpellDmg()
+//                        - target.getArmor().getMagicDefRating();
+//                if (this.getIntMultiplier() > 0) {
+//                    spellDmg += caster.getIntStat() * this.getIntMultiplier() / 3;
+//                }
+//                spellDmg *= this.spellDmgMultiplier;
+//            }
+//            double physDmg = 0;
+//            if (getPhysDmgDie() > 0) {
+//                physDmg = Dice.die(this.getPhysDmgDie())
+//                        + caster.getWeapon().getPhysDamage()
+//                        - target.getArmor().getArmorRating()
+//                        + caster.getStrStat() * this.getStrMultiplier();
+//                if (this.physDmgMultiplier > 0) {
+//                    physDmg *= this.physDmgMultiplier;
+//                }
+//            }
+//            if (crit) {
+//                spellDmg *= this.getCritMultiplier();
+//                physDmg *= this.getCritMultiplier();
+//            }
+//            //factors in hpDrain if applicable
+//            if (getHpDrainMultiplier() != 0) {
+//                heal += (int) (spellDmg * getHpDrainMultiplier());
+//            }
+//            int spellDamage = (int) spellDmg;
+//            int physicalDamage = (int) physDmg;
+//            actionResults.add(new ActionResult(this.getName(), physicalDamage, spellDamage, manaCost, heal, crit));
+//            System.out.println(caster.getName() + "'s " + this.getName() + " deals " + spellDmg + " dmg");
+//        }
+//
+//        return actionResults;
+//    }
 
-            //dmg is intelligence and dice
-            int spellDmg = Dice.die(this.getSpellDmgDie(), this.getRolls()) +
-                    (int) (caster.getIntStat() * this.getIntMultiplier() / 3) +
-                    (int) (caster.getWeapon().getSpellDmg() * this.getSpellDmgMultiplier());
-            if (getPhysDmgDie() > 0) {
-
-            }
-            if (crit) {
-                spellDmg *= 2;
-            }
-            //factors in hpDrain if applicable
-            if (getHpDrainMultiplier() != 0) {
-                heal += (int) (spellDmg * getHpDrainMultiplier());
-            }
-            actionResults.add(new ActionResult(this.getName(), 0, spellDmg, manaCost, heal, crit));
-            System.out.println(caster.getName() + "'s " + this.getName() + " deals " + spellDmg + " dmg");
-        }
-
-        return actionResults;
-    }
-
-    public boolean critCheck(myCharacter caster, int roll) {   //wisdom lowers critical hit min
-        //todo test spell hit/miss/crit balance
-        if (roll == 20) {
-            return true;
-        }
-        double rollMod = roll - (caster.getWisStat() * this.getWisMultiplier() /3);
-        double critPoint = 20 + caster.getLevel()*5;
-        System.out.printf("%s accuracy Roll = %d\n" +
-                "Accuracy modified = %d\n" +
-                "CritPoint = %d",
-                this.getName(), roll,(int) rollMod, (int)critPoint);
-
-        return rollMod>critPoint;
-    }
-
-    @Override
-    public double getSpellDmgMultiplier() {
-        return spellDmgMultiplier;
-    }
-
-    @Override
-    public void setSpellDmgMultiplier(double spellDmgMultiplier) {
-        this.spellDmgMultiplier = spellDmgMultiplier;
-    }
-
-    @Override
-    public double getPhysDmgMultiplier() {
-        return physDmgMultiplier;
-    }
-
-    @Override
-    public void setPhysDmgMultiplier(double physDmgMultiplier) {
-        this.physDmgMultiplier = physDmgMultiplier;
-    }
-
-    @Override
-    public double getStrMultiplier() {
-        return strMultiplier;
-    }
-
-    @Override
-    public void setStrMultiplier(double strMultiplier) {
-        this.strMultiplier = strMultiplier;
-    }
-
-    @Override
-    public double getDexMultiplier() {
-        return dexMultiplier;
-    }
+//    @Override
+//    public hmc hmcCheck(myCharacter caster, myCharacter target) {   //wisdom increases critical hit chance // int increases hit chance
+//        //todo test spell hit/miss/crit balance
+//        if (caster.getMana() < this.getTotalManaCost(caster)) {
+//            return hmc.OOM;
+//        }
+//        int roll = Dice.d20();
+//        if (roll <= getMissPoint()){
+//            return hmc.MISS;
+//        }
+//        if (roll >= getCriticalHitMin()){
+//            return hmc.HIT;
+//        }
+//
+//        roll = accuracyRollModifier(caster, target, roll);
+//        double critPoint = 20 + caster.getLevel() * 5;
+//        System.out.printf("%s accuracy Roll = %d\n" +
+//                        "Accuracy modified = %d\n" +
+//                        "CritPoint = %d",
+//                this.getName(), roll, (int) rollMod, (int) critPoint);
+//        if (rollMod < (double) (target.getDexStat() / 3)) {
+//            return hmc.MISS;
+//        }
+//        if (rollMod > (double) (caster.getLevel() / 4 + caster.getWisStat() / 4)) {
+//            return hmc.CRIT;
+//        }
+//        return hmc.HIT;
+//    }
 
     @Override
-    public void setDexMultiplier(double dexMultiplier) {
-        this.dexMultiplier = dexMultiplier;
+    public int critPoint(myCharacter caster) {
+        return getCriticalHitMin() + (int) (caster.getWisStat() * this.getWisMultiplier() / 6);
+    }
+
+    @Override
+    public int hitPoint(myCharacter target) {
+        return this.getMissPoint() + (int)(target.getWisStat() / 6);
+    }
+
+    @Override
+    public int accuracyRollModifier(myCharacter caster) {
+        return caster.getWeapon().getAccuracy() +
+                (int) (caster.getWisStat() * this.getWisMultiplier() * this.getAccMultiplier() / 3);
     }
 }

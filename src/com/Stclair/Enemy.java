@@ -57,29 +57,24 @@ public class Enemy extends myCharacter {
     }
 
 
-    public List<ActionResult> defaultAttack(myCharacter target) {
+    public Attack defaultAttack(myCharacter target) {
         Random rand = new Random();
         ArrayList<Attack> attacks = new ArrayList<>(this.getWeapon().getAttackList());
-        ArrayList<Integer> indicesToRemove = new ArrayList<>();
         // remove spells from selection pool if OOM
-        for (Attack a : attacks) {
-            if (a.getTotalManaCost(this) > this.getMana()) {
-                indicesToRemove.add(attacks.indexOf(a));
+        for (int i = attacks.size()-1; i >= 0 ; i--) {
+            if (attacks.get(i).getTotalManaCost(this) > this.getMana()) {
+                attacks.remove(i);
             }
-        }
-        for (int i : indicesToRemove) {
-            attacks.remove(i);
         }
 
         if (this.getHealthPct() < .20 && this.isSmart()) {
             for (Attack a : attacks) {
                 if (a instanceof HealingSpell) {
-                    return a.action(this, target);
+                    return a;
                 }
             }
         }
-
-        return attacks.get(rand.nextInt(attacks.size())).action(this, target);
+        return attacks.get(rand.nextInt(attacks.size()));
     }
 
     public String getEntrance() {
@@ -92,7 +87,7 @@ public class Enemy extends myCharacter {
                 case 1:
                     return "comes forward aggressively.";
                 case 2:
-                    return "grunts angrily, ready to attack.";
+                    return "grumbles angrily, ready to attack.";
                 case 3:
                     return "is ready for battle.";
                 case 4:
@@ -109,7 +104,7 @@ public class Enemy extends myCharacter {
     // returns experience gained on defeat
     // 2x level times the average of all base stats
     public int getExperienceGained() {
-        int a = this.getStrength() + this.getConstitution() + this.getDexterity() + this.getWisdom() + this.getIntelligence()
+        double a = this.getStrength() + this.getConstitution() + this.getDexterity() + this.getWisdom() + this.getIntelligence()
                 + this.getCharisma();
         double b = a / 5;
         return (int) (b * (this.getLevel() * 2));

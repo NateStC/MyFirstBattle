@@ -21,7 +21,11 @@ public class Spells {
     //basic healing spell
     //todo test to make sure constructor still works
     public static HealingSpell healingHands() {
-        return new HealingSpell("Healing Hands", 15, 12, 0, .5, 1.5);
+        HealingSpell heal = new HealingSpell("Healing Hands", 15, 12, 0, 1, 1.5);
+        heal.setDescription("Heal your wounds with magic.");
+        //todo come up with better description for healing hands
+
+        return heal;
     }
 
 }

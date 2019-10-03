@@ -98,7 +98,10 @@ public class Weapons {
     public static Weapon boneBow(int lvl) {
         Weapon boneBow = bow();
         boneBow.setName("Bone Bow");
-        bowAttacks().add(Ranged.drainArrow());
+
+        boneBow.addAttack(Ranged.drainArrow());
+        boneBow.addAttack(Ranged.arrowStrike());
+        boneBow.addAttack(Ranged.arrowVolley());
 
         return boneBow;
     }
@@ -153,7 +156,7 @@ public class Weapons {
         int con = 1 + lvl;
 
         return new Weapon("Goblin Club", 9, 4, 2, physDmg, 0, str, 0, con,
-                0, 0, 0, maceAttacks());
+                0, 0, 0, clubAttacks());
     }
 
     public static Weapon goblinBow(int lvl) {
@@ -274,6 +277,7 @@ public class Weapons {
                 Ranged.arrowStrike(),
                 Attacks.bash(),
                 Ranged.headShot(),
+                Ranged.arrowVolley(),
                 Ranged.fireArrow()
         ));
     }

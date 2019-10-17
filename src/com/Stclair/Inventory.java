@@ -1,19 +1,19 @@
 package com.Stclair;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Inventory extends ArrayList<Item> {
+public class Inventory extends ArrayList<Item> { //todo find a way to make observable?
 
     private int maxStorage = 30;
 
     @Override
     public boolean add(Item item) {
-        if (item == null){
-            return true;
+        if (item == null) {
+            return false;
         }
-        if (this.contains(item) && item.isStackable()) {
-            int itemIndex = this.indexOf(item);
-            this.get(itemIndex).addCount(item.getQuantity());
+        if (this.has(item) && item.isStackable()) {
+            this.findItem(item).addCount(item.getQuantity());
             return true;
         }
         if (!isFull()) {
@@ -22,9 +22,15 @@ public class Inventory extends ArrayList<Item> {
         return false;
     }
 
+    public void addAll(List<Item> items) {
+        for (Item i : items) {
+            this.add(i);
+        }
+    }
+
     public boolean destroyItem(Item item) {
         boolean removed = this.remove(item);
-        if (removed){
+        if (removed) {
             System.out.println("Removed " + item.getName());
             return true;
         }
@@ -37,7 +43,7 @@ public class Inventory extends ArrayList<Item> {
         for (int i = 0; i < this.size(); i++) {
             System.out.println(this.get(i));
         }
-        for (Item i : this){
+        for (Item i : this) {
             System.out.print(i.getName());
             if (i.isStackable()) System.out.print(" x " + i.getQuantity());
             if (i.isSaleable()) System.out.print(" worth " + i.getValue());
@@ -45,10 +51,11 @@ public class Inventory extends ArrayList<Item> {
     }
 
     public Item findItem(Item searchItem) {
-//        boolean exists = inventory.contains(searchItem);
-        int position = this.indexOf(searchItem);
-        if (position >= 0) {
-            return this.get(position);
+        for (Item i : this){
+            if (searchItem.getName().equals(i.getName()) && searchItem.getDescription().equals(i.getDescription()) &&
+                searchItem.getValue() == i.getValue()){
+                return i;
+            }
         }
         return null;
     }
@@ -57,9 +64,17 @@ public class Inventory extends ArrayList<Item> {
         return !(this.size() <= maxStorage);
     }
 
-    public int getSpace(){
+    public int getSpace() {
         return this.maxStorage - this.size();
     }
 
-
+    public boolean has(Item item) {
+        for (Item i : this) {
+            if (i.getName().equals(item.getName()) && i.getValue() == item.getValue() &&
+                    item.getDescription().equals(i.getDescription())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -40,6 +40,7 @@ public class Armors {
         chain.setConBonus(Dice.die(2, lvl));
         chain.setDexBonus(Dice.die(2, lvl));
         chain.setDropPct(30);
+        chain.setValue(25 + chain.getStrBonus() + chain.getConBonus() + chain.getDexBonus());
 
         return chain;
     }
@@ -48,6 +49,8 @@ public class Armors {
         String name = Item.getLvledLeatherName(lvl) + " Leathers";
         int value = 20 + lvl * 5;
         int wt = lvl / 3 + 4;
+        int dropPct = 30;
+        String desc = "A standard set of leathers made of " + Item.getLvledLeatherName(lvl);
         int armorRating = 2 + lvl;
         int magicDef = lvl;
         int str = 0;
@@ -56,14 +59,14 @@ public class Armors {
         int intl = 0;
         int wis = 0;
         int cha = Dice.die(2, lvl) + 1;
-        int dropPct = 30;
 
-        return new Armor(name, value, wt, dropPct, armorRating, magicDef, str, con, dex, intl, wis, cha);
+        return new Armor(name, value, wt, dropPct, desc, armorRating, magicDef, str, con, dex, intl, wis, cha);
     }
 
     public static Armor plate(int lvl) {
         String name = Item.getLvledMetalName(lvl) + " Platemail";
         int wt = lvl / 3 + 9;
+        String desc = "A standard set of plate armor made out of " + Item.getLvledMetalName(lvl);
         int armorRating = 5 + lvl;
         int magicDef = 0;
         int str = Dice.die(3, lvl);
@@ -75,7 +78,7 @@ public class Armors {
         int dropPct = 30;
         int value = 40 + lvl + str + con + dex + intel + + wis + cha;
 
-        return new Armor(name, value, wt, armorRating, magicDef, str, con, dex, intel, wis, cha, dropPct);
+        return new Armor(name, value, wt, dropPct, desc, armorRating, magicDef, str, con, dex, intel, wis, cha);
     }
 
     public static Armor beast(int lvl) {

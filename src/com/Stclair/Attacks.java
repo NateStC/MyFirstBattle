@@ -56,7 +56,7 @@ public class Attacks {
         return ss;
     }
 
-    //fixme overpowered
+    //fixme overpowered, always crit
     public static Attack smash() {
         Attack smash = new Attack();
         smash.setName("Smash");

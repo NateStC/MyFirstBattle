@@ -432,7 +432,11 @@ public class myCharacter {
             return false;
         }
         if (!inventory.isFull()) {
-            this.inventory.add(item);
+            if(item.isStackable() && inventory.has(item)){
+                inventory.findItem(item).addCount(item.getQuantity());
+            } else {
+                this.inventory.add(item);
+            }
             return true;
         }
         return false;
@@ -460,7 +464,7 @@ public class myCharacter {
         return equipment;
     }
 
-    public List<Item> loot() {
+    public List<Item> rollLoot() {
         List<Item> items = new ArrayList<>();
         List<Item> allLoot = new ArrayList<>(inventory);
         allLoot.addAll(equippedItems());
@@ -733,8 +737,9 @@ public class myCharacter {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory.clear();
+        this.inventory.addAll(inventory);
     }
 
     public void setAttacks(ArrayList<Attack> attacks) {

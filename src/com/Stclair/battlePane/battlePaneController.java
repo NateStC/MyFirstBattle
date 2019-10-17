@@ -10,6 +10,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +46,7 @@ public class battlePaneController {
     @FXML
     private ProgressBar expBar, playerHpBar, manaBar, enemyHpBar, enemyManaBar;
 
-    @FXML
-    private Button nextButton;
+    private Button nextButton = new Button();
 
     @FXML
     private Button strPlus, dexPlus, conPlus, intPlus, wisPlus, chaPlus;
@@ -86,6 +86,7 @@ public class battlePaneController {
         GridPane.setRowSpan(attackDescription, 3);
         enemyLootBox.setVisible(false);
         lootView.setItems(lootList);
+        nextButton.setPrefWidth(120);
 
         //set actions list view to wrap text  from Ryotsu on StackOverflow
         actionListView.setCellFactory(param -> new ListCell<>() {
@@ -305,8 +306,7 @@ public class battlePaneController {
     }
 
     private void makeNextEnemyButton() {
-        nextButton = new Button("Next Enemy");
-        nextButton.setPrefWidth(120);
+        nextButton.setText("Next Enemy");
         nextButton.setOnAction(event -> nextEnemy());
     }
 
@@ -768,7 +768,7 @@ public class battlePaneController {
             gainGold(enemy.getGold());
             setExpBar();
             nextButton.setDisable(false);
-            lootList.setAll(enemy.loot());
+            lootList.setAll(enemy.rollLoot());
             enemyLootBox.setVisible(true);
         }
         setEnemyHpBar();
@@ -851,11 +851,11 @@ public class battlePaneController {
 
     private void restartRound() {
         actionList.clear();
-        makeNextEnemyButton();
         setUpEnemies(enemies);
         enemiesDefeated = 0;
         setEnemy(enemies.get(0));
         restorePlayer();
+        makeNextEnemyButton();
     }
 
     private void restoreEnemies() {
@@ -989,23 +989,25 @@ public class battlePaneController {
         playerGold.setText(player.getGold() + " Gold");
     }
 
-    private void playerLoot(Item item) {
-        if (!player.getInventory().isFull()) {
-            player.getInventory().add(item);
-            if (item.isStackable() && playerInventory.contains(item)) {
-                int i = playerInventory.indexOf(item);
-                playerInventory.get(i).addCount(item.getQuantity());
-            } else {
-                playerInventory.add(item);
-            }
+    private boolean playerLoot(Item item) {
+        if (player.getInventory().isFull() && !item.isStackable()) {
+            print("Your inventory is full!");
+            return false;
+        } else if (player.receiveLoot(item)) {
+            playerInventory.setAll(player.getInventory());
+            return true;
         }
+        print("Unable to loot " + item.getName());
+        return false;
     }
 
     @FXML
     private void lootItem() {
         if (!lootList.isEmpty() && lootView.getSelectionModel().getSelectedItem() != null) {
             Item item = lootView.getSelectionModel().getSelectedItem();
-            playerLoot(item);
+            if (playerLoot(item)) {
+                lootList.remove(item);
+            }
         }
     }
 
@@ -1018,6 +1020,7 @@ public class battlePaneController {
                 for (Item i : lootList) {
                     playerLoot(i);
                 }
+                lootList.clear();
             }
         }
     }

@@ -10,7 +10,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,10 @@ public class battlePaneController {
     private GridPane actionsGrid, playerGrid, enemyGrid;
 
     @FXML
-    private AnchorPane centerPane;
+    private AnchorPane bottomPane;
+
+    @FXML
+    private VBox enemyLootBox;
 
     private Label nameFieldLabel = new Label();
     private TextField nameField = new TextField();
@@ -38,7 +40,7 @@ public class battlePaneController {
             enemyNameLabel, enemyLvlLabel, enemyStrLabel, enemyConLabel, enemyDexLabel, enemyIntLabel, enemyWisLabel,
             enemyChaLabel, playerHpLabel, playerMpLabel, playerXpLabel, playerMaxHpLabel, playerMaxMpLabel,
             enemyHpLabel, enemyMpLabel, enemyMaxMpLabel, enemyMaxHpLabel, strBonusLabel, dexBonusLabel, conBonusLabel,
-            intBonusLabel, wisBonusLabel, chaBonusLabel;
+            intBonusLabel, wisBonusLabel, chaBonusLabel, inventoryDescription, lootDescription, playerGold;
 
     @FXML
     private ProgressBar expBar, playerHpBar, manaBar, enemyHpBar, enemyManaBar;
@@ -52,9 +54,20 @@ public class battlePaneController {
     @FXML
     private ListView<String> actionListView;
 
+    @FXML
+    private TableView<Item> lootView, playerInventoryView;
+
+    @FXML
+    private AnchorPane playerPane;
+
+    private GridPane tempGrid;
+
+    private ObservableList<Item> playerInventory = FXCollections.observableArrayList();
+    private ObservableList<Item> lootList = FXCollections.observableArrayList();
+
     static Player player;
 
-    Enemy enemy;
+    static Enemy enemy;
 
     private Enemies.EnemyGroup enemies;
 
@@ -67,9 +80,12 @@ public class battlePaneController {
         skillPoints = 0;
         showLvlUpButtons(false);
         enemyGrid.setVisible(false);
+        playerGrid.setVisible(false);
         attackDescription.setWrapText(true);
         GridPane.setColumnSpan(attackDescription, 2);
-        GridPane.setRowSpan(attackDescription,3);
+        GridPane.setRowSpan(attackDescription, 3);
+        enemyLootBox.setVisible(false);
+        lootView.setItems(lootList);
 
         //set actions list view to wrap text  from Ryotsu on StackOverflow
         actionListView.setCellFactory(param -> new ListCell<>() {
@@ -89,17 +105,24 @@ public class battlePaneController {
             }
         });
         startNewGame();
+
+        // set Inventory table
+
+
     }
 
     private void showActionList() {
-        ListView<String> actionLV = new ListView<>();
-        mainBorderPane.setCenter(actionLV);
-        actionLV.setItems(actionList);
-
+//        ListView<String> actionLV = new ListView<>();
+//        actionLV.setItems(actionList);
+        actionList.clear();
+        actionListView.setItems(actionList);
+        actionListView.setVisible(true);
+        playerPane.setVisible(true);
     }
 
     @FXML
     private void startNewGame() {
+        bottomPane.setVisible(false);
         actionListView.setVisible(false);
         Button newCharacter = new Button("Roll New Character");
         newCharacter.setOnAction(e -> rollNewCharacter());
@@ -129,11 +152,11 @@ public class battlePaneController {
         ranger.setOnAction(e -> newRanger());
         ranger.setPrefWidth(120);
 
-        GridPane grid = new GridPane();
-        grid.getColumnConstraints().setAll(new ColumnConstraints(120));
-        grid.setHgap(10);
-        grid.setAlignment(Pos.CENTER);
-        grid.alignmentProperty().setValue(Pos.CENTER);
+        tempGrid = new GridPane();
+        tempGrid.getColumnConstraints().setAll(new ColumnConstraints(120));
+        tempGrid.setHgap(10);
+        tempGrid.setAlignment(Pos.CENTER);
+        tempGrid.alignmentProperty().setValue(Pos.CENTER);
 
         GridPane.setColumnSpan(nameFieldLabel, 2);
         GridPane.setHalignment(nameFieldLabel, HPos.CENTER);
@@ -143,21 +166,22 @@ public class battlePaneController {
         GridPane.setColumnSpan(nameField, 2);
         nameField.setPromptText("Player Name");
 
-        grid.setVgap(10);
-        grid.add(newCharacter, 0, 0);
-        grid.add(loadCharacter, 1, 0);
-        grid.add(nameFieldLabel, 0, 1);
-        grid.add(nameField, 0, 2);
-        grid.add(spellSword, 0, 3);
-        grid.add(rogue, 1, 3);
-        grid.add(warrior, 0, 4);
-        grid.add(wizard, 1, 4);
-        grid.add(ranger, 0, 5);
+        tempGrid.setVgap(10);
+        tempGrid.add(newCharacter, 0, 0);
+        tempGrid.add(loadCharacter, 1, 0);
+        tempGrid.add(nameFieldLabel, 0, 1);
+        tempGrid.add(nameField, 0, 2);
+        tempGrid.add(spellSword, 0, 3);
+        tempGrid.add(rogue, 1, 3);
+        tempGrid.add(warrior, 0, 4);
+        tempGrid.add(wizard, 1, 4);
+        tempGrid.add(ranger, 0, 5);
 
-        AnchorPane.setLeftAnchor(grid, 80.0);
-        AnchorPane.setTopAnchor(grid, 60.0);
+        AnchorPane.setLeftAnchor(tempGrid, 250.0);
+        AnchorPane.setRightAnchor(tempGrid, 250.0);
+        AnchorPane.setTopAnchor(tempGrid, 10.0);
 
-        mainBorderPane.setCenter(grid);
+        playerPane.getChildren().add(tempGrid);
     }
 
     //     dialog popup window to create new player
@@ -191,7 +215,6 @@ public class battlePaneController {
     private boolean nameCheck() {
         if (nameField.getText().length() > 30) {
             nameFieldLabel.setText("Name must be 30 or fewer characters");
-            nameFieldLabel.setStyle("-fx-color: red");
             nameField.clear();
             return false;
         }
@@ -233,7 +256,7 @@ public class battlePaneController {
                 name = nameField.getText().trim();
             }
             player = new Player(name, 14, 8, 13, 8, 9,
-                    7, Weapons.mace(), Armors.tinPlatemail());
+                    7, Weapons.mace(), Armors.copperPlatemail());
             startGame();
         }
     }
@@ -289,6 +312,8 @@ public class battlePaneController {
 
     private void nextEnemy() {
         if (enemy.isDead()) {
+            enemyLootBox.setVisible(false);
+            lootList.clear();
             enemiesDefeated += 1;
             player.addKill();
             System.out.println("enemies defeated: " + enemiesDefeated);
@@ -322,6 +347,7 @@ public class battlePaneController {
     }
 
     public void startGame() {
+        bottomPane.setVisible(true);
         setPlayer();
         enemiesDefeated = 0;
         restorePlayer();
@@ -329,6 +355,8 @@ public class battlePaneController {
         setUpEnemies(Enemies.goblinGang(1));
         actionList.add("Your journey begins!");
         setEnemy(enemies.get(0));
+        tempGrid.getChildren().clear();
+        tempGrid.setVisible(false);
     }
 
     private int setActionsGrid(List<Button> buttons) {
@@ -353,7 +381,7 @@ public class battlePaneController {
     private int setActionsGrid(List<Button> buttons, Button lastButton) {
         int lastRow = setActionsGrid(buttons) + 1;
         actionsGrid.add(lastButton, 1, lastRow);
-        return lastRow+1;
+        return lastRow + 1;
     }
 
     public void newRound() {
@@ -372,7 +400,7 @@ public class battlePaneController {
     private void setAttacks() {
         makeNextEnemyButton();
         int row = setActionsGrid(getAttackButtons(), nextButton);
-        actionsGrid.add(attackDescription,0,row);
+        actionsGrid.add(attackDescription, 0, row);
     }
 
     private List<Button> getEnemyGroupButtons() {
@@ -407,7 +435,7 @@ public class battlePaneController {
             button.setPrefWidth(130);
 
 //            button.setOnMouseDragOver(e-> attackDescription.setText(action.getDescription()));
-            button.setOnMouseEntered(event -> attackDescription.setText(action.getDescription()));
+            button.setOnMouseEntered(event -> attackDescription.setText(action.getDescription(player)));
             button.setOnMouseExited(e -> attackDescription.setText(""));
 
             button.setOnAction(e -> {
@@ -438,21 +466,21 @@ public class battlePaneController {
 
                         if (!r.isHit()) {
                             if (result.size() == 1) {
-                                ALPause(500, r.getAttackName() + " missed.");
+                                print(500, r.getAttackName() + " missed.");
                                 enemyTurn();
                                 break;
                             } else {
-                                ALPause(500, firstOrSecond(atks) + " attack missed!");
+                                print(500, firstOrSecond(atks) + " attack missed!");
                             }
                         }
                         if (r.isCrit()) {
-                            ALPause(500, "Critical hit!");
+                            print(500, "Critical hit!");
                         }
                         if (r.getDamage() > 0) {
                             if (result.size() == 1) {
                                 actionList.add(enemy.getName() + " takes " + r.getDamage() + " damage");
                             } else {
-                                ALPause(50, firstOrSecond(atks) + " strike deals " + r.getDamage() + " damage");
+                                print(50, firstOrSecond(atks) + " strike deals " + r.getDamage() + " damage");
                             }
                             enemyTakeDamage(r.getDamage());
                         } else if (!(action instanceof HealingSpell)) {
@@ -514,7 +542,22 @@ public class battlePaneController {
 //        }
 //    }
 
+    private void showEnemyGrid() {
+        enemyGrid.setVisible(true);
+    }
+
+    private void hidePlayerGrid() {
+        playerGrid.setVisible(false);
+//        playerGrid.setBackground(new BackgroundFill(Color.web(), CornerRadii.EMPTY, Insets.EMPTY));
+    }
+
+    private void showPlayerGrid() {
+        playerGrid.setVisible(true);
+
+    }
+
     private void setPlayer() {
+        showPlayerGrid();
         //todo find a way to populate buttons for attacks the weapon has
         playerNameLabel.setText(player.getName());
 //        playerHp = new SimpleIntegerProperty(player.getHealth());
@@ -523,6 +566,8 @@ public class battlePaneController {
 
         setPlayerStats();
         setAttacks();
+        playerInventory.setAll(player.getInventory());
+        playerInventoryView.setItems(playerInventory);
 
         //broken listeners in an attempt to bind labels to stats
 //        experience.addListener((observable, oldValue, newValue) -> {
@@ -678,7 +723,7 @@ public class battlePaneController {
     }
 
     private void playerHeal(int health) {
-        ALPause(250, player.getName() + " restores " + health + " health.");
+        print(250, player.getName() + " restores " + health + " health.");
         player.heal(health);
         setHpBar();
 
@@ -696,8 +741,14 @@ public class battlePaneController {
         }
     }
 
-    private void ALPause(long ms, String message) {
+    private void print(String message) {
         actionList.add(message);
+        actionListView.scrollTo(actionList.size());
+    }
+
+    private void print(long ms, String message) {
+        actionList.add(message);
+        actionListView.scrollTo(actionList.size());
 
         //todo figure out how to get messages to pause between each display (Thread pools?)
 //        try {
@@ -709,14 +760,16 @@ public class battlePaneController {
 
     private void enemyTakeDamage(int damage) {
         if (!enemy.takeDamage(damage)) {
-            setEnemyHpBar();
-            ALPause(500, enemy.getName() + " has died!");
+            print(500, enemy.getName() + " has died!");
             actionList.add(player.getName() + " gains " + enemy.getExperienceGained() + " experience points");
             if (player.gainExp(enemy.getExperienceGained())) {
                 levelUp();
             }
+            gainGold(enemy.getGold());
             setExpBar();
             nextButton.setDisable(false);
+            lootList.setAll(enemy.loot());
+            enemyLootBox.setVisible(true);
         }
         setEnemyHpBar();
     }
@@ -749,7 +802,7 @@ public class battlePaneController {
                 enemyTurn();
                 return;
             }
-            ALPause(500, enemy.getName() + " uses " + r.getAttackName());
+            print(500, enemy.getName() + " uses " + r.getAttackName());
             if (atks == 1) {
                 enemyDrainMana(r.getManaCost());
             }
@@ -760,7 +813,7 @@ public class battlePaneController {
             int dmg = r.getDamage();
             int heal = r.getHeal();
             if (r.isCrit()) {
-                ALPause(250, "Critical Hit!");
+                print(250, "Critical Hit!");
             }
             if (dmg > 0) {
                 if (results.size() == 1) {
@@ -773,7 +826,7 @@ public class battlePaneController {
                 actionList.add(player.getName() + " absorbed the blow!");
             }
             if (heal > 0) {
-                ALPause(500, enemy.getName() + " heals for " + heal + " damage");
+                print(500, enemy.getName() + " heals for " + heal + " damage");
                 enemyHeal(heal);
             }
         }
@@ -916,4 +969,80 @@ public class battlePaneController {
         setManaBar();
         setHpBar();
     }
+
+
+//    *********** INVENTORY AND LOOT ***********
+
+    private void gainGold(int gold) {
+        player.gainGold(gold);
+        print("You receive " + gold + " gold");
+        updateGold();
+    }
+
+    private void loseGold(int gold) {
+        player.loseGold(gold);
+        print("You lose " + gold + " gold");
+        updateGold();
+    }
+
+    private void updateGold() {
+        playerGold.setText(player.getGold() + " Gold");
+    }
+
+    private void playerLoot(Item item) {
+        if (!player.getInventory().isFull()) {
+            player.getInventory().add(item);
+            if (item.isStackable() && playerInventory.contains(item)) {
+                int i = playerInventory.indexOf(item);
+                playerInventory.get(i).addCount(item.getQuantity());
+            } else {
+                playerInventory.add(item);
+            }
+        }
+    }
+
+    @FXML
+    private void lootItem() {
+        if (!lootList.isEmpty() && lootView.getSelectionModel().getSelectedItem() != null) {
+            Item item = lootView.getSelectionModel().getSelectedItem();
+            playerLoot(item);
+        }
+    }
+
+    @FXML
+    private void lootAll() {
+        if (!lootList.isEmpty()) {
+            if (lootList.size() > player.getInventory().getSpace()) {
+                print("Not enough inventory space to loot everything!");
+            } else {
+                for (Item i : lootList) {
+                    playerLoot(i);
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void equipItem() {
+        try {
+            Equipable item = (Equipable) playerInventoryView.getSelectionModel().getSelectedItem();
+            item.equip(player);
+            print("Equipped " + item); //todo test print name is correct for equippable
+        } catch (NullPointerException e) {
+            print("No item selected from inventory to equip");
+        } catch (TypeNotPresentException e) {
+            print("Item is not equippable");
+        }
+    }
+
+    @FXML
+    private void dropItem() {
+        try {
+            Item item = playerInventoryView.getSelectionModel().getSelectedItem();
+            playerInventory.remove(item);
+        } catch (NullPointerException e) {
+            print("No item selected from inventory to drop");
+        }
+    }
+
 }

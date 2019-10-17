@@ -1,7 +1,7 @@
 module MyFirstBattle {
     requires javafx.controls;
     requires javafx.fxml;
-    exports com.Stclair.battlePane;
+    exports com.Stclair;
 
     opens com.Stclair.battlePane;
 }

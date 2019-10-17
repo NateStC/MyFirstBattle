@@ -3,39 +3,47 @@ package com.Stclair;
 import java.util.Random;
 
 public class Dice {
+    private static Random rand = new Random();
 
     public static int d6() {
-        Random rand = new Random();
         return rand.nextInt(6) + 1;
     }
 
     public static int d8() {
-        Random rand = new Random();
         return rand.nextInt(8) + 1;
     }
 
     public static int d12() {
-        Random rand = new Random();
         return rand.nextInt(12) + 1;
     }
 
     public static int d20() {
-        Random rand = new Random();
         return rand.nextInt(20) + 1;
     }
 
+    public static int d100() {
+        return rand.nextInt(100) + 1;
+    }
+
     public static int die(int sides) {
-        Random rand = new Random();
         return rand.nextInt(sides) + 1;
     }
 
-    public static int die(int sides, int rolls){
-        Random rand = new Random();
+    public static int die(int sides, int rolls) {
         int num = 0;
-        for (int i=0; i<rolls; i++){
-            num += rand.nextInt(sides)+1;
+        for (int i = 0; i < rolls; i++) {
+            num += rand.nextInt(sides) + 1;
         }
         return num;
+    }
+
+    public static int goldDice(int lvl, double multiplier) {
+        double gold = (Dice.die(lvl * 20) + lvl * 10) * multiplier;
+        return (int) gold;
+    }
+
+    public static boolean coinFlip() {
+        return (rand.nextInt(1) == 1);
     }
 
     public static int statRoll() {

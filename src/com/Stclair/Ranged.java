@@ -170,7 +170,7 @@ public class Ranged extends Attack {
     //***** RANGED ATTACKS ******
 
     public static Ranged arrowStrike() {
-        return new Ranged("Arrow Strike", 8, 1, 1);
+        return new Ranged("Arrow Strike", 8, 1, 0.5);
     }
 
     //aim for headshot, higher crit chance, higher crit damage?, higher miss chance;

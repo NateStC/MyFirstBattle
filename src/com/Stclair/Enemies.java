@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Enemies {
 
-    public static Enemy getKobld(int lvl) {
+    public static Enemy getKobold(int lvl) {
         return new Enemy(lvl);
     }
 
@@ -49,9 +49,19 @@ public class Enemies {
         entrances.add("waves a jagged spear above its head");
         entrances.add("angrily mutters gibberish that somehow sounds threatening");
 
-
-        return new Enemy("Goblin Grunt", str, con, dex, intel, wis, cha, lvl, Weapons.goblinSpear(lvl),
+        Enemy goblin = new Enemy("Goblin Grunt", str, con, dex, intel, wis, cha, lvl, Weapons.goblinSpear(lvl),
                 Armors.goblinmaile(lvl), entrances);
+
+        goblin.setGold(lvl * 4);
+
+        Inventory inv = new Inventory();
+        inv.addAll(List.of(Weapons.goblinSpear(lvl), Armors.goblinmaile(lvl),
+                Items.goblinBeads(Dice.die(3,lvl*2),70)));
+
+        goblin.setInventory(inv);
+
+        return goblin;
+
     }
 
     public static Enemy goblinShaman(int lvl) {
@@ -66,9 +76,12 @@ public class Enemies {
         entrances.add("shakes its gnarled staff angrily in your direction.");
         entrances.add("summons a small fireball to swirl around its staff.");
 
-        return new Enemy("Goblin Shaman", str, con, dex, intel, wis, cha, lvl, Weapons.staff(),
+        Enemy goblin = new Enemy("Goblin Shaman", str, con, dex, intel, wis, cha, lvl, Weapons.staff(),
                 Armors.goblinRobes(lvl), entrances);
 
+        goblin.setGold(5*lvl);
+
+        return goblin;
     }
 
     public static Enemy goblinSoldier(int lvl) {
@@ -150,12 +163,20 @@ public class Enemies {
     }
 
     public static Enemy skeleton(int lvl) {
+        Enemy skele = new Enemy("Skeleton");
         int str = Dice.die(6, lvl) + 2;
         int dex = Dice.die(6, lvl) + 4;
         int con = Dice.die(6, lvl) + 3;
         int intel = 3 + lvl + Dice.d6();
         int wis = 4 + lvl + Dice.d6();
         int cha = Dice.die(6, lvl) / 2 + 3;
+        skele.setStats(str,con,dex,intel,wis,cha);
+        int bonesNum = lvl + Dice.die(lvl,1);
+        if (bonesNum >10){
+            bonesNum = 10;
+        }
+        skele.receiveLoot(Items.skeleBones(bonesNum,70));
+
 
         return new Enemy("Skeleton", str, con, dex, intel, wis, cha, lvl, Weapons.shortSword(lvl),
                 Armors.chain(lvl));
@@ -173,10 +194,10 @@ public class Enemies {
                 Armors.scrapLeathers());
     }
 
-    public static Enemy skeleArcher(int lvl){
-        int str = Dice.die(4,lvl) + 3;
-        int dex = Dice.die(6,lvl) + 6;
-        int con = Dice.die(6,lvl) + 3;
+    public static Enemy skeleArcher(int lvl) {
+        int str = Dice.die(4, lvl) + 3;
+        int dex = Dice.die(6, lvl) + 6;
+        int con = Dice.die(6, lvl) + 3;
         Enemy skeleArcher = skeleton(lvl);
         skeleArcher.setName("Skeleton Archer");
         skeleArcher.setStrength(str);
@@ -188,13 +209,13 @@ public class Enemies {
         return skeleArcher;
     }
 
-    public static Enemy bloatedZombie(int lvl){
+    public static Enemy bloatedZombie(int lvl) {
         int str = 4 + Dice.die(8, lvl);
-        int dex = 3 + Dice.die(6,lvl);
-        int con = 10 + Dice.die(8,lvl*2);
-        int intel = 4 + Dice.die(2,(int)(lvl*1.5));
-        int wis = 4 + Dice.die(2,lvl);
-        int cha = 4 + lvl/2;
+        int dex = 3 + Dice.die(6, lvl);
+        int con = 10 + Dice.die(8, lvl * 2);
+        int intel = 4 + Dice.die(2, (int) (lvl * 1.5));
+        int wis = 4 + Dice.die(2, lvl);
+        int cha = 4 + lvl / 2;
 
         ArrayList<String> entrances = new ArrayList<>(Arrays.asList(
                 "A Bloated Zombie waddles into the room",

@@ -8,9 +8,17 @@ public class ActionResultList extends ArrayList<ActionResult> {
 
     public int getTotalHeals() {
         int heals = 0;
-        for (int h = 0; h < this.size(); h++) {
-            heals += this.get(h).getHeal();
+        for (ActionResult actionResult : this) {
+            heals += actionResult.getHeal();
         }
         return heals;
+    }
+
+    public int getTotalDamage(){
+        int dmg = 0;
+        for (ActionResult actionResult : this){
+            dmg+= actionResult.getDamage();
+        }
+        return dmg;
     }
 }

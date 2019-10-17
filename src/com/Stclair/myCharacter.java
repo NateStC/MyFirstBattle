@@ -1,28 +1,46 @@
 package com.Stclair;
 
-import javafx.beans.property.SimpleDoubleProperty;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class myCharacter {
 
     protected String name;
-    public int health;
-    public int mana;
-    public int experience = 0;
-    private int strength;
-    private int dexterity;
-    private int constitution;
-    private int intelligence;
-    private int wisdom;
-    private int charisma;
-    private int gold;
+    private int health = 50;
+    private int mana = 30;
+    private int experience = 0;
+    private int strength = 7;
+    private int dexterity = 7;
+    private int constitution = 7;
+    private int intelligence = 7;
+    private int wisdom = 7;
+    private int charisma = 7;
+    private int[] attributes = new int[6];
+    private int gold = 0;
     private Weapon weapon = new Weapon();
     private Armor armor = new Armor();
-    Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory();
+    private ArrayList<Attack> attacks = new ArrayList<>();
+    private static final Map<Attribute, Integer> stats = new HashMap<>();
+
+
+    static {
+        stats.put(Attribute.STR, 0);
+        stats.put(Attribute.CON, 1);
+        stats.put(Attribute.DEX, 2);
+        stats.put(Attribute.INT, 3);
+        stats.put(Attribute.WIS, 4);
+        stats.put(Attribute.CHA, 5);
+    }
+
+    public enum Attribute { //todo finish switching attributes over to map with enum
+        STR,
+        CON,
+        DEX,
+        INT,
+        WIS,
+        CHA,
+    }
+
 
     public static String[] attributeNames = {"Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"};
 
@@ -35,6 +53,14 @@ public class myCharacter {
     public myCharacter(String name) {
         super();
         this.name = name;
+    }
+
+    public myCharacter(String name, int lvl) {
+        setName(name);
+        setLevel(lvl);
+        setDefaultStats();
+        rollLvledStats();
+        gold = Dice.goldDice(lvl, 1);
     }
 
     //construct character w/ attribute array
@@ -55,7 +81,8 @@ public class myCharacter {
     }
 
     //load character constructor
-    public myCharacter(String name, int health, int mana, int experience, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
+    public myCharacter(String name, int health, int mana, int experience, int strength, int dexterity,
+                       int constitution, int intelligence, int wisdom, int charisma) {
         this.name = name;
         this.health = health;
         this.mana = mana;
@@ -88,20 +115,18 @@ public class myCharacter {
     }
 
     public void assignStats(ArrayList<Integer> arrayRolls, Scanner scanner) {
-        int[] attributeArray = new int[5];
-        for (int i = 0; i < 6; i++) {
-            boolean match = false;
-            while (!match) {
-                printStatRolls(arrayRolls);
-                System.out.println("Which roll would you like to assign to " + attributeNames[i]);
-                int choice = scanner.nextInt();
-                if (arrayRolls.contains(choice)) {
-                    attributeArray[i] = choice;
-                    arrayRolls.remove(arrayRolls.indexOf(choice));
-                    match = true;
-                } else {
-                    System.out.println("Invalid choice");
-                }
+        int[] attributeArray = new int[6];
+        int i = 0;
+        while (i <= 5) {
+            System.out.println(arrayRolls);
+            System.out.println("Which roll would you like to assign to " + attributeNames[i]);
+            int choice = scanner.nextInt();
+            if (arrayRolls.contains(choice)) {
+                attributeArray[i] = choice;
+                arrayRolls.remove((Integer) choice);
+                i++;
+            } else {
+                System.out.println("Invalid choice");
             }
         }
         setStats(attributeArray);
@@ -109,24 +134,16 @@ public class myCharacter {
         fullMana();
     }
 
-    private void printStatRolls(ArrayList<Integer> arrayRolls) {
-        System.out.println("Your rolls:");
-        for (int i = 0; i < arrayRolls.size(); i++) {
-            System.out.println(arrayRolls.get(i));
-        }
-    }
-
     public boolean isDead() {
-        if (this.health > 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.health <= 0;
     }
 
     //returns true if still alive, false if dead
     public boolean takeDamage(int damage) {
-        if (damage == 0){
+        if (isDead()) {
+            return false;
+        }
+        if (damage == 0) {
             return true;
         }
         this.health -= (damage);
@@ -164,101 +181,6 @@ public class myCharacter {
         fullHealth();
     }
 
-
-    // ********* ATTACKS ***********
-
-    public int stab() {
-
-        int att = Dice.d20();
-        int roll = Dice.d6();
-        int damage = 0;
-
-        if (att == 1) {
-            System.out.println(this.name + "'s stab missed!");
-        } else {
-            damage = (roll + ((this.strength + this.dexterity) / 2));
-        }
-        if (roll == 20) {
-            damage *= 2;
-            System.out.println("Critical hit!");
-        }
-        System.out.println(this.name + " hits with stab for " + damage + " damage.");
-        return damage;
-    }
-
-    public int smash() {
-        int att = Dice.d20();
-        int roll = Dice.d8();
-        int dmg = 0;
-        if (att == 1) {
-            System.out.println(this.name + "'s smash missed!");
-            return dmg;
-        }
-        dmg = (roll + (this.strength / 2));
-        if (roll == 20) {
-            dmg *= 2;
-            System.out.println("Critical hit!");
-        }
-        System.out.println("Smash deals " + dmg + " damage");
-        return dmg;
-    }
-
-
-    // ********* SPELLS ***********
-
-    public int fireball() {
-        if (this.mana < 10) {
-            System.out.println("Insufficient mana");
-            return -1;
-        }
-        this.mana -= 10;
-        int attRoll = Dice.d20();
-        int damRoll = d6roll();
-        int dmg = 0;
-        if (attRoll == 1) {
-            System.out.println(this.name + " missed!");
-            printMana();
-            return dmg;
-        }
-        dmg = damRoll + (intelligence / 2);
-        if (attRoll == 20) {
-            dmg *= 2;
-            System.out.println("Critical hit!");
-        }
-        System.out.println(this.name + " hits with Fireball for " + dmg + " damage.");
-        printMana();
-        return dmg;
-
-    }
-
-
-    public int[] healingSpell() {
-        if (this.mana < 10) {
-            System.out.println("Insufficient mana for healing spell");
-            return new int[]{-1, -1};
-        }
-        if (healthIsFull()) {
-            System.out.println("Health already full");
-            return new int[]{-2, -2};
-        }
-        int crits = 0;
-        int roll1 = d6roll();
-        int roll2 = d6roll();
-        if (roll1 == 6) {
-            roll1 = 12;
-            crits += 1;
-        }
-        if (roll2 == 6) {
-            roll2 = 12;
-            crits += 1;
-        }
-        this.mana -= 10;
-        int heal = ((this.intelligence + this.wisdom + this.charisma) / 2) + roll1 + roll2;
-        System.out.println("Healing spell heals " + heal + " damage.");
-        printMana();
-        return new int[]{heal, crits};
-    }
-
     public void printStats() {
         System.out.println(this.name + "'s attributes are");
         System.out.println("LEVEL: " + getLevel());
@@ -272,10 +194,6 @@ public class myCharacter {
         System.out.println("MANA: " + this.mana + " / " + getMaxMana());
         System.out.println((getNextLvlExp() - this.experience) + " experience until level " + (getLevel() + 1));
 
-    }
-
-    public void printMana() {
-        System.out.println(this.name + " has " + this.mana + " / " + getMaxMana() + " mana left.");
     }
 
     public void gainLevel() {
@@ -320,16 +238,25 @@ public class myCharacter {
     }
 
 
-    private void setDefaultStats() {
-        this.strength = 5;
-        this.dexterity = 5;
-        this.constitution = 5;
-        this.intelligence = 5;
-        this.wisdom = 5;
-        this.charisma = 5;
+    public void setDefaultStats() {
+        this.strength = 7;
+        this.dexterity = 7;
+        this.constitution = 7;
+        this.intelligence = 7;
+        this.wisdom = 7;
+        this.charisma = 7;
         fullHealth();
         fullMana();
-        this.experience = 0;
+    }
+
+    public void rollLvledStats() {
+        this.strength += Dice.die((getLevel() + 1) / 2);
+        this.constitution += Dice.die((getLevel() + 1) / 2);
+        this.dexterity += Dice.die((getLevel() + 1) / 2);
+        this.intelligence += Dice.die((getLevel() + 1) / 2);
+        this.wisdom += Dice.die((getLevel() + 1) / 2);
+        this.charisma += Dice.die((getLevel() + 1) / 2);
+
     }
 
     public void setStats(int str, int con, int dex, int intel, int wis, int cha) {
@@ -481,7 +408,7 @@ public class myCharacter {
         return this.getExperience() >= getNextLvlExp();
     }
 
-    //returns total exp per passed lvl ie 200xp for lvl 2 to 3;
+    //returns total exp per passed lvl i.e. 200xp for lvl 2 to 3, primarily for experience progress bar
     public static int getExpDifferenceForLvl(int lvl) {
         return (getExpForLvl(lvl + 1) - getExpForLvl(lvl));
     }
@@ -497,11 +424,58 @@ public class myCharacter {
         return this.getExperience() - getExpForLvl(this.getLevel());
     }
 
-    // ********* DICE ROLLS **********
 
-    public static int d6roll() {
+    // ********* Loot **********
+
+    public boolean receiveLoot(Item item) {
+        if (item == null || item.getQuantity() < 1){
+            return false;
+        }
+        if (!inventory.isFull()) {
+            this.inventory.add(item);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean receiveLoot(List<Item> items) {
+        if (items.size() > inventory.getSpace()) {
+            System.out.println("Not enough room for all items");
+            return false;
+        }
+        for (Item i : items){
+            receiveLoot(i);
+        }
+        return true;
+    }
+
+    public List<Item> equippedItems(){
+        List<Item> equipment = new ArrayList<>();
+        if (armor != null){
+            equipment.add(armor);
+        }
+        if (weapon != null && !weapon.getName().toLowerCase().contains("fists")){ //todo find a way to make fists non lootable on unarmed enemies
+            equipment.add(armor);
+        }
+        return equipment;
+    }
+
+    public List<Item> loot() {
+        List<Item> items = new ArrayList<>();
+        List<Item> allLoot = new ArrayList<>(inventory);
+        allLoot.addAll(equippedItems());
         Random rand = new Random();
-        return rand.nextInt(6) + 1;
+        for (Item i : allLoot) {
+            int roll = rand.nextInt(100) + 1;
+            if (roll <= i.getDropPct()) {
+                items.add(i);
+            }
+        }
+        return items;
+    }
+
+    public void loseItem(int index) {
+        inventory.remove(index);
     }
 
 
@@ -515,8 +489,11 @@ public class myCharacter {
         return (this.getMana() >= this.getMaxMana());
     }
 
-    public List<Attack> getAttacks(){
-        return this.getWeapon().getAttackList();
+    public List<Attack> getAttacks() {
+        List<Attack> allAttacks = new ArrayList<>();
+        allAttacks.addAll(this.weapon.getAttackList());
+        allAttacks.addAll(this.attacks);
+        return allAttacks;
     }
 
     public int getLevel() {
@@ -623,7 +600,7 @@ public class myCharacter {
         return weapon;
     }
 
-    public Armor getArmor(){
+    public Armor getArmor() {
         return this.armor;
     }
 
@@ -652,10 +629,39 @@ public class myCharacter {
     }
 
     public void equipWeapon(Weapon weapon) {
+        if (this.weapon == null) {
+            this.weapon = weapon;
+        } else if (inventory.isFull()) {
+            return;
+        } else {
+            inventory.add(this.weapon);
+            inventory.remove(weapon);
+            this.weapon = weapon;
+        }
+    }
+
+    public boolean equipArmor(Armor armor) {
+        if (this.armor == null) {
+            this.armor = armor;
+            return true;
+        }
+
+        if (inventory.isFull()) {
+            System.out.println("Cannot unequip current armor, inventory is full");
+            return false;
+        } else {
+            inventory.remove(armor);
+            inventory.add(this.armor);
+            this.armor = armor;
+            return true;
+        }
+    }
+
+    public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
 
-    public void equipArmor(Armor armor) {
+    public void setArmor(Armor armor) {
         this.armor = armor;
     }
 
@@ -663,20 +669,40 @@ public class myCharacter {
         return this.strength + this.getStrBonus();
     }
 
+    public int statMod(Attribute stat) {
+        return (stats.get(stat) - 10) / 2;
+    }
+
     public int getConStat() {
         return this.constitution + this.getConBonus();
+    }
+
+    public int getConMod() {
+        return (this.getConStat() - 10) / 3;
     }
 
     public int getDexStat() {
         return this.dexterity + this.getDexBonus();
     }
 
+    public int getDexMod() {
+        return this.dexterity = 10 / 3;
+    }
+
     public int getIntStat() {
         return this.intelligence + this.getIntBonus();
     }
 
+    public int getIntMod() {
+        return (this.getIntStat() - 10) / 3;
+    }
+
     public int getWisStat() {
         return this.wisdom + this.getWisBonus();
+    }
+
+    public int getWisMod() {
+        return (this.getWisStat() - 10) / 3;
     }
 
     public int getChaStat() {
@@ -695,11 +721,23 @@ public class myCharacter {
         this.gold = gold;
     }
 
-    public void gainGold(int gold){
+    public void gainGold(int gold) {
         this.gold += gold;
     }
 
-    public void loseGold(int gold){
+    public void loseGold(int gold) {
         this.gold -= gold;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setAttacks(ArrayList<Attack> attacks) {
+        this.attacks = attacks;
     }
 }

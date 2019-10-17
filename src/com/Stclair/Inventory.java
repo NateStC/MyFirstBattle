@@ -6,16 +6,18 @@ public class Inventory extends ArrayList<Item> {
 
     private int maxStorage = 30;
 
-
-    public boolean addItem(Item item) {
+    @Override
+    public boolean add(Item item) {
+        if (item == null){
+            return true;
+        }
         if (this.contains(item) && item.isStackable()) {
             int itemIndex = this.indexOf(item);
             this.get(itemIndex).addCount(item.getQuantity());
             return true;
         }
         if (!isFull()) {
-            this.add(item);
-            return true;
+            super.add(item);
         }
         return false;
     }
@@ -28,10 +30,6 @@ public class Inventory extends ArrayList<Item> {
         }
         System.out.println("Item not found in inventory");
         return false;
-    }
-
-    public void destroyItem(int index){
-        this.remove(index);
     }
 
     public void printInventory() {
@@ -57,6 +55,10 @@ public class Inventory extends ArrayList<Item> {
 
     public boolean isFull() {
         return !(this.size() <= maxStorage);
+    }
+
+    public int getSpace(){
+        return this.maxStorage - this.size();
     }
 
 

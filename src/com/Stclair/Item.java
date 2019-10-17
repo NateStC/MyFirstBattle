@@ -4,28 +4,63 @@ import java.util.ArrayList;
 
 public class Item {
 
-    private String name;
-    private double weight;
+    private String name = "Item";
+    private double weight = 1;
     private int value = 0;
-    private boolean equipable;
     private boolean saleable = true;
     private boolean stackable = false;
-    private int quantity;
+    private int quantity = 1;
+    private double dropPct = 0;
+    private String description = "";
 
-    public Item(String name, double weight) {
-        this.name = name;
-        this.weight = weight;
-    }
+    public Item(){
 
-    public Item(String name, double weight, int value) {
-        this.name = name;
-        this.weight = weight;
-        this.value = value;
     }
 
     public Item(String name) {
         this.name = name;
-        this.weight = 1;
+    }
+
+    public Item(String name, double weight){
+        this.name = name;
+        this.weight = weight;
+    }
+
+    public Item(String name, int value, double weight) {
+        this.name = name;
+        this.value = value;
+        this.weight = weight;
+    }
+
+    public Item(String name, int value, double weight, double dropPct, String description) {
+        this.name = name;
+        this.value = value;
+        this.weight = weight;
+        this.dropPct = dropPct;
+        this.description = description;
+    }
+
+    public Item(String name, int value, double wt, boolean stackable, int quantity, double dropPct) {
+        this.name = name;
+        this.value = value;
+        this.weight = wt;
+        if (stackable) {
+            this.stackable = true;
+            this.quantity = quantity;
+        }
+        this.dropPct = dropPct;
+    }
+
+    public Item(String name, int value, double weight, boolean stackable, int quantity, double dropPct, String description){
+        this.name = name;
+        this.value = value;
+        this.weight = weight;
+        if (stackable) {
+            this.stackable = true;
+            this.quantity = quantity;
+        }
+        this.dropPct = dropPct;
+        this.description = description;
     }
 
     public static String getLvledClothName(int lvl) {
@@ -90,10 +125,6 @@ public class Item {
         return "";
     }
 
-    public Item() {
-
-    }
-
     public String getName() {
         return name;
     }
@@ -118,16 +149,8 @@ public class Item {
         return value;
     }
 
-    public boolean isEquipable() {
-        return equipable;
-    }
-
-    public void setEquipable(boolean equipable) {
-        this.equipable = equipable;
-    }
-
     public boolean isSaleable() {
-        if (value<=0){
+        if (value <= 0) {
             return false;
         }
         return saleable;
@@ -145,8 +168,8 @@ public class Item {
         this.stackable = stackable;
     }
 
-    public boolean addCount(int count){
-        if (stackable){
+    public boolean addCount(int count) {
+        if (stackable) {
             this.quantity += count;
             return true;
         }
@@ -159,6 +182,29 @@ public class Item {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getDropPct() {
+        return dropPct;
+    }
+
+    public void setDropPct(double dropPct) {
+        this.dropPct = dropPct;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getFullDescription(){
+        StringBuilder desc = new StringBuilder();
+        desc.append("Item value: ").append(this.value).append(" gold\n\n").append(this.description);
+
+        return desc.toString();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

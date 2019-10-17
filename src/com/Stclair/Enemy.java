@@ -11,10 +11,9 @@ public class Enemy extends myCharacter {
     // super?
     public Enemy() {  //Empty constructor calls kobold/ base enemy.
         setName("Kobold");
-        setStats(5, 5, 6, 3, 3, 3);
-        setLevel(1);
         fullHealth();
         fullMana();
+        rollLvledStats();
         equipWeapon(Weapons.dagger());
         System.out.println("A " + name + " appears.");
         System.out.println("It has " + this.getHealth() + " health.");
@@ -24,17 +23,25 @@ public class Enemy extends myCharacter {
     public Enemy(int lvl) {
         setName("Kobold");
         setLevel(lvl);
-        setStats(4 + lvl, 4 + lvl, 5 + lvl, 2 + lvl, 2 + lvl, 2 + lvl);
+        setStats(6 + lvl, 6 + lvl, 5 + lvl, 3 + lvl, 3 + lvl, 3 + lvl);
         equipWeapon(Weapons.dagger());
         equipArmor(Armors.goblinLeathers(lvl));
         fullHealth();
         fullMana();
+        setGold(3);
+        receiveLoot(Weapons.dagger());
+        receiveLoot(Items.goblinBeads(Dice.die(2,lvl),60));
     }
 
     public Enemy(String name) {   //construct generic man.
         setName(name);
-        setStats(5, 5, 5, 5, 5, 5);
+        setStats(7, 7, 7, 7, 7, 7);
         setLevel(1);
+        setGold(50);
+    }
+
+    public Enemy(String name, int lvl){
+        super(name,lvl);
     }
 
     public Enemy(String name, int str, int con, int dex, int intel, int wis, int cha, int lvl, Weapon weapon, Armor armor) {
@@ -48,7 +55,7 @@ public class Enemy extends myCharacter {
                  int charisma, int lvl, Weapon weapon, Armor armor, List<String> entrance) {
         super(name, strength, dexterity, constitution, intelligence, wisdom, charisma, weapon, armor);
         this.entrance = entrance;
-        this.experience = getExpForLvl(lvl);
+        setExperience(getExpForLvl(lvl));
     }
 
     public Enemy(String name, int[] allStats, Weapon weapon, Armor armor, List<String> entrance) {
@@ -59,19 +66,23 @@ public class Enemy extends myCharacter {
 
     public Attack defaultAttack(myCharacter target) {
         Random rand = new Random();
-        ArrayList<Attack> attacks = new ArrayList<>(this.getWeapon().getAttackList());
+        ArrayList<Attack> attacks = new ArrayList<>();
         // remove spells from selection pool if OOM
-        for (int i = attacks.size()-1; i >= 0 ; i--) {
-            if (attacks.get(i).getTotalManaCost(this) > this.getMana()) {
-                attacks.remove(i);
+        for (Attack a : this.getAttacks()) {
+            if (a.getTotalManaCost(this) <= this.getMana()) {
+                attacks.add(a);
             }
         }
 
         if (this.getHealthPct() < .20 && this.isSmart()) {
+            ArrayList<Attack> heals = new ArrayList<>();
             for (Attack a : attacks) {
-                if (a instanceof HealingSpell) {
-                    return a;
+                if (a.getHpDrainMultiplier() > 0 || a instanceof HealingSpell) {
+                    heals.add(a);
                 }
+            }
+            if (heals.size()>0){
+                return heals.get(rand.nextInt(heals.size()));
             }
         }
         return attacks.get(rand.nextInt(attacks.size()));

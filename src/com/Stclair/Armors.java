@@ -4,25 +4,25 @@ public class Armors {
 
     //beginner robes armor for mage
     public static Armor initiateRobes() {
-        return new Armor("Initiate's Robes", 2, 0, 4, 0, 0, 0,
-                2, 1, 1);
+        return new Armor("Initiate's Robes", 25, 2, 0,4,
+                0,0,0,2,1,1);
     }
 
     //beginner plate armor for tank
-    public static Armor tinPlatemail() {
-        return new Armor("Tin Platemail", 8, 6, 0, 2, 2, 0,
+    public static Armor copperPlatemail() {
+        return new Armor("Copper Platemail", 40, 8, 6, 0, 2, 2, 0,
                 0, 0, 0);
     }
 
     //beginner leather armor for rogue or archer
     public static Armor scrapLeathers() {
-        return new Armor("Scrap Leathers", 4, 3, 2, 0, 1, 2,
+        return new Armor("Scrap Leathers",30, 4, 3, 2, 0, 1, 2,
                 0, 0, 1);
     }
 
     //beginner chainmail
     public static Armor tinChainmail() {
-        return new Armor("Tin Chainmail", 5, 4, 0, 1, 1, 1,
+        return new Armor("Tin Chainmail",35, 5, 4, 0, 1, 1, 1,
                 0, 1, 0);
     }
 
@@ -30,33 +30,35 @@ public class Armors {
     // *** lvled Armors ***
 
     public static Armor chain(int lvl) {
-        String name = Item.getLvledMetalName(lvl) + " Chainmail";
-        int wt = lvl / 3 + 5;
-        int armorRating = 3 + lvl;
-        int magicDefRating = lvl / 2;
-        int str = Dice.die(2, lvl);
-        int con = Dice.die(2, lvl);
-        int dex = Dice.die(2, lvl);
-        int intl = Dice.die(2, lvl) / 3;
-        int wis = Dice.die(2, lvl) / 3;
-        int cha = Dice.die(2, lvl) / 2;
+        Armor chain = new Armor();
+        chain.setName(Item.getLvledMetalName(lvl) + " Chainmail");
+        chain.setValue(25 + lvl * 7);
+        chain.setWeight(5 + (int)(lvl / 3));
+        chain.setArmorRating(3 + lvl);
+        chain.setMagicDefRating(lvl / 2);
+        chain.setStrBonus(Dice.die(2, lvl));
+        chain.setConBonus(Dice.die(2, lvl));
+        chain.setDexBonus(Dice.die(2, lvl));
+        chain.setDropPct(30);
 
-        return new Armor(name, wt, armorRating, magicDefRating, str, con, dex, intl, wis, cha);
+        return chain;
     }
 
     public static Armor leathers(int lvl) {
         String name = Item.getLvledLeatherName(lvl) + " Leathers";
+        int value = 20 + lvl * 5;
         int wt = lvl / 3 + 4;
         int armorRating = 2 + lvl;
         int magicDef = lvl;
-        int str = Dice.die(2, lvl) - lvl;
+        int str = 0;
         int con = Dice.die(2, lvl) / 2;
         int dex = Dice.die(3, lvl) + 2;
-        int intl = Dice.die(2, lvl) - lvl;
-        int wis = Dice.die(2, lvl);
-        int cha = Dice.die(2, lvl);
+        int intl = 0;
+        int wis = 0;
+        int cha = Dice.die(2, lvl) + 1;
+        int dropPct = 30;
 
-        return new Armor(name, wt, armorRating, magicDef, str, con, dex, intl, wis, cha);
+        return new Armor(name, value, wt, dropPct, armorRating, magicDef, str, con, dex, intl, wis, cha);
     }
 
     public static Armor plate(int lvl) {
@@ -66,12 +68,14 @@ public class Armors {
         int magicDef = 0;
         int str = Dice.die(3, lvl);
         int con = Dice.die(3, lvl);
-        int dex = Dice.die(2, lvl) / 2;
+        int dex = 0;
         int intel = 0;
-        int wis = Dice.die(2, lvl) / 3;
-        int cha = Dice.die(2, lvl) / 3;
+        int wis = 0;
+        int cha = 0;
+        int dropPct = 30;
+        int value = 40 + lvl + str + con + dex + intel + + wis + cha;
 
-        return new Armor(name, wt, armorRating, magicDef, str, con, dex, intel, wis, cha);
+        return new Armor(name, value, wt, armorRating, magicDef, str, con, dex, intel, wis, cha, dropPct);
     }
 
     public static Armor beast(int lvl) {

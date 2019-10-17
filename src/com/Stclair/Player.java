@@ -16,8 +16,8 @@ public class Player extends myCharacter implements Serializable {
     public Player(String name, int strength, int dexterity, int constitution, int intelligence, int wisdom,
                        int charisma, Weapon weapon, Armor armor) {
         super(name,strength, dexterity, constitution, intelligence, wisdom, charisma, weapon, armor);
-        this.health = getMaxHealth();
-        this.mana = getMaxMana();
+        setHealth(getMaxHealth());
+        setMana(getMaxMana());
     }
 
     //full constructor/ load player
@@ -26,12 +26,12 @@ public class Player extends myCharacter implements Serializable {
                   int roundsCompleted, int deaths, int killStreak, int highestKillStreak, int roundStreak, int highestRoundStreak) {
         super(name, strength, dexterity, constitution, intelligence, wisdom, charisma, weapon, armor);
         setExperience(experience);
-        this.health = health;
-        this.mana = mana;
+        setHealth(health);
+        setMana(mana);
         this.totalKills = totalKills;
         this.roundsCompleted = roundsCompleted;
         this.totalDeaths = deaths;
-        this.inventory = inventory;
+        setInventory(inventory);
         this.killStreak = killStreak;
         this.highestKillStreak = highestKillStreak;
         this.roundStreak = roundStreak;

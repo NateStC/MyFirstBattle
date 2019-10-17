@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
     public static myCharacter player;
+    public static Enemy enemy;
 
     public static void main(String[] args) {
 
@@ -14,6 +15,7 @@ public class Main {
         System.out.println("Please enter your name.");
         String name = scanner.nextLine();
         player = new myCharacter(name);
+        player.equipWeapon(Weapons.dagger());
 
         System.out.println("\nGreat!\n");
         ArrayList<Integer> arrayRolls = new ArrayList<>();
@@ -21,7 +23,7 @@ public class Main {
             arrayRolls.add(Dice.statRoll());
         }
 
-        player.assignStats(arrayRolls,scanner);
+        player.assignStats(arrayRolls, scanner);
 //        player.setHealth();
 //        player.setMana();
 //        player.updateAttributeArray();
@@ -29,78 +31,62 @@ public class Main {
         player.printStats();
         System.out.println();
 
-    Inventory inventory = new Inventory();
-    Weapon dagger = new Weapon("Wooden dagger", 0.5, 90, 75, 2);
-
-        inventory.addItem(dagger);
-
-    Enemy goblin = new Enemy();
+        enemy = new Enemy();
 
         System.out.println("Press enter to start battle!");
         scanner.nextLine();
 
         System.out.println();
 
-    //FIRST BATTLE BEGINS
+        //FIRST BATTLE BEGINS
 
-    boolean battle = true;
-        while(battle)
-
-    {
-
-        battle = player.takeDamage(goblin.stab());
-        if (player.isDead()) {
-            battle = false;
-            System.out.println("You have died!");
-            gameOver = true;
+        boolean battle = true;
+        while (!player.isDead() || !enemy.isDead()) {
+            if (player.isDead()) {
+                battle = false;
+                System.out.println("You have died!");
+                gameOver = true;
+            }
+            System.out.println("Choose an action:" +
+                    "\n1. Stab" +
+                    "\n2. Fireball" +
+                    "\n3. Healing spell");
+            switch (scanner.nextInt()) {
+                case 1:
+                    enemy.takeDamage(Attacks.stab().action(player, enemy).getTotalDamage());
+                    break;
+                case 2:
+                    enemy.takeDamage(Spells.fireball().action(player, enemy).getTotalDamage());
+                    break;
+                case 3:
+                    player.heal(Spells.healingHands().action(player, enemy).getTotalHeals());
+                    break;
+            }
         }
-        System.out.println("Choose an action:" +
-                "\n1. Stab" +
-                "\n2. Fireball" +
-                "\n3. Healing spell");
-        switch (scanner.nextInt()) {
-            case 1:
-                goblin.takeDamage(player.stab());
-                break;
-            case 2:
-                goblin.takeDamage(player.fireball());
-                break;
-            case 3:
-                int[] heal = player.healingSpell();
-                player.heal(heal[1]);
-                break;
-        }
-        if (goblin.isDead()) {
-            battle = false;
-            System.out.println("You have slain the goblin!\n");
-            player.gainExp(100);
-        }
-    }
         scanner.nextLine();
 
-        System.out.println("Congratulations! You have won your first battle!"+
+        System.out.println("Congratulations! You have won your first battle!" +
                 "\nWhat would you like to do? Enter 'help' to view options");
-        while(!gameOver)
+        while (!gameOver) {
+            switch (scanner.nextLine().toLowerCase()) {
+                case "help":
+                    help();
+                    continue;
+                case "stats":
+                    player.printStats();
+                    continue;
+                case "quit":
+                    scanner.close();
+                    gameOver = true;
+                    break;
+                default:
+                    System.out.println("Invalid input. Try again");
+                    help();
 
-    {
-        switch (scanner.nextLine().toLowerCase()) {
-            case "help":
-                help();
-                continue;
-            case "stats":
-                player.printStats();
-                continue;
-            case "quit":
-                gameOver = true;
-                break;
-            default:
-                System.out.println("Invalid input. Try again");
-                help();
-
+            }
         }
-    }
 
-}
+    }
 
 //        System.out.println("Now it is time for battle. You approach the lair of the dragon.");
 //        System.out.print("You feel the heat through your " + armor + " as your enter the maw of the cave. ");

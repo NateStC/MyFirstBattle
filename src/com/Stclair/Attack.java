@@ -142,11 +142,12 @@ public class Attack {
     }
 
     public int critPoint(myCharacter attacker) {
-        return criticalHitMin + (int)(attacker.getDexStat() /4 * this.critModifier);
+        return criticalHitMin + (int)((attacker.getDexStat()-10) / 3 * this.critModifier);
     }
 
     public int hitPoint(myCharacter target){
-        return missPoint + (int)(target.getDexStat() / 6);
+//        return missPoint + (int)(target.getDexStat() - / 6); //todo fix calculate hitPoint()
+        return missPoint;
     }
 
     public int accuracyRollModifier(myCharacter attacker) {
@@ -156,19 +157,22 @@ public class Attack {
     }
 
     public int calcPhysDmg(myCharacter attacker, myCharacter target){
+        if (physDmgMultiplier <= 0 || this.physDmgDie <= 0){
+            return 0;
+        }
         double dmg = Dice.die(this.physDmgDie, this.numOfRolls)
                 + attacker.getWeapon().getPhysDamage()
                 + (attacker.getDexStat() * this.strMultiplier)
                 + (attacker.getStrStat() * this.strMultiplier)
                 - target.getArmor().getArmorRating();
-        if (physDmgMultiplier > 0) {
-            dmg *= physDmgMultiplier;
-        }
+
         return (int)dmg;
     }
 
     public int calcSpellDmg(myCharacter attacker, myCharacter target){
-        if (this.spellDmgDie == 0) return 0;
+        if (this.spellDmgDie <= 0 || this.spellDmgMultiplier == 0){
+            return 0;
+        }
         double dmg = Dice.die(this.spellDmgDie, this.numOfRolls)
                 + attacker.getIntStat() * this.getIntMultiplier() / 2.5
                 - target.getArmor().getMagicDefRating();
@@ -320,7 +324,19 @@ public class Attack {
     }
 
     public String getDescription() {
+
         return description;
+    }
+
+    public String getDescription(myCharacter user){
+        StringBuilder desc = new StringBuilder();
+        if (manaCost>0){
+            desc.append("Mana Cost: ").append(this.getTotalManaCost(user)).append("\n\n");
+        }
+
+        desc.append(this.description);
+
+        return desc.toString();
     }
 
     public void setDescription(String description) {
